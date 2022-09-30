@@ -8,11 +8,11 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @Database(entities = [Product::class], version = 1)
-abstract class ProductsLocalDataSource : RoomDatabase() {
+abstract class ProductsDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
     class Callback @Inject constructor(
-        private val database: Provider<ProductsLocalDataSource>
+        private val database: Provider<ProductsDatabase>
     ): RoomDatabase.Callback(){
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)

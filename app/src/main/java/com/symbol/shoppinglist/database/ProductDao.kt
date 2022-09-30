@@ -1,19 +1,21 @@
 package com.symbol.shoppinglist.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.symbol.shoppinglist.data.Product
 
 @Dao
 interface ProductDao {
 
     @Query("SELECT * FROM products")
-    fun getAllProducts(): List<Product>
+    fun getAllProducts(): LiveData<List<Product>>
 
     @Insert
-    fun insertProduct(product: Product)
+    suspend fun addProduct(product: Product)
 
     @Delete
-    fun deleteProduct(product: Product)
+    suspend fun deleteProduct(product: Product)
 
     @Update
-    fun updateProduct(product: Product)
+    suspend fun updateProduct(product: Product)
 }

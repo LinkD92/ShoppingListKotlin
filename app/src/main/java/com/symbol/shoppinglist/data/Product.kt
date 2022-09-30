@@ -1,12 +1,12 @@
-package com.symbol.shoppinglist.product
+package com.symbol.shoppinglist.data
 
 import androidx.room.Entity
-import com.symbol.shoppinglist.category.Category
 
-@Entity(tableName = "products", primaryKeys =["name"])
-data class Product (
+@Entity(tableName = "products", primaryKeys = ["name"])
+data class Product(
     val name: String,
     val category: String,
-    val price: Int?
-        ){
+    val price: Int?,
+    val isChecked: Boolean = false
+) {
 }

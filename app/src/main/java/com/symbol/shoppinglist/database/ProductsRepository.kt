@@ -1,28 +1,17 @@
 package com.symbol.shoppinglist.database
 
+import androidx.lifecycle.LiveData
 import com.symbol.shoppinglist.data.Product
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ProductsDataSource @Inject constructor(private val productDao: ProductDao) {
-    val getAllProducts = productDao.getAllProducts()
+class ProductsRepository @Inject constructor(private val productDao: ProductDao) {
 
-    suspend fun insertProduct(product: Product){
-        Dispatchers.IO.apply {
-            productDao.insertProduct(product)
-        }
-    }
+    fun getAllProducts(): LiveData<List<Product>> = productDao.getAllProducts()
 
-    suspend fun deleteProduct(product: Product){
-        Dispatchers.IO.apply {
-            productDao.deleteProduct(product)
-        }
-    }
+    suspend fun addProduct(product: Product) = productDao.addProduct(product)
 
-    suspend fun updateProduct(product: Product){
-        Dispatchers.IO.apply {
-            productDao.updateProduct(product)
-        }
-    }
+    suspend fun deleteProduct(product: Product) = productDao.deleteProduct(product)
 
+    suspend fun updateProduct(product: Product) = productDao.updateProduct(product)
 }

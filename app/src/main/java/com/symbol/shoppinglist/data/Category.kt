@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.category
+package com.symbol.shoppinglist.data
 
 import androidx.compose.ui.graphics.Color
 
