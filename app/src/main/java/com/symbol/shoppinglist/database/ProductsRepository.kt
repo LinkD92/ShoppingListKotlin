@@ -5,7 +5,7 @@ import com.symbol.shoppinglist.data.Product
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ProductsRepository @Inject constructor(private val productDao: ProductDao) {
+class ProductsRepository (private val productDao: ProductDao) {
 
     fun getAllProducts(): LiveData<List<Product>> = productDao.getAllProducts()
 

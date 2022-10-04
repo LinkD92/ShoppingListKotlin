@@ -11,12 +11,4 @@ import javax.inject.Provider
 abstract class ProductsDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
-    class Callback @Inject constructor(
-        private val database: Provider<ProductsDatabase>
-    ): RoomDatabase.Callback(){
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            database.get()
-        }
-    }
 }
