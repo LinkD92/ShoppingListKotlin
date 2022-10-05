@@ -1,0 +1,21 @@
+package com.symbol.shoppinglist.database
+
+import androidx.lifecycle.LiveData
+import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.database.entities.Product
+import javax.inject.Inject
+
+class ListRepository @Inject constructor(private val listDao: ListDao) {
+
+    fun getAllProducts(): LiveData<List<Product>> = listDao.getAllProducts()
+
+    fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
+
+    suspend fun addProduct(product: Product) = listDao.addProduct(product)
+
+    suspend fun addCategory(category: Category) = listDao.addCategory(category)
+
+    suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)
+
+    suspend fun updateProduct(product: Product) = listDao.updateProduct(product)
+}

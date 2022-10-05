@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.addProduct
+package com.symbol.shoppinglist.ui.productAdd
 
 import androidx.compose.material.Button
 import androidx.compose.material.Icon

@@ -2,9 +2,9 @@ package com.symbol.shoppinglist.dependencyinjection
 
 import android.app.Application
 import androidx.room.Room
-import com.symbol.shoppinglist.database.ProductDao
-import com.symbol.shoppinglist.database.ProductsDatabase
-import com.symbol.shoppinglist.database.ProductsRepository
+import com.symbol.shoppinglist.database.ListDao
+import com.symbol.shoppinglist.database.ListDatabase
+import com.symbol.shoppinglist.database.ListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,14 +19,14 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-    ) = Room.databaseBuilder(app, ProductsDatabase::class.java, "products_database")
+    ) = Room.databaseBuilder(app, ListDatabase::class.java, "products_database")
         .fallbackToDestructiveMigration()
         .build()
 
     @Provides
-    fun providesProductDao(db: ProductsDatabase) = db.productDao()
+    fun providesProductDao(db: ListDatabase) = db.listDao()
 
     @Provides
-    fun providesRepository(productDao: ProductDao): ProductsRepository = ProductsRepository(productDao)
+    fun providesRepository(listDao: ListDao): ListRepository = ListRepository(listDao)
 
 }
