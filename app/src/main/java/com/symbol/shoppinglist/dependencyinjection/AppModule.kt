@@ -1,10 +1,8 @@
 package com.symbol.shoppinglist.dependencyinjection
 
 import android.app.Application
-import androidx.navigation.NavController
 import androidx.room.Room
 import com.symbol.shoppinglist.database.ProductDao
-import com.symbol.shoppinglist.database.ProductDao_Impl
 import com.symbol.shoppinglist.database.ProductsDatabase
 import com.symbol.shoppinglist.database.ProductsRepository
 import dagger.Module
@@ -21,7 +19,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-    ) = Room.databaseBuilder(app, ProductsDatabase::class.java, "xxx_database" )
+    ) = Room.databaseBuilder(app, ProductsDatabase::class.java, "products_database")
         .fallbackToDestructiveMigration()
         .build()
 

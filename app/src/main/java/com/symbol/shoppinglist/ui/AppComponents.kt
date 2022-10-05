@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.symbol.shoppinglist.Action
 import com.symbol.shoppinglist.ScreenName
-import com.symbol.shoppinglist.addProduct.AddProductView
+import com.symbol.shoppinglist.addProduct.AddProductScreen
 import com.symbol.shoppinglist.product.DisplayProducts
 
 
@@ -55,6 +55,6 @@ fun NavigationGraph(navController: NavHostController) {
         startDestination = ScreenName.PRODUCTS
     ) {
         composable(ScreenName.PRODUCTS) { DisplayProducts(navController) }
-        composable(ScreenName.ADD_PRODUCT) { AddProductView(navController) }
+        composable(ScreenName.ADD_PRODUCT) { AddProductScreen(navController) }
     }
 }
