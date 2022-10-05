@@ -14,10 +14,8 @@ fun NavGraphBuilder.productsNavGraph(
     modifier: Modifier = Modifier,
     navHostController: NavHostController
 ) {
-    val currentScreen =
-        navHostController.currentBackStackEntry?.destination?.route ?: ScreenName.PRODUCTS
     navigation(
-        startDestination = currentScreen,
+        startDestination = ScreenName.PRODUCTS,
         route = NavGraphs.PRODUCTS
     ) {
         composable(ScreenName.PRODUCTS) { DisplayProducts(modifier) }

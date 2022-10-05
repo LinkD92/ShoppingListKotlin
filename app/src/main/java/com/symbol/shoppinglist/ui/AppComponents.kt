@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.symbol.shoppinglist.Action
+import com.symbol.shoppinglist.ScreenName
 import com.symbol.shoppinglist.ui.navigation.BottomNavigationItem
 
 
@@ -38,10 +39,10 @@ fun AppTopBar(
 fun AppFab(navController: NavHostController) {
     val currentScreen = navController.currentBackStackEntryAsState().value?.destination?.route
     FloatingActionButton(onClick = {
-//        when (currentScreen) {
-//            ScreenName.PRODUCTS -> navController.navigate(ScreenName.ADD_PRODUCT)
-//            ScreenName.CATEGORIES -> navController.navigate(ScreenName.ADD_CATEGORY)
-//        }
+        when (currentScreen) {
+            ScreenName.PRODUCTS -> navController.navigate(ScreenName.ADD_PRODUCT)
+            ScreenName.CATEGORIES -> navController.navigate(ScreenName.ADD_CATEGORY)
+        }
     }) {
         Icon(Icons.Rounded.Add, Action.ADD)
     }

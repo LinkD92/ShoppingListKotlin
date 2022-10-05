@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
-<<<<<<< HEAD
 import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +36,4 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
     fun updateCategoryName(input: String) {
         categoryName = input
     }
-=======
-class AddCategoryViewModel {
->>>>>>> origin/db-relations
 }
