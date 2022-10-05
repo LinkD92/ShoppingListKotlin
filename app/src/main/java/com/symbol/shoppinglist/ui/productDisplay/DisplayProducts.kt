@@ -7,11 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.symbol.shoppinglist.displayProducts.DisplayProductViewModel
+import com.symbol.shoppinglist.ui.displayProducts.DisplayProductViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DisplayProducts (navController: NavController, viewModel: DisplayProductViewModel = hiltViewModel()) {
+fun DisplayProducts (viewModel: DisplayProductViewModel = hiltViewModel()) {
     val products = viewModel.allProducts.observeAsState()
     Column() {
         Text(text = products.value?.size.toString())
