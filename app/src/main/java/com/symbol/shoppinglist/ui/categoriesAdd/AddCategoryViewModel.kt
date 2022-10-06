@@ -1,31 +1,36 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
 import android.database.sqlite.SQLiteConstraintException
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.provider.ContactsContract
+import android.util.Log
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.database.ListRepository
 import com.symbol.shoppinglist.database.entities.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @HiltViewModel
 class AddCategoryViewModel @Inject constructor(private val repository: ListRepository) :
     ViewModel() {
     var categoryName by mutableStateOf("")
+    private var categoryColorHex by mutableStateOf("")
+    var categoryColor by mutableStateOf(Color.Black)
+
 
     private val _successObserver = MutableSharedFlow<String>()
     val successObserver = _successObserver.asSharedFlow()
     val categories = repository.getAllCategories()
 
+
     fun addCategory() = viewModelScope.launch {
-        val category = Category(categoryName)
         try {
+            val category = Category(categoryName, categoryColorHex)
             repository.addCategory(category)
             _successObserver.emit("Category added")
         } catch (error: SQLiteConstraintException) {
@@ -35,5 +40,13 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
 
     fun updateCategoryName(input: String) {
         categoryName = input
+    }
+
+    fun updateCategoryColor(input: String) {
+        categoryColorHex = input
+    }
+
+    fun updateCategoryColor(input: Color) {
+        categoryColor = input
     }
 }

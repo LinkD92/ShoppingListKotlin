@@ -1,6 +1,8 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -9,10 +11,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.ScreenName
 import com.symbol.shoppinglist.ui.productAdd.AddButton
@@ -21,16 +26,21 @@ import com.symbol.shoppinglist.ui.productAdd.LabelAndPlaceHolder
 @Composable
 fun AddCategory(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     viewModel: AddCategoryViewModel = hiltViewModel()
 ) {
-    val navController = rememberNavController()
     val context = LocalContext.current
+
     Column {
         LabelAndPlaceHolder(viewModel.categoryName) {
             viewModel.updateCategoryName(it)
         }
-        ColorPickerButton(onClick = { navController.navigate(ScreenName.COLOR_PICKER) })
-        AddButton(onClick = { viewModel.addCategory() })
+        Log.d("QWAS - AddCategory:", "${viewModel.toString()}")
+        ColorPickerButton(
+            modifier.background(viewModel.categoryColor),
+            onClick = { navController.navigate(ScreenName.COLOR_PICKER) })
+        AddButton(
+            onClick = { viewModel.addCategory() })
     }
 
     LaunchedEffect(true) {
@@ -41,8 +51,11 @@ fun AddCategory(
 }
 
 @Composable
-fun ColorPickerButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
+fun ColorPickerButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Button(
+        modifier = modifier,
+        onClick = onClick
+    ) {
         Icon(Icons.Rounded.Palette, IconName.PALETTE)
         Text(text = "Choose Color")
     }

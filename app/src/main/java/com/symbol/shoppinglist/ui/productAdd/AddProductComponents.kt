@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productAdd
 
+import androidx.compose.foundation.background
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -7,6 +8,8 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import com.symbol.shoppinglist.Action
 
@@ -32,8 +35,9 @@ fun SimpleTextField() {
 }
 
 @Composable
-fun AddButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
+fun AddButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Button(
+        onClick = onClick) {
         Icon(Icons.Rounded.Add, Action.ADD)
     }
 }

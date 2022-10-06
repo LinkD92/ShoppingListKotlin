@@ -21,7 +21,7 @@ fun AddProduct(
         LabelAndPlaceHolder(viewModel.productName) {
             viewModel.updateName(it)
         }
-        AddButton(onClick = { viewModel.addProduct() })
+        AddButton(modifier, onClick = { viewModel.addProduct() })
     }
 
     LaunchedEffect(true) {

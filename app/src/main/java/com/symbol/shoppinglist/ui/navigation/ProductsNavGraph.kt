@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.navigation
 
+import android.content.Context
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,7 +13,7 @@ import com.symbol.shoppinglist.ui.productAdd.AddProduct
 
 fun NavGraphBuilder.productsNavGraph(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController
+    navHostController: NavHostController,
 ) {
     navigation(
         startDestination = ScreenName.PRODUCTS,
