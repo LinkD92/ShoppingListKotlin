@@ -30,14 +30,14 @@ fun AddCategory(
     viewModel: AddCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val test = Color(viewModel.test)
 
     Column {
         LabelAndPlaceHolder(viewModel.categoryName) {
             viewModel.updateCategoryName(it)
         }
-        Log.d("QWAS - AddCategory:", "${viewModel.toString()}")
         ColorPickerButton(
-            modifier.background(viewModel.categoryColor),
+            modifier.background(test),
             onClick = { navController.navigate(ScreenName.COLOR_PICKER) })
         AddButton(
             onClick = { viewModel.addCategory() })

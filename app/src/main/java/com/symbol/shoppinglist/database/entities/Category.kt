@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Category(
     @PrimaryKey(autoGenerate = false)
     val categoryName: String,
-    val categoryColor: String
+    val categoryColor: Long
 )

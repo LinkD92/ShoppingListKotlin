@@ -21,6 +21,7 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
     var categoryName by mutableStateOf("")
     private var categoryColorHex by mutableStateOf("")
     var categoryColor by mutableStateOf(Color.Black)
+    var test: Long by mutableStateOf(0)
 
 
     private val _successObserver = MutableSharedFlow<String>()
@@ -30,7 +31,7 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
 
     fun addCategory() = viewModelScope.launch {
         try {
-            val category = Category(categoryName, categoryColorHex)
+            val category = Category(categoryName, test)
             repository.addCategory(category)
             _successObserver.emit("Category added")
         } catch (error: SQLiteConstraintException) {
@@ -44,6 +45,8 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
 
     fun updateCategoryColor(input: String) {
         categoryColorHex = input
+        Log.d("QWAS - updateCategoryColor:", "${input.toLong(16)}")
+        test = input.toLong(16)
     }
 
     fun updateCategoryColor(input: Color) {

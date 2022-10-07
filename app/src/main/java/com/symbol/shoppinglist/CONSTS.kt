@@ -17,6 +17,7 @@ object Action {
 object IconName {
     const val PALETTE = "Palette"
     const val CHECK = "Check"
+    const val DELETE = "Delete"
 }
 
 object NavGraphs {
