@@ -3,6 +3,7 @@ package com.symbol.shoppinglist.database
 import androidx.lifecycle.LiveData
 import com.symbol.shoppinglist.database.entities.Category
 import com.symbol.shoppinglist.database.entities.Product
+import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
 import javax.inject.Inject
 
 class ListRepository @Inject constructor(private val listDao: ListDao) {
@@ -10,6 +11,8 @@ class ListRepository @Inject constructor(private val listDao: ListDao) {
     fun getAllProducts(): LiveData<List<Product>> = listDao.getAllProducts()
 
     fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
+
+    suspend fun getCategoriesWithProducts(): List<CategoryWithProducts> = listDao.getCategoryWithProducts()
 
     suspend fun addProduct(product: Product) = listDao.addProduct(product)
 

@@ -15,9 +15,11 @@ object Action {
 }
 
 object IconName {
+    const val EXPAND = "Expand"
     const val PALETTE = "Palette"
     const val CHECK = "Check"
     const val DELETE = "Delete"
+    const val DROPDOWN = "Dropdown"
 }
 
 object NavGraphs {

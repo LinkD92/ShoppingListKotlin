@@ -18,9 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class AddProductViewModel @Inject constructor(private val repository: ListRepository) :
     ViewModel() {
+    private val dummyCategory = Category("Select category")
     var productName by mutableStateOf("")
-    var productCategory by mutableStateOf("")
     val allCategories = repository.getAllCategories()
+    var productCategory by mutableStateOf(allCategories.value?.get(0) ?: dummyCategory)
 
     private val _successObserver = MutableSharedFlow<String>()
     val successObserver = _successObserver.asSharedFlow()
@@ -28,8 +29,7 @@ class AddProductViewModel @Inject constructor(private val repository: ListReposi
     val products = repository.getAllProducts()
 
     fun addProduct() = viewModelScope.launch {
-        val categoryName = "cat1"
-        val product = Product(productName, categoryName = categoryName)
+        val product = Product(productName, categoryName = productCategory.categoryName)
         try {
             repository.addProduct(product)
             _successObserver.emit("Product added")
@@ -41,7 +41,8 @@ class AddProductViewModel @Inject constructor(private val repository: ListReposi
     fun updateName(input: String) {
         productName = input
     }
-    fun chooseCategory(input: String = ""){
+
+    fun chooseCategory(input: Category) {
         productCategory = input
     }
 }

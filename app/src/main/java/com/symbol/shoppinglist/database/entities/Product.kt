@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 data class Product(
     @PrimaryKey(autoGenerate = false)
     val productName: String,
-    val isProductChecked: Boolean = false,
-    var categoryName: String
+    var categoryName: String,
+
 ) {
+    var isProductChecked: Boolean = false
     var productPrice: Int = 0
 }
