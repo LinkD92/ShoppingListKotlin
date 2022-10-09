@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productAdd
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,16 +25,19 @@ fun AddProduct(
 ) {
     val context = LocalContext.current
     val categories = viewModel.allCategories.observeAsState().value ?: listOf()
-
     Column {
+        Log.d("QWAS - AddProduct:", "COLUMN")
         LabelAndPlaceHolder(viewModel.productName) {
+            Log.d("QWAS - AddProduct:", "LABEL")
             viewModel.updateName(it)
         }
         CategoriesDropDown(
             modifier,
             categories,
             viewModel.productCategory
-        ) { category -> viewModel.chooseCategory(category) }
+        ) { category ->
+            Log.d("QWAS - AddProduct:", "CATEGORY")
+            viewModel.chooseCategory(category) }
         AddButton(modifier, onClick = { viewModel.addProduct() })
     }
 

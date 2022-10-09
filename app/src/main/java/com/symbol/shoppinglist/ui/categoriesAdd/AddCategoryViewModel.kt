@@ -45,7 +45,6 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
 
     fun updateCategoryColor(input: String) {
         categoryColorHex = input
-        Log.d("QWAS - updateCategoryColor:", "${input.toLong(16)}")
         test = input.toLong(16)
     }
 
