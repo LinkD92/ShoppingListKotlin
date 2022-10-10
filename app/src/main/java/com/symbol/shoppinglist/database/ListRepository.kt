@@ -12,7 +12,7 @@ class ListRepository @Inject constructor(private val listDao: ListDao) {
 
     fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
 
-    suspend fun getCategoriesWithProducts(): List<CategoryWithProducts> = listDao.getCategoryWithProducts()
+    fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>> = listDao.getCategoryWithProducts()
 
     suspend fun addProduct(product: Product) = listDao.addProduct(product)
 
@@ -21,4 +21,6 @@ class ListRepository @Inject constructor(private val listDao: ListDao) {
     suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)
 
     suspend fun updateProduct(product: Product) = listDao.updateProduct(product)
+
+    suspend fun updateCategory(category: Category) = listDao.updateCategory(category)
 }

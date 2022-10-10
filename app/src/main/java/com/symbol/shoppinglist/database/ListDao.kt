@@ -17,7 +17,7 @@ interface ListDao {
 
     @Transaction
     @Query("SELECT * FROM categories")
-    suspend fun getCategoryWithProducts(): List<CategoryWithProducts>
+    fun getCategoryWithProducts(): LiveData<List<CategoryWithProducts>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addProduct(product: Product)
@@ -30,4 +30,7 @@ interface ListDao {
 
     @Update
     suspend fun updateProduct(product: Product)
+
+    @Update
+    suspend fun updateCategory(category: Category)
 }

@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class Category(
     @PrimaryKey(autoGenerate = false)
     val categoryName: String = "",
-    val categoryColor: Long = 0
-)
+    val categoryColor: Long = 0,
+){
+    var isExpanded: Boolean = false
+}

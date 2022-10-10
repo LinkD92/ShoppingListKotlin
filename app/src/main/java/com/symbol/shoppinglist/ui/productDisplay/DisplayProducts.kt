@@ -2,7 +2,6 @@ package com.symbol.shoppinglist.product
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.compiler.plugins.kotlin.ComposeFqNames.remember
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +25,6 @@ import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.entities.Product
 import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProductViewModel
-import kotlin.math.exp
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -33,58 +32,38 @@ fun DisplayProducts(
     modifier: Modifier = Modifier,
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
-    val mylist = remember { mutableStateListOf<CategoryWithProducts>().apply { addAll(viewModel.list.value) } }
+    val list by viewModel.categoriesWithProducts.observeAsState()
     LazyColumn(modifier = modifier) {
         items(
-            items = mylist,
-            key = { item -> item.category.categoryName }
-        ) { item ->
-                LazyColumn(content = modifier){
-                    items(
-                        items = item,
-                        key = { item -> item}
-
+            items = list ?: listOf()
+        ) { categoryWithProduct ->
+            var expand by rememberSaveable {
+                mutableStateOf(categoryWithProduct.category.isExpanded)
+            }
+            Row {
+                Text(text = categoryWithProduct.category.categoryName)
+                Icon(Icons.Rounded.ArrowDropDown, IconName.DROPDOWN,
+                    modifier = modifier
+                        .clickable {
+                            expand = !expand
+                            viewModel.updateCategory(categoryWithProduct.category.apply {
+                                isExpanded = expand
+                            })
+                        })
+            }
+            if (expand) {
+                categoryWithProduct.products.forEach { product ->
+                    ProductItem(
+                        product = product,
+                        categoryColor = categoryWithProduct.category.categoryColor,
+                        onClick = { viewModel.updateProduct(product) },
+                        deleteProduct = { viewModel.deleteProduct(product) })
                 }
             }
         }
     }
 }
 
-//    Log.d("QWAS - DisplayProducts:", "${viewModel.expand}")
-//    Column() {
-//        Text(text = viewModel.list.value.size.toString())
-//        viewModel.list.value.forEach { categoryWithProducts ->
-////            ExpandableCategoryCard(
-////                modifier,
-////                categoryWithProducts,
-////                onClick = { product -> viewModel.updateProduct(product) },
-////                onIconRemoveClick = { product -> viewModel.deleteProduct(product) },
-////                expand = viewModel.expand,
-////                { viewModel.changeExpand() }
-////            )
-//            categoryWithProducts.products.forEach { product ->
-//                ProductItem(
-//                    product = product,
-//                    categoryColor = categoryWithProducts.category.categoryColor,
-//                    onClick = { item -> viewModel.updateProduct(item) },
-//                    deleteProduct = { item -> viewModel.deleteProduct(item) })
-//            }
-//        }
-            
-//            Text(
-//                text = categoryWithProducts.category.categoryName,
-//                fontSize = 30.sp
-//            )
-//            categoryWithProducts.products.forEach { product ->
-//                ProductItem(
-//                    modifier,
-//                    product,
-//                    categoryWithProducts.category.categoryColor,
-//                    { product -> viewModel.updateProduct(product) },
-//                    { product -> viewModel.deleteProduct(product) }
-//                )
-//
-//            }     }
 
 @Composable
 fun ProductItem(
@@ -94,7 +73,8 @@ fun ProductItem(
     onClick: (Product) -> Unit,
     deleteProduct: (Product) -> Unit,
 ) {
-    val colorTransparency = if (product.isProductChecked)
+    var isChecked by remember { mutableStateOf(product.isProductChecked) }
+    val backgroundColor = if (isChecked)
         Color(categoryColor).copy(alpha = 1f)
     else
         Color(categoryColor).copy(alpha = 0.3f)
@@ -102,13 +82,14 @@ fun ProductItem(
         modifier = modifier,
         elevation = 10.dp,
     ) {
-        Log.d("QWAS - ProductItem:", "PRODUCT")
+        Log.d("QWAS - ProductItem:", "${product.productName}")
         Box(
             modifier = modifier
                 .clickable {
-                    onClick(product)
+                    isChecked = !isChecked
+                    onClick(product.apply { isProductChecked = isChecked })
                 }
-                .background(color = colorTransparency)
+                .background(color = backgroundColor)
         ) {
             Row(
                 modifier = modifier
@@ -133,7 +114,6 @@ fun ExpandableCategoryCard(
     expand: Boolean,
     changeExpand: () -> Unit
 ) {
-    Log.d("QWAS - ExpandableCategoryCard:", "$expand")
     Card(
         modifier = modifier
             .background(color = Color(categoryWithProducts.category.categoryColor).copy()),
@@ -143,7 +123,7 @@ fun ExpandableCategoryCard(
             Row(modifier) {
                 Text(text = categoryWithProducts.category.categoryName)
                 Icon(Icons.Rounded.ArrowDropDown, IconName.EXPAND,
-                    modifier.clickable { changeExpand()})
+                    modifier.clickable { changeExpand() })
             }
             if (expand) {
                 Row() {
@@ -181,7 +161,7 @@ fun ExpandableCategoryCardTest(
             Row(modifier) {
                 Text(text = categoryWithProducts.category.categoryName)
                 Icon(Icons.Rounded.ArrowDropDown, IconName.EXPAND,
-                    modifier.clickable {expand = !expand })
+                    modifier.clickable { expand = !expand })
             }
             if (expand) {
 //                Row(content = content)
