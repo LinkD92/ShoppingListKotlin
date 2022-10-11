@@ -37,4 +37,10 @@ class DisplayProductViewModel @Inject constructor(
             repository.updateCategory(category)
         }
     }
+
+    fun changeCategoryExpand(category: Category, isExpanded: Boolean){
+        viewModelScope.launch {
+            repository.updateCategory(category.apply { this.isExpanded = isExpanded })
+        }
+    }
 }

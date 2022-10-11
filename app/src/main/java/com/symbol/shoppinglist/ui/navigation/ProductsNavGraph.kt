@@ -19,7 +19,7 @@ fun NavGraphBuilder.productsNavGraph(
         startDestination = ScreenName.PRODUCTS,
         route = NavGraphs.PRODUCTS
     ) {
-        composable(ScreenName.PRODUCTS) { DisplayProducts(modifier) }
+        composable(ScreenName.PRODUCTS) { DisplayProducts(modifier, navHostController) }
         composable(ScreenName.ADD_PRODUCT) { AddProduct(modifier) }
     }
 }
