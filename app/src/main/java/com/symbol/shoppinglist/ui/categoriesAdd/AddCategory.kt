@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.ScreenName
+import com.symbol.shoppinglist.ui.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.productAdd.AddButton
 import com.symbol.shoppinglist.ui.productAdd.LabelAndPlaceHolder
 
@@ -38,7 +39,7 @@ fun AddCategory(
         }
         ColorPickerButton(
             modifier.background(test),
-            onClick = { navController.navigate(ScreenName.COLOR_PICKER) })
+            onClick = { navController.navigate(CategoriesDirections.ColorPicker.route) })
         AddButton(
             onClick = { viewModel.addCategory() })
     }

@@ -1,30 +1,32 @@
 package com.symbol.shoppinglist.ui.navigation
 
-import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.symbol.shoppinglist.NavGraphs
-import com.symbol.shoppinglist.ScreenName
+import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.ui.categoriesAdd.AddCategory
-import com.symbol.shoppinglist.ui.categoriesAdd.AddCategoryViewModel
 import com.symbol.shoppinglist.ui.categoriesAdd.ColorPicker
 import com.symbol.shoppinglist.ui.categoriesManage.ManageCategories
+
+sealed class CategoriesDirections(val route: String) {
+    object Root : CategoriesDirections(NavigationRoutes.Categories.ROOT)
+    object AddCategory : CategoriesDirections(NavigationRoutes.Categories.ADD_CATEGORY)
+    object ColorPicker : CategoriesDirections(NavigationRoutes.Categories.COLOR_PICKER)
+}
+
 
 fun NavGraphBuilder.categoriesNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
     navigation(
-        startDestination = ScreenName.CATEGORIES,
-        route = NavGraphs.CATEGORIES
+        startDestination = CategoriesDirections.Root.route,
+        route = BottomNavigationDirection.Categories.route
     ) {
-        composable(ScreenName.CATEGORIES) { ManageCategories(modifier) }
-        composable(ScreenName.ADD_CATEGORY) { AddCategory(modifier, navController) }
-        composable(ScreenName.COLOR_PICKER) { ColorPicker(modifier, navController) }
+        composable(CategoriesDirections.Root.route) { ManageCategories(modifier) }
+        composable(CategoriesDirections.AddCategory.route) { AddCategory(modifier, navController) }
+        composable(CategoriesDirections.ColorPicker.route) { ColorPicker(modifier, navController) }
     }
 }

@@ -6,10 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.symbol.shoppinglist.ui.AppBottomNavigation
+import com.symbol.shoppinglist.ui.navigation.AppBottomNavigation
 import com.symbol.shoppinglist.ui.AppFab
 import com.symbol.shoppinglist.ui.AppTopBar
-import com.symbol.shoppinglist.ui.navigation.RootNavGraph
+import com.symbol.shoppinglist.ui.navigation.AppNavGraph
 import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
 
 
@@ -26,7 +26,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
             bottomBar = { AppBottomNavigation(navController) }
         ) {
             it
-            RootNavGraph(modifier, navController)
+            AppNavGraph(modifier, navController)
         }
     }
 }
