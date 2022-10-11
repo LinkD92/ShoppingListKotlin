@@ -1,7 +1,10 @@
 package com.symbol.shoppinglist
 
+import android.app.SearchManager.QUERY
+
 object TopBarName {
     const val ADD_PRODUCT = "Add Product"
+    const val EDIT_PRODUCT = "Edit Product"
     const val PRODUCTS = "Products"
     const val CATEGORIES = "Categories"
     const val ADD_CATEGORY = "Add Category"
@@ -29,6 +32,10 @@ object Error{
 
 
 object NavigationRoutes{
+    private const val OPTIONAL_ARGUMENT = "?"
+    fun addArgument(argumentName: String, argument: String): String{
+        return "${argumentName}={$argument}"
+    }
     object NavGraphs {
         const val PRODUCTS = "products"
         const val CATEGORIES = "categories"
@@ -44,6 +51,11 @@ object NavigationRoutes{
         const val ADD_CATEGORY = ROOT+"addCategory/"
         const val COLOR_PICKER = ADD_CATEGORY+"colorPicker/"
     }
+}
+
+object Prompt{
+    const val PRODUCT_ADDED = "Product has been added"
+    const val PRODUCT_EXISTS = "Product already exists"
 }
 
 

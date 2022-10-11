@@ -25,10 +25,9 @@ fun AddProduct(
 ) {
     val context = LocalContext.current
     val categories = viewModel.allCategories.observeAsState().value ?: listOf()
+
     Column {
-        Log.d("QWAS - AddProduct:", "COLUMN")
         LabelAndPlaceHolder(viewModel.productName) {
-            Log.d("QWAS - AddProduct:", "LABEL")
             viewModel.updateName(it)
         }
         CategoriesDropDown(
@@ -36,7 +35,6 @@ fun AddProduct(
             categories,
             viewModel.productCategory
         ) { category ->
-            Log.d("QWAS - AddProduct:", "CATEGORY")
             viewModel.chooseCategory(category) }
         AddButton(modifier, onClick = { viewModel.addProduct() })
     }
@@ -66,7 +64,7 @@ fun CategoriesDropDown(
                 .clickable { expanded = !expanded },
         ) {
             Text(text = selectedCategory.categoryName)
-            ColorSquare(category = selectedCategory)
+            ColorSquare(color = selectedCategory.categoryColor)
             Icon(Icons.Rounded.ArrowDropDown, IconName.DROPDOWN)
             DropdownMenu(
                 modifier = modifier,
@@ -77,15 +75,10 @@ fun CategoriesDropDown(
                         chooseCategory(category)
                     }) {
                         Text(text = category.categoryName)
-                        ColorSquare(modifier, category)
+                        ColorSquare(modifier, category.categoryColor)
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun CategoryDropDownItem(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
-
 }

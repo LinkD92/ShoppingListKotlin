@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ShoppingList</string>
+    <string name="Products">Produkty</string>
+    <string name="AddProduct">Dodaj produkt</string>
+
+    <!--Products-->
+    <string name="product_added">Proukt został dodany</string>
+    <string name="product_exists">Taki produkt już istnieje</string>
+
+
 </resources>

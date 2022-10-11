@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.TopBarName
 import com.symbol.shoppinglist.database.entities.Product
+import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProductViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -58,7 +58,9 @@ fun DisplayProducts(
                             product = product,
                             categoryColor = categoryWithProduct.category.categoryColor,
                             onClick = { viewModel.updateProduct(product) },
-                            onLongPress = {navHostController.navigate(TopBarName.ADD_PRODUCT)},
+                            onLongPress = {
+                                navHostController.navigate(ProductsDirections.AddProduct.passProductName(product.productName))
+                            },
                             deleteProduct = { viewModel.deleteProduct(product) })
                     }
                 }
@@ -92,21 +94,21 @@ fun ProductItem(
                         isChecked = !isChecked
                         onClick(product.apply { isProductChecked = isChecked })
                     },
-                    onLongClick = {onLongPress(product)}
+                    onLongClick = { onLongPress(product) }
                 )
-        .background(color = backgroundColor)
-    ) {
-        Row(
-            modifier = modifier
+                .background(color = backgroundColor)
         ) {
-            Text(text = product.productName)
-            Icon(
-                Icons.Rounded.Delete, IconName.DELETE,
-                modifier = modifier.clickable { deleteProduct(product) }
-            )
+            Row(
+                modifier = modifier
+            ) {
+                Text(text = product.productName)
+                Icon(
+                    Icons.Rounded.Delete, IconName.DELETE,
+                    modifier = modifier.clickable { deleteProduct(product) }
+                )
+            }
         }
     }
-}
 }
 
 @Composable

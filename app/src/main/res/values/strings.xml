@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">ShoppingList</string>
+    <string name="app_name">Shopping list</string>
+
+<!--Products-->
+    <string name="product_added">Product has been added</string>
+    <string name="product_exists">Product already exists</string>
     <string name="Products">Products</string>
-    <string name="AddProduct">AddProduct</string>
+    <string name="AddProduct">Add product</string>
 </resources>

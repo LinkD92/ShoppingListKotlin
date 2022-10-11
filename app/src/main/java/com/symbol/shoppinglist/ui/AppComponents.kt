@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -17,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.symbol.shoppinglist.Action
 import com.symbol.shoppinglist.Error
+import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.TopBarName
 import com.symbol.shoppinglist.database.entities.Category
 import com.symbol.shoppinglist.navigation.CategoriesDirections
@@ -30,7 +32,8 @@ fun AppTopBar(
 ) {
     val backStackEntry = navController.currentBackStackEntry
     val showBackButton = !listOfRootRoutes.contains(backStackEntry?.destination?.route)
-    val topBarTitle = getTopBarTitle(backStackEntry?.destination?.route)
+    val haveArguments = (backStackEntry?.destination?.arguments?.size) != 0
+    val topBarTitle = getTopBarTitle(backStackEntry?.destination?.route, haveArguments)
     TopAppBar(
         title = { Text(text = topBarTitle) },
         navigationIcon = {
@@ -45,10 +48,14 @@ fun AppTopBar(
     )
 }
 
-private fun getTopBarTitle(route: String?): String {
+private fun getTopBarTitle(route: String?, haveArguments: Boolean): String {
+    Log.d("QWAS - getTopBarTitle:", "$route")
+    Log.d("QWAS - getTopBarTitle:", "$haveArguments")
     return when (route) {
         ProductsDirections.Root.route -> TopBarName.PRODUCTS
-        ProductsDirections.AddProduct.route -> TopBarName.ADD_PRODUCT
+        ProductsDirections.AddProduct.route ->{
+            if(haveArguments) TopBarName.EDIT_PRODUCT else TopBarName.ADD_PRODUCT
+        }
         CategoriesDirections.Root.route -> TopBarName.CATEGORIES
         CategoriesDirections.AddCategory.route -> TopBarName.ADD_CATEGORY
         CategoriesDirections.ColorPicker.route -> TopBarName.COLOR_PICKER

@@ -16,6 +16,10 @@ class ListRepository @Inject constructor(private val listDao: ListDao) {
 
     suspend fun addProduct(product: Product) = listDao.addProduct(product)
 
+    suspend fun getProduct(name: String) = listDao.getProduct(name)
+
+    suspend fun getCategory(name: String) = listDao.getCategory(name)
+
     suspend fun addCategory(category: Category) = listDao.addCategory(category)
 
     suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)

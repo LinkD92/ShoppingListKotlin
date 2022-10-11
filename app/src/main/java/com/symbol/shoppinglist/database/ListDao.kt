@@ -19,6 +19,12 @@ interface ListDao {
     @Query("SELECT * FROM categories")
     fun getCategoryWithProducts(): LiveData<List<CategoryWithProducts>>
 
+    @Query("SELECT * FROM products WHERE productName= :name")
+    suspend fun getProduct(name: String): Product
+
+    @Query("SELECT * FROM categories WHERE categoryName= :name")
+    suspend fun getCategory(name: String): Category
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addProduct(product: Product)
 
