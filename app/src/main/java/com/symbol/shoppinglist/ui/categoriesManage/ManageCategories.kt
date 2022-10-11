@@ -46,7 +46,7 @@ fun CategoryItem(modifier: Modifier = Modifier, category: Category){
         Box(modifier = modifier
             .clip(RoundedCornerShape(20))
         ) {
-            ColorSquare(modifier, category)
+            ColorSquare(modifier, category.categoryColor)
         }
     }
 }

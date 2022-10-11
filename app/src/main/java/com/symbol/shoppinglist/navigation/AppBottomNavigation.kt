@@ -1,6 +1,5 @@
-package com.symbol.shoppinglist.ui.navigation
+package com.symbol.shoppinglist.navigation
 
-import android.util.Log
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -34,10 +33,6 @@ sealed class BottomNavigationDirection(val route: String, val icon: ImageVector)
 fun AppBottomNavigation(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: BottomNavigationDirection.Products
-//    val listOfNavigationItems = BottomNavigationDirection::class.nestedClasses.map {
-//        it.objectInstance as BottomNavigationDirection
-//    }
-
     val listOfNavigationItems = listOf(
         BottomNavigationDirection.Products,
         BottomNavigationDirection.Categories
@@ -47,22 +42,19 @@ fun AppBottomNavigation(navController: NavHostController) {
             BottomNavigationItem(
                 selected = currentRoute == item.route,
                 onClick = {
-                    Log.d("QWAS - AppBottomNavigation:", "CUR: ${currentRoute.toString()}")
-                    Log.d("QWAS - AppBottomNavigation:", " ROUT: ${item.route}")
                     if (currentRoute.toString().startsWith(item.route)) {
                         navController.navigate(findBottomNavRootRoute(item.route)) {
                             popUpTo(findStartDestination(navController.graph).id)
                         }
-                    } else if(currentRoute != item.route){
-                        navController.navigate(item.route){
+                    } else if (currentRoute != item.route) {
+                        navController.navigate(item.route) {
                             launchSingleTop = true
                             restoreState = true
                             val startDestination = findStartDestination(navController.graph)
-                            popUpTo(startDestination.id){
+                            popUpTo(startDestination.id) {
                                 saveState = true
                             }
                         }
-                        Log.d("QWAS - AppBottomNavigation:", "ELSE")
                     }
                 },
                 icon = { Icon(item.icon, item.route) },

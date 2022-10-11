@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -17,21 +16,25 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.symbol.shoppinglist.Action
+import com.symbol.shoppinglist.Error
+import com.symbol.shoppinglist.TopBarName
 import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.ui.navigation.CategoriesDirections
-import com.symbol.shoppinglist.ui.navigation.ProductsDirections
+import com.symbol.shoppinglist.navigation.CategoriesDirections
+import com.symbol.shoppinglist.navigation.ProductsDirections
+import com.symbol.shoppinglist.navigation.listOfRootRoutes
 
 
 @Composable
 fun AppTopBar(
-    screenName: String,
     navController: NavHostController,
 ) {
-    val backStackEntry = navController.previousBackStackEntry
+    val backStackEntry = navController.currentBackStackEntry
+    val showBackButton = !listOfRootRoutes.contains(backStackEntry?.destination?.route)
+    val topBarTitle = getTopBarTitle(backStackEntry?.destination?.route)
     TopAppBar(
-        title = { Text(text = screenName) },
+        title = { Text(text = topBarTitle) },
         navigationIcon = {
-            if (backStackEntry != null) {
+            if (showBackButton) {
                 IconButton(onClick = {
                     navController.popBackStack()
                 }) {
@@ -42,10 +45,21 @@ fun AppTopBar(
     )
 }
 
+private fun getTopBarTitle(route: String?): String {
+    return when (route) {
+        ProductsDirections.Root.route -> TopBarName.PRODUCTS
+        ProductsDirections.AddProduct.route -> TopBarName.ADD_PRODUCT
+        CategoriesDirections.Root.route -> TopBarName.CATEGORIES
+        CategoriesDirections.AddCategory.route -> TopBarName.ADD_CATEGORY
+        CategoriesDirections.ColorPicker.route -> TopBarName.COLOR_PICKER
+        else -> Error.ERROR
+    }
+}
+
+
 @Composable
 fun AppFab(navController: NavHostController) {
     val currentScreen = navController.currentBackStackEntryAsState().value?.destination?.route
-    Log.d("QWAS - AppFab:", "$currentScreen")
     FloatingActionButton(onClick = {
         when (currentScreen) {
             ProductsDirections.Root.route -> {
@@ -62,11 +76,11 @@ fun AppFab(navController: NavHostController) {
 
 
 @Composable
-fun ColorSquare(modifier: Modifier = Modifier, category: Category) {
+fun ColorSquare(modifier: Modifier = Modifier, color: Long) {
     Canvas(
         modifier = modifier
             .size(30.dp)
             .clip(RoundedCornerShape(20))
-            .background(Color(category.categoryColor))
+            .background(Color(color))
     ) {}
 }

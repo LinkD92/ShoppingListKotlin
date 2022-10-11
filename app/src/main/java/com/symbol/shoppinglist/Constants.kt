@@ -1,8 +1,6 @@
 package com.symbol.shoppinglist
 
-import com.symbol.shoppinglist.ui.navigation.BottomNavigationDirection
-
-object ScreenName {
+object TopBarName {
     const val ADD_PRODUCT = "Add Product"
     const val PRODUCTS = "Products"
     const val CATEGORIES = "Categories"
@@ -24,17 +22,14 @@ object IconName {
     const val DROPDOWN = "Dropdown"
 }
 
+object Error{
+    const val ERROR = "ERROR"
+}
+
 
 
 object NavigationRoutes{
     object NavGraphs {
-        private const val NAV_GRAPH = ""
-        const val ROOT = "root$NAV_GRAPH"
-        const val PRODUCTS = "products$NAV_GRAPH"
-        const val CATEGORIES = "categories$NAV_GRAPH"
-    }
-
-    object BottomNavigationRoutes{
         const val PRODUCTS = "products"
         const val CATEGORIES = "categories"
     }
@@ -50,3 +45,5 @@ object NavigationRoutes{
         const val COLOR_PICKER = ADD_CATEGORY+"colorPicker/"
     }
 }
+
+

@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,16 +10,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.ScreenName
-import com.symbol.shoppinglist.ui.navigation.CategoriesDirections
+import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.productAdd.AddButton
 import com.symbol.shoppinglist.ui.productAdd.LabelAndPlaceHolder
 

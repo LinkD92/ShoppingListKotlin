@@ -9,7 +9,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,8 +20,7 @@ import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.ScreenName
-import com.symbol.shoppinglist.ui.navigation.CategoriesDirections
+import com.symbol.shoppinglist.navigation.CategoriesDirections
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable

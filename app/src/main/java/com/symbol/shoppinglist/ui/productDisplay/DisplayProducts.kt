@@ -28,8 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.ScreenName
-import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.TopBarName
 import com.symbol.shoppinglist.database.entities.Product
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProductViewModel
 
@@ -59,7 +58,7 @@ fun DisplayProducts(
                             product = product,
                             categoryColor = categoryWithProduct.category.categoryColor,
                             onClick = { viewModel.updateProduct(product) },
-                            onLongPress = {navHostController.navigate(ScreenName.ADD_PRODUCT)},
+                            onLongPress = {navHostController.navigate(TopBarName.ADD_PRODUCT)},
                             deleteProduct = { viewModel.deleteProduct(product) })
                     }
                 }
