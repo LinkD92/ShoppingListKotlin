@@ -26,6 +26,7 @@ object IconName {
 }
 
 object Error{
+    const val LOADING = "Loading..."
     const val ERROR = "ERROR"
 }
 
@@ -33,8 +34,8 @@ object Error{
 
 object NavigationRoutes{
     private const val OPTIONAL_ARGUMENT = "?"
-    fun addArgument(argumentName: String, argument: String): String{
-        return "${argumentName}={$argument}"
+    fun addArgument(argumentName: String, argument: String = "{$argumentName}"): String{
+        return "$OPTIONAL_ARGUMENT${argumentName}=$argument"
     }
     object NavGraphs {
         const val PRODUCTS = "products"
@@ -44,6 +45,9 @@ object NavigationRoutes{
     object Products{
         const val ROOT = "products/"
         const val ADD_PRODUCT = ROOT+"addProduct/"
+        object Arguments{
+            const val PRODUCT_NAME = "productName"
+        }
     }
 
     object Categories{
@@ -53,9 +57,5 @@ object NavigationRoutes{
     }
 }
 
-object Prompt{
-    const val PRODUCT_ADDED = "Product has been added"
-    const val PRODUCT_EXISTS = "Product already exists"
-}
 
 

@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">Shopping list</string>
 
-<!--Products-->
+    <!--Products-->
     <string name="product_added">Product has been added</string>
     <string name="product_exists">Product already exists</string>
     <string name="Products">Products</string>
     <string name="AddProduct">Add product</string>
+
+    <!--TopBarScreenName-->
+    <string name="products">Products</string>
+    <string name="add_product">Add product</string>
+    <string name="edit_product">Edit product</string>
+    <string name="categories">Categories</string>
+    <string name="add_category">Add category</string>
+    <string name="edit_category">Edit category</string>
+    <string name="color_picker">Color picker</string>
+
 </resources>

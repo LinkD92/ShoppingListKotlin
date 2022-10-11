@@ -16,8 +16,6 @@ import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
 @Composable
 fun ShoppingListApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = backStackEntry?.destination?.route ?: TopBarName.PRODUCTS
 
     ShoppingListTheme {
         Scaffold(

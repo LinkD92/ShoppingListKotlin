@@ -1,7 +1,6 @@
 package com.symbol.shoppinglist.ui.productAdd
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,7 +12,6 @@ import com.symbol.shoppinglist.database.ListRepository
 import com.symbol.shoppinglist.database.entities.Category
 import com.symbol.shoppinglist.database.entities.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch

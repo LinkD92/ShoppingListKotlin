@@ -8,5 +8,13 @@
     <string name="product_added">Proukt został dodany</string>
     <string name="product_exists">Taki produkt już istnieje</string>
 
+    <!--TopBarScreenName-->
+    <string name="products">Produkty</string>
+    <string name="add_product">Dodaj produkt</string>
+    <string name="edit_product">Edytuj produkt</string>
+    <string name="categories">Kategorie</string>
+    <string name="add_category">Dodaj kategorie</string>
+    <string name="edit_category">Edytuj kategorie</string>
+    <string name="color_picker">Wybierz kolor</string>
 
 </resources>

@@ -45,6 +45,8 @@ fun AppBottomNavigation(navController: NavHostController) {
                     if (currentRoute.toString().startsWith(item.route)) {
                         navController.navigate(findBottomNavRootRoute(item.route)) {
                             popUpTo(findStartDestination(navController.graph).id)
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     } else if (currentRoute != item.route) {
                         navController.navigate(item.route) {
