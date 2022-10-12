@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -93,4 +94,24 @@ fun ColorSquare(modifier: Modifier = Modifier, color: Long) {
             .clip(RoundedCornerShape(20))
             .background(Color(color))
     ) {}
+}
+
+@Composable
+fun LabelAndPlaceHolder(value: String, onValueChange: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = "Your Label") },
+        placeholder = { Text(text = "Your Placeholder/Hint") },
+    )
+}
+
+@Composable
+fun AddButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Button(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Icon(Icons.Rounded.Check, Action.CHECK)
+    }
 }

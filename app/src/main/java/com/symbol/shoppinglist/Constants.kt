@@ -42,7 +42,7 @@ object NavigationRoutes{
         const val ADD_PRODUCT = ROOT+"addProduct/"
         object Arguments{
             const val ID = "productId"
-            const val PRODUCT_NAME = "productName"
+            const val NAME = "productName"
         }
     }
 
@@ -50,6 +50,10 @@ object NavigationRoutes{
         const val ROOT = "categories/"
         const val ADD_CATEGORY = ROOT+"addCategory/"
         const val COLOR_PICKER = ADD_CATEGORY+"colorPicker/"
+        object Arguments{
+            const val ID = "categoryId"
+            const val NAME = "categoryName"
+        }
     }
 
     object Arguments{

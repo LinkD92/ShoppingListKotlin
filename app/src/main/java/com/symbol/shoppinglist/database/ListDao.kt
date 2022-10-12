@@ -8,16 +8,9 @@ import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
 
 @Dao
 interface ListDao {
-
+    //Products
     @Query("SELECT * FROM products")
     fun getAllProducts(): LiveData<List<Product>>
-
-    @Query("SELECT * FROM categories")
-    fun getAllCategories(): LiveData<List<Category>>
-
-    @Transaction
-    @Query("SELECT * FROM categories")
-    fun getCategoryWithProducts(): LiveData<List<CategoryWithProducts>>
 
     @Query("SELECT * FROM products WHERE id = :id")
     suspend fun getProduct(id: Int): Product
@@ -25,14 +18,8 @@ interface ListDao {
     @Query("SELECT COUNT(*) FROM products WHERE productName = :name")
     suspend fun doesProductExists(name: String): Int
 
-    @Query("SELECT * FROM categories WHERE id = :id")
-    suspend fun getCategory(id: Int): Category
-
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addProduct(product: Product)
-
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addCategory(category: Category)
 
     @Delete
     suspend fun deleteProduct(product: Product)
@@ -40,6 +27,28 @@ interface ListDao {
     @Update
     suspend fun updateProduct(product: Product)
 
+    //Categories
+    @Query("SELECT * FROM categories")
+    fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("SELECT * FROM categories WHERE id = :id")
+    suspend fun getCategory(id: Int): Category
+
+    @Query("SELECT COUNT(*) FROM categories WHERE categoryName = :name")
+    suspend fun doesCategoryExists(name: String): Int
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun addCategory(category: Category)
+
+    @Delete
+    suspend fun deleteCategory(category: Category)
+
     @Update
     suspend fun updateCategory(category: Category)
+
+    //Transactions
+    @Transaction
+    @Query("SELECT * FROM categories")
+    fun getCategoryWithProducts(): LiveData<List<CategoryWithProducts>>
+
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Shopping list</string>
 
@@ -5,8 +6,11 @@
     <string name="product_added">Product has been added</string>
     <string name="product_exists">Product already exists</string>
     <string name="product_updated">Product has been updated</string>
-    <string name="Products">Products</string>
-    <string name="AddProduct">Add product</string>
+
+    <!--Categories-->
+    <string name="category_added">Category has been added</string>
+    <string name="category_exists">Category already exists</string>
+    <string name="category_updated">Category has been updated</string>
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>

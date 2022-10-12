@@ -14,7 +14,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.ui.AddButton
 import com.symbol.shoppinglist.ui.ColorSquare
+import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 
 @Composable
 fun AddProduct(

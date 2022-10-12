@@ -67,8 +67,8 @@ fun ColorPicker(
                     .padding(10.dp),
                 controller = controller,
                 onColorChanged = {
-                    viewModel.updateCategoryColor(it.hexCode)
-                    viewModel.updateCategoryColor(it.color)
+                    viewModel.updateColor(it.hexCode)
+                    viewModel.updateColor(it.color)
                 }
             )
         }

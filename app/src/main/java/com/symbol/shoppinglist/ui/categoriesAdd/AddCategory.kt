@@ -11,14 +11,13 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.navigation.CategoriesDirections
-import com.symbol.shoppinglist.ui.productAdd.AddButton
-import com.symbol.shoppinglist.ui.productAdd.LabelAndPlaceHolder
+import com.symbol.shoppinglist.ui.AddButton
+import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 
 @Composable
 fun AddCategory(
@@ -27,22 +26,22 @@ fun AddCategory(
     viewModel: AddCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val test = Color(viewModel.test)
+    val currentColor = viewModel.categoryColor
 
     Column {
         LabelAndPlaceHolder(viewModel.categoryName) {
-            viewModel.updateCategoryName(it)
+            viewModel.updateName(it)
         }
         ColorPickerButton(
-            modifier.background(test),
+            modifier.background(currentColor),
             onClick = { navController.navigate(CategoriesDirections.ColorPicker.route) })
         AddButton(
-            onClick = { viewModel.addCategory() })
+            onClick = { viewModel.confirmButtonClick() })
     }
 
     LaunchedEffect(true) {
         viewModel.successObserver.collect {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
         }
     }
 }
