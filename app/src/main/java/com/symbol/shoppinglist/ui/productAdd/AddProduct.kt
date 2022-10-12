@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.productAdd
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.entities.Category
@@ -36,12 +34,12 @@ fun AddProduct(
             viewModel.productCategory
         ) { category ->
             viewModel.chooseCategory(category) }
-        AddButton(modifier, onClick = { viewModel.addProduct() })
+        AddButton(modifier, onClick = { viewModel.confirmButtonClick() })
     }
 
     LaunchedEffect(true) {
         viewModel.successObserver.collect {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
         }
     }
 }

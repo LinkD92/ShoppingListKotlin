@@ -1,3 +1,9 @@
 package com.symbol.shoppinglist.ui
 
-sealed class UiPrompt
+import androidx.annotation.StringRes
+
+sealed class UiPrompt{
+    class StringResource(
+        @StringRes val resId: Int
+    ): UiPrompt()
+}

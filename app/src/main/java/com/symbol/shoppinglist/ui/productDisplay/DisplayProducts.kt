@@ -59,7 +59,7 @@ fun DisplayProducts(
                             categoryColor = categoryWithProduct.category.categoryColor,
                             onClick = { viewModel.updateProduct(product) },
                             onLongPress = {
-                                navHostController.navigate(ProductsDirections.AddProduct.passArgument(product.productName))
+                                navHostController.navigate(ProductsDirections.AddProduct.passArgument(product.id))
                             },
                             deleteProduct = { viewModel.deleteProduct(product) })
                     }

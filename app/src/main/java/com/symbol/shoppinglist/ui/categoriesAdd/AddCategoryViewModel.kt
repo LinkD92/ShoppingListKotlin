@@ -31,7 +31,7 @@ class AddCategoryViewModel @Inject constructor(private val repository: ListRepos
 
     fun addCategory() = viewModelScope.launch {
         try {
-            val category = Category(categoryName, test)
+            val category = Category( categoryName = categoryName, categoryColor = test)
             repository.addCategory(category)
             _successObserver.emit("Category added")
         } catch (error: SQLiteConstraintException) {

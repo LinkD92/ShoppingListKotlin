@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +39,6 @@ fun SimpleTextField() {
 fun AddButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick) {
-        Icon(Icons.Rounded.Add, Action.ADD)
+        Icon(Icons.Rounded.Check, Action.CHECK)
     }
 }

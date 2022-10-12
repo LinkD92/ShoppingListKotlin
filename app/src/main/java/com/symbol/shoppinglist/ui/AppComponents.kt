@@ -28,11 +28,12 @@ import com.symbol.shoppinglist.navigation.listOfRootRoutes
 fun AppTopBar(
     navController: NavHostController,
 ) {
-    val productName = NavigationRoutes.Products.Arguments.PRODUCT_NAME
+    val productId = NavigationRoutes.Products.Arguments.ID
+    val invalidId = NavigationRoutes.Arguments.INVALID_ID
     val backStackEntry by navController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
     val showBackButton = !listOfRootRoutes.contains(route)
-    val haveArguments = backStackEntry?.arguments?.getString(productName) != null
+    val haveArguments = backStackEntry?.arguments?.getInt(productId) != invalidId
     val topBarTitle = getTopBarTitle(route, haveArguments)
     TopAppBar(
         title = { Text(text = topBarTitle) },

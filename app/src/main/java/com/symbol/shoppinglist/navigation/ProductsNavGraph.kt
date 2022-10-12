@@ -7,16 +7,16 @@ import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.product.DisplayProducts
 import com.symbol.shoppinglist.ui.productAdd.AddProduct
 
-private const val productName = NavigationRoutes.Products.Arguments.PRODUCT_NAME
+private const val productId = NavigationRoutes.Products.Arguments.ID
 
 sealed class ProductsDirections(val route: String) {
     object Root : ProductsDirections(NavigationRoutes.Products.ROOT)
     object AddProduct : ProductsDirections(
-        "${NavigationRoutes.Products.ADD_PRODUCT}${NavigationRoutes.addArgument(productName)}"
+        "${NavigationRoutes.Products.ADD_PRODUCT}${NavigationRoutes.addArgumentName(productId)}"
     ) {
-        fun passArgument(name: String): String {
+        fun passArgument(id: Int): String {
             return "${NavigationRoutes.Products.ADD_PRODUCT}${
-                NavigationRoutes.addArgument(productName, name)
+                NavigationRoutes.addArgument(productId, id)
             }"
         }
     }
@@ -35,9 +35,9 @@ fun NavGraphBuilder.productsNavGraph(
         }
         composable(ProductsDirections.AddProduct.route,
             arguments = listOf(
-                navArgument(productName) {
-                    type = NavType.StringType
-                    nullable = true
+                navArgument(productId) {
+                    type = NavType.IntType
+                    defaultValue = NavigationRoutes.Arguments.INVALID_ID
                 }
             )
         ) {

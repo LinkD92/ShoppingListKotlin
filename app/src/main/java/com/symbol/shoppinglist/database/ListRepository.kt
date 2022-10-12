@@ -12,13 +12,16 @@ class ListRepository @Inject constructor(private val listDao: ListDao) {
 
     fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
 
-    fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>> = listDao.getCategoryWithProducts()
+    fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>> =
+        listDao.getCategoryWithProducts()
 
     suspend fun addProduct(product: Product) = listDao.addProduct(product)
 
-    suspend fun getProduct(name: String) = listDao.getProduct(name)
+    suspend fun getProduct(id: Int) = listDao.getProduct(id)
 
-    suspend fun getCategory(name: String) = listDao.getCategory(name)
+    suspend fun doesProductExists(name: String) = listDao.doesProductExists(name)
+
+    suspend fun getCategory(id: Int) = listDao.getCategory(id)
 
     suspend fun addCategory(category: Category) = listDao.addCategory(category)
 

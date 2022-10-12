@@ -7,6 +7,7 @@
     <!--Products-->
     <string name="product_added">Proukt został dodany</string>
     <string name="product_exists">Taki produkt już istnieje</string>
+    <string name="product_updated">Produk został zaktualizowany</string>
 
     <!--TopBarScreenName-->
     <string name="products">Produkty</string>

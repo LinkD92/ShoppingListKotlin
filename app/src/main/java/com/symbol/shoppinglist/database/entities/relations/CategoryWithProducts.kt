@@ -9,8 +9,8 @@ data class CategoryWithProducts(
     @Embedded
     val category: Category,
     @Relation(
-        parentColumn = "categoryName",
-        entityColumn = "categoryName"
+        parentColumn = "id",
+        entityColumn = "categoryId"
     )
     val products: List<Product>
 )
