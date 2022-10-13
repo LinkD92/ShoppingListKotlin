@@ -57,7 +57,7 @@ fun ListOfCategories(modifier: Modifier, categories: List<Category>, onClick: (I
     LazyColumn(
         modifier = modifier
     ) {
-        items(categories, key = { it.categoryName }) { item ->
+        items(categories, key = { it.id }) { item ->
             CategoryItem(
                 category = item,
                 onClick = onClick

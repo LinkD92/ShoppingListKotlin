@@ -68,7 +68,6 @@ fun ColorPicker(
                 controller = controller,
                 onColorChanged = {
                     viewModel.updateColor(it.hexCode)
-                    viewModel.updateColor(it.color)
                 }
             )
         }

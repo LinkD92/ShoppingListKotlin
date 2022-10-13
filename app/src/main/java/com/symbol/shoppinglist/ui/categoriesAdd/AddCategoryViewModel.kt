@@ -1,10 +1,8 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,14 +26,15 @@ class AddCategoryViewModel @Inject constructor(
     private val categoryIdReceived =
         savedStateHandle.get<Int>(NavigationRoutes.Products.Arguments.ID)
             ?: invalidId
-    private var categoryColorHex by mutableStateOf("")
+    private var receivedCategoryName = ""
     private val _successObserver = MutableSharedFlow<Int>()
     private var isCategoryValid = false
     val successObserver = _successObserver.asSharedFlow()
     val categories = repository.getAllCategories()
     var categoryName by mutableStateOf("")
-    var categoryColor by mutableStateOf(Color.Black)
+        private set
     var categoryColorLong: Long by mutableStateOf(0)
+        private set
 
     init {
         getCategory(categoryIdReceived)
@@ -44,7 +43,6 @@ class AddCategoryViewModel @Inject constructor(
     fun confirmButtonClick() = viewModelScope.launch {
         val action = if (categoryIdReceived == invalidId) ::addCategory else ::updateCategory
         validateCategory(categoryName)
-        Log.d("QWAS - confirmButtonClick:", "$isCategoryValid")
         if (isCategoryValid) {
             action()
         } else {
@@ -52,44 +50,41 @@ class AddCategoryViewModel @Inject constructor(
         }
     }
 
+    fun updateName(input: String) {
+        categoryName = input
+    }
+
+    fun updateColor(input: String) {
+        categoryColorLong = input.toLong(16)
+    }
+
+    private fun getCategory(id: Int) {
+        if (id != invalidId) {
+            viewModelScope.launch {
+                val category = repository.getCategory(id)
+                receivedCategoryName = category.categoryName
+                categoryName = category.categoryName
+                categoryColorLong = category.categoryColor
+            }
+        }
+    }
+
     private suspend fun addCategory() {
         val category = Category(categoryName = categoryName, categoryColor = categoryColorLong)
         _successObserver.emit(R.string.category_added)
         repository.addCategory(category)
-}
-
-fun updateName(input: String) {
-    categoryName = input
-}
-
-fun updateColor(input: String) {
-    categoryColorHex = input
-    categoryColorLong = input.toLong(16)
-}
-
-fun updateColor(input: Color) {
-    categoryColor = input
-}
-
-private fun getCategory(id: Int) {
-    if (id != invalidId) {
-        viewModelScope.launch {
-            val category = repository.getCategory(id)
-            updateName(category.categoryName)
-            updateColor(category.categoryColor.toString())
-        }
     }
-}
 
-private suspend fun updateCategory() {
-    val category = Category(categoryIdReceived, categoryName, categoryColorLong)
-    _successObserver.emit(R.string.category_updated)
-    repository.updateCategory(category)
-}
+    private suspend fun updateCategory() {
+        val category = Category(categoryIdReceived, categoryName, categoryColorLong)
+        _successObserver.emit(R.string.category_updated)
+        repository.updateCategory(category)
+    }
 
-private suspend fun validateCategory(name: String) {
-    val count = repository.doesCategoryExists(name)
-    isCategoryValid = count <= 0
-    Log.d("QWAS - validateCategory:", "$isCategoryValid")
-}
+    private suspend fun validateCategory(name: String) {
+        val count = repository.doesCategoryExists(name)
+        val duplicateValidation = count <= 0
+        val currentNameValidation = name == receivedCategoryName
+        isCategoryValid = duplicateValidation || currentNameValidation
+    }
 }
