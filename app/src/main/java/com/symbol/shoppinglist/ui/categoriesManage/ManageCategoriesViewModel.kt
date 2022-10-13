@@ -3,7 +3,7 @@ package com.symbol.shoppinglist.ui.categoriesManage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

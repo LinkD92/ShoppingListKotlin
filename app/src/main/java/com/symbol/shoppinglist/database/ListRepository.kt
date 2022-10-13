@@ -1,9 +1,10 @@
 package com.symbol.shoppinglist.database
 
 import androidx.lifecycle.LiveData
-import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.database.entities.Product
-import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
+import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
+import com.symbol.shoppinglist.database.local.ListDao
 import javax.inject.Inject
 
 class ListRepository @Inject constructor(private val listDao: ListDao) {

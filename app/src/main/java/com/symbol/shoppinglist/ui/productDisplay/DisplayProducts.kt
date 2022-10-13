@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.database.entities.Product
+import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProductViewModel
 
@@ -46,7 +46,7 @@ fun DisplayProducts(
         ) { categoryWithProduct ->
             ExpandableCategoryCard(
                 modifier,
-                categoryWithProduct.category.categoryName,
+                categoryWithProduct.category.name,
                 categoryWithProduct.category.isExpanded,
                 { isExpanded ->
                     viewModel.changeCategoryExpand(categoryWithProduct.category, isExpanded)
@@ -56,7 +56,7 @@ fun DisplayProducts(
                     categoryWithProduct.products.forEach { product ->
                         ProductItem(
                             product = product,
-                            categoryColor = categoryWithProduct.category.categoryColor,
+                            categoryColor = categoryWithProduct.category.color,
                             onClick = { viewModel.updateProduct(product) },
                             onLongPress = {
                                 navHostController.navigate(ProductsDirections.AddProduct.passArgument(product.id))
@@ -80,7 +80,7 @@ fun ProductItem(
     onLongPress: (Product) -> Unit,
     deleteProduct: (Product) -> Unit,
 ) {
-    var isChecked by remember { mutableStateOf(product.isProductChecked) }
+    var isChecked by remember { mutableStateOf(product.isChecked) }
     val alphaValue = if (isChecked) 1f else 0.3f
     val backgroundColor = Color(categoryColor).copy(alphaValue)
     Surface(
@@ -92,7 +92,7 @@ fun ProductItem(
                 .combinedClickable(
                     onClick = {
                         isChecked = !isChecked
-                        onClick(product.apply { isProductChecked = isChecked })
+                        onClick(product.apply { this.isChecked = isChecked })
                     },
                     onLongClick = { onLongPress(product) }
                 )
@@ -101,7 +101,7 @@ fun ProductItem(
             Row(
                 modifier = modifier
             ) {
-                Text(text = product.productName)
+                Text(text = product.name)
                 Icon(
                     Icons.Rounded.Delete, IconName.DELETE,
                     modifier = modifier.clickable { deleteProduct(product) }
@@ -181,7 +181,7 @@ fun StaggeredGrid(
 
         // Grid's height is the sum of the tallest element of each row
         // coerced to the height constraints
-        val height = rowMaxHeights.sumBy { it }
+        val height = rowMaxHeights.sumOf { it }
             .coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
 
         // Y of each row, based on the height accumulation of previous rows

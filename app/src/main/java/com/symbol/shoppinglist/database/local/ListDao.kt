@@ -1,10 +1,10 @@
-package com.symbol.shoppinglist.database
+package com.symbol.shoppinglist.database.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.database.entities.Product
-import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
+import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 
 @Dao
 interface ListDao {
@@ -15,7 +15,7 @@ interface ListDao {
     @Query("SELECT * FROM products WHERE id = :id")
     suspend fun getProduct(id: Int): Product
 
-    @Query("SELECT COUNT(*) FROM products WHERE productName = :name")
+    @Query("SELECT COUNT(*) FROM products WHERE name = :name")
     suspend fun doesProductExists(name: String): Int
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
@@ -34,7 +34,7 @@ interface ListDao {
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getCategory(id: Int): Category
 
-    @Query("SELECT COUNT(*) FROM categories WHERE categoryName = :name")
+    @Query("SELECT COUNT(*) FROM categories WHERE name = :name")
     suspend fun doesCategoryExists(name: String): Int
 
     @Insert(onConflict = OnConflictStrategy.ABORT)

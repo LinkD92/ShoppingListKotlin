@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesManage
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.ColorSquare
 
@@ -51,12 +50,12 @@ fun CategoryItem(
         onClick(category.id)
     }
     ) {
-        Text(modifier = modifier, text = category.categoryName)
+        Text(modifier = modifier, text = category.name)
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(20))
         ) {
-            ColorSquare(modifier, category.categoryColor)
+            ColorSquare(modifier, category.color)
         }
         Icon(Icons.Rounded.Delete, IconName.DELETE, modifier.clickable {
             deleteIconClick(category)

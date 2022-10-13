@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.ui.AddButton
 import com.symbol.shoppinglist.ui.ColorSquare
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
@@ -63,8 +63,8 @@ fun CategoriesDropDown(
             modifier = modifier
                 .clickable { expanded = !expanded },
         ) {
-            Text(text = selectedCategory.categoryName)
-            ColorSquare(color = selectedCategory.categoryColor)
+            Text(text = selectedCategory.name)
+            ColorSquare(color = selectedCategory.color)
             Icon(Icons.Rounded.ArrowDropDown, IconName.DROPDOWN)
             DropdownMenu(
                 modifier = modifier,
@@ -74,8 +74,8 @@ fun CategoriesDropDown(
                         expanded = false
                         chooseCategory(category)
                     }) {
-                        Text(text = category.categoryName)
-                        ColorSquare(modifier, category.categoryColor)
+                        Text(text = category.name)
+                        ColorSquare(modifier, category.color)
                     }
                 }
             }

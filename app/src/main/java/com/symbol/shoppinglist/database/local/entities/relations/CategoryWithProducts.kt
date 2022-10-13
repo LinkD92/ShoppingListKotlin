@@ -1,9 +1,9 @@
-package com.symbol.shoppinglist.database.entities.relations
+package com.symbol.shoppinglist.database.local.entities.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.database.entities.Product
+import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Product
 
 data class CategoryWithProducts(
     @Embedded

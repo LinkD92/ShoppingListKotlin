@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.database.entities.Product
-import com.symbol.shoppinglist.database.entities.relations.CategoryWithProducts
+import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

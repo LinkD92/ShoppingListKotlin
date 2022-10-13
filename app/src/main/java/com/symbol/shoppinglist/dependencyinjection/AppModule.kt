@@ -2,8 +2,8 @@ package com.symbol.shoppinglist.dependencyinjection
 
 import android.app.Application
 import androidx.room.Room
-import com.symbol.shoppinglist.database.ListDao
-import com.symbol.shoppinglist.database.ListDatabase
+import com.symbol.shoppinglist.database.local.ListDao
+import com.symbol.shoppinglist.database.local.ListDatabase
 import com.symbol.shoppinglist.database.ListRepository
 import dagger.Module
 import dagger.Provides

@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.entities.Category
-import com.symbol.shoppinglist.database.entities.Product
+import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -24,7 +24,7 @@ class AddProductViewModel @Inject constructor(
 ) :
     ViewModel() {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
-    private val dummyCategory = Category(0, categoryName = "Select category")
+    private val dummyCategory = Category(name = "Select category")
     private var isProductValid = false
     private var receivedCategoryName = ""
     private val productIdReceived =
@@ -62,13 +62,13 @@ class AddProductViewModel @Inject constructor(
     }
 
     private suspend fun addProduct() {
-        val product = Product(productName = productName, categoryId = productCategory.id)
+        val product = Product(name = productName, categoryId = productCategory.id)
         _successObserver.emit(R.string.product_added)
         repository.addProduct(product)
     }
 
     private suspend fun updateProduct() {
-        val product = Product(productIdReceived, productName, productCategory.id)
+        val product = Product(productName, productCategory.id, id = productIdReceived)
         _successObserver.emit(R.string.product_updated)
         repository.updateProduct(product)
     }
@@ -84,8 +84,8 @@ class AddProductViewModel @Inject constructor(
         if (id != invalidId) {
             viewModelScope.launch {
                 val product = repository.getProduct(id)
-                receivedCategoryName = product.productName
-                productName = product.productName
+                receivedCategoryName = product.name
+                productName = product.name
                 chooseCategory(repository.getCategory(product.categoryId))
             }
         }

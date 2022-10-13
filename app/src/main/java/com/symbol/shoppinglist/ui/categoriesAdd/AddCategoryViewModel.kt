@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.entities.Category
+import com.symbol.shoppinglist.database.local.entities.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -62,21 +62,21 @@ class AddCategoryViewModel @Inject constructor(
         if (id != invalidId) {
             viewModelScope.launch {
                 val category = repository.getCategory(id)
-                receivedCategoryName = category.categoryName
-                categoryName = category.categoryName
-                categoryColorLong = category.categoryColor
+                receivedCategoryName = category.name
+                categoryName = category.name
+                categoryColorLong = category.color
             }
         }
     }
 
     private suspend fun addCategory() {
-        val category = Category(categoryName = categoryName, categoryColor = categoryColorLong)
+        val category = Category(name = categoryName, color = categoryColorLong)
         _successObserver.emit(R.string.category_added)
         repository.addCategory(category)
     }
 
     private suspend fun updateCategory() {
-        val category = Category(categoryIdReceived, categoryName, categoryColorLong)
+        val category = Category(categoryName, categoryColorLong, id=categoryIdReceived)
         _successObserver.emit(R.string.category_updated)
         repository.updateCategory(category)
     }
@@ -86,5 +86,9 @@ class AddCategoryViewModel @Inject constructor(
         val duplicateValidation = count <= 0
         val currentNameValidation = name == receivedCategoryName
         isCategoryValid = duplicateValidation || currentNameValidation
+    }
+
+    private suspend fun validateCategoryName(name: String): Boolean{
+        return true
     }
 }
