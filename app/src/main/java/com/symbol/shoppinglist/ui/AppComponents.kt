@@ -16,9 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.symbol.shoppinglist.*
+import com.symbol.shoppinglist.Action
+import com.symbol.shoppinglist.Error
+import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.navigation.ProductsDirections
@@ -29,13 +32,11 @@ import com.symbol.shoppinglist.navigation.listOfRootRoutes
 fun AppTopBar(
     navController: NavHostController,
 ) {
-    val productId = NavigationRoutes.Products.Arguments.ID
-    val invalidId = NavigationRoutes.Arguments.INVALID_ID
     val backStackEntry by navController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
     val showBackButton = !listOfRootRoutes.contains(route)
-    val haveArguments = backStackEntry?.arguments?.getInt(productId) != invalidId
-    val topBarTitle = getTopBarTitle(route, haveArguments)
+    val topBarTitle =
+        getTopBarTitle(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
         title = { Text(text = topBarTitle) },
         navigationIcon = {
@@ -50,18 +51,30 @@ fun AppTopBar(
     )
 }
 
+private fun haveArguments(backStackEntry: NavBackStackEntry?, argumentName: String): Boolean {
+    val invalidId = NavigationRoutes.Arguments.INVALID_ID
+    return backStackEntry?.arguments?.getInt(argumentName) != invalidId
+}
+
 @Composable
-private fun getTopBarTitle(route: String?, haveArguments: Boolean = false): String {
+private fun getTopBarTitle(route: String?, haveArguments: (String) -> Boolean): String {
     return when (route) {
         ProductsDirections.Root.route -> stringResource(id = R.string.products)
         ProductsDirections.AddProduct.route -> {
-            if (haveArguments)
+            val productId = NavigationRoutes.Products.Arguments.ID
+            if (haveArguments(productId))
                 stringResource(id = R.string.edit_product)
             else
                 stringResource(id = R.string.add_product)
         }
         CategoriesDirections.Root.route -> stringResource(id = R.string.categories)
-        CategoriesDirections.AddCategory.route -> stringResource(id = R.string.add_category)
+        CategoriesDirections.AddCategory.route -> {
+            val categoryId = NavigationRoutes.Categories.Arguments.ID
+            if (haveArguments(categoryId))
+                stringResource(id = R.string.edit_category)
+            else
+                stringResource(id = R.string.add_category)
+        }
         CategoriesDirections.ColorPicker.route -> stringResource(id = R.string.color_picker)
         else -> Error.LOADING
     }

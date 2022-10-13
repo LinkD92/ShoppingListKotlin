@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -15,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.entities.Category
 import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.ColorSquare
@@ -27,17 +31,22 @@ fun ManageCategories(
 ) {
     val categories = viewModel.allCategories.observeAsState().value ?: listOf()
     ListOfCategories(
-        modifier = modifier, categories = categories,
+        modifier = modifier,
+        categories = categories,
         onClick = { categoryId ->
             navHostController.navigate(CategoriesDirections.AddCategory.passArgument(categoryId))
-        }
+        },
+        deleteIconClick = { category -> viewModel.deleteCategory(category) }
     )
-
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CategoryItem(modifier: Modifier = Modifier, category: Category, onClick: (Int) -> Unit) {
+fun CategoryItem(
+    modifier: Modifier = Modifier,
+    category: Category,
+    onClick: (Int) -> Unit,
+    deleteIconClick: (Category) -> Unit
+) {
     Row(modifier = modifier.clickable {
         onClick(category.id)
     }
@@ -49,18 +58,27 @@ fun CategoryItem(modifier: Modifier = Modifier, category: Category, onClick: (In
         ) {
             ColorSquare(modifier, category.categoryColor)
         }
+        Icon(Icons.Rounded.Delete, IconName.DELETE, modifier.clickable {
+            deleteIconClick(category)
+        })
     }
 }
 
 @Composable
-fun ListOfCategories(modifier: Modifier, categories: List<Category>, onClick: (Int) -> Unit) {
+fun ListOfCategories(
+    modifier: Modifier,
+    categories: List<Category>,
+    onClick: (Int) -> Unit,
+    deleteIconClick: (Category) -> Unit
+) {
     LazyColumn(
         modifier = modifier
     ) {
         items(categories, key = { it.id }) { item ->
             CategoryItem(
                 category = item,
-                onClick = onClick
+                onClick = onClick,
+                deleteIconClick = deleteIconClick
             )
         }
     }

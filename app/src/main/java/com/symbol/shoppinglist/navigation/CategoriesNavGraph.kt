@@ -8,7 +8,7 @@ import com.symbol.shoppinglist.ui.categoriesAdd.AddCategory
 import com.symbol.shoppinglist.ui.categoriesAdd.ColorPicker
 import com.symbol.shoppinglist.ui.categoriesManage.ManageCategories
 
-private const val categoryId = NavigationRoutes.Products.Arguments.ID
+private const val categoryId = NavigationRoutes.Categories.Arguments.ID
 
 sealed class CategoriesDirections(val route: String) {
     object Root : CategoriesDirections(NavigationRoutes.Categories.ROOT)

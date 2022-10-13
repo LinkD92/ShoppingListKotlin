@@ -24,7 +24,7 @@ class AddCategoryViewModel @Inject constructor(
     ViewModel() {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
     private val categoryIdReceived =
-        savedStateHandle.get<Int>(NavigationRoutes.Products.Arguments.ID)
+        savedStateHandle.get<Int>(NavigationRoutes.Categories.Arguments.ID)
             ?: invalidId
     private var receivedCategoryName = ""
     private val _successObserver = MutableSharedFlow<Int>()
