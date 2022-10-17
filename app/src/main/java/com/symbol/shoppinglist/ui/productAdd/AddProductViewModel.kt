@@ -18,8 +18,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-typealias Action = () -> Unit
-
 @HiltViewModel
 class AddProductViewModel @Inject constructor(
     private val repository: ListRepository,
@@ -93,9 +91,5 @@ class AddProductViewModel @Inject constructor(
                 chooseCategory(repository.getCategory(product.categoryId))
             }
         }
-    }
-
-    private fun validateFields(productName: String, category: Category){
-
     }
 }
