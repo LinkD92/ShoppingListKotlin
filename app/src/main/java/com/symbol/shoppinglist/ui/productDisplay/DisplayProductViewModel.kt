@@ -3,6 +3,7 @@ package com.symbol.shoppinglist.ui.productDisplay
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.symbol.shoppinglist.database.DefaultListRepository
 import com.symbol.shoppinglist.database.ListRepository
 import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product

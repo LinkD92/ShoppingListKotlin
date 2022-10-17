@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
@@ -17,10 +18,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+typealias Action = () -> Unit
+
 @HiltViewModel
 class AddProductViewModel @Inject constructor(
     private val repository: ListRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val dispatcher: DispatcherProvider
 ) :
     ViewModel() {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
@@ -32,7 +36,7 @@ class AddProductViewModel @Inject constructor(
             ?: invalidId
     private val _successObserver = MutableSharedFlow<Int>()
     val successObserver = _successObserver.asSharedFlow()
-    val products = repository.getAllProducts()
+    val allProducts = repository.getAllProducts()
     val allCategories = repository.getAllCategories()
     var productName by mutableStateOf("")
         private set
@@ -43,7 +47,7 @@ class AddProductViewModel @Inject constructor(
         getProduct(productIdReceived)
     }
 
-    fun confirmButtonClick() = viewModelScope.launch {
+    fun confirmButtonClick() = viewModelScope.launch(dispatcher.main) {
         val action = if (productIdReceived == invalidId) ::addProduct else ::updateProduct
         validateProduct(productName)
         if (isProductValid) {
@@ -82,12 +86,16 @@ class AddProductViewModel @Inject constructor(
 
     private fun getProduct(id: Int) {
         if (id != invalidId) {
-            viewModelScope.launch {
+            viewModelScope.launch(dispatcher.main) {
                 val product = repository.getProduct(id)
                 receivedCategoryName = product.name
                 productName = product.name
                 chooseCategory(repository.getCategory(product.categoryId))
             }
         }
+    }
+
+    private fun validateFields(productName: String, category: Category){
+
     }
 }

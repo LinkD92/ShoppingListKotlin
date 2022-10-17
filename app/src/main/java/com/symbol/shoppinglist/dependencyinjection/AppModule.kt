@@ -2,8 +2,11 @@ package com.symbol.shoppinglist.dependencyinjection
 
 import android.app.Application
 import androidx.room.Room
+import com.symbol.shoppinglist.DefaultDispatchers
+import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.database.local.ListDao
 import com.symbol.shoppinglist.database.local.ListDatabase
+import com.symbol.shoppinglist.database.DefaultListRepository
 import com.symbol.shoppinglist.database.ListRepository
 import dagger.Module
 import dagger.Provides
@@ -27,6 +30,8 @@ object AppModule {
     fun providesProductDao(db: ListDatabase) = db.listDao()
 
     @Provides
-    fun providesRepository(listDao: ListDao): ListRepository = ListRepository(listDao)
+    fun providesDefaultRepository(listDao: ListDao): ListRepository = DefaultListRepository(listDao)
 
+    @Provides
+    fun providesDispatchers(): DispatcherProvider = DefaultDispatchers()
 }

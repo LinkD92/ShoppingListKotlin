@@ -7,35 +7,35 @@ import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithPro
 import com.symbol.shoppinglist.database.local.ListDao
 import javax.inject.Inject
 
-class ListRepository @Inject constructor(private val listDao: ListDao) {
+class DefaultListRepository @Inject constructor(private val listDao: ListDao): ListRepository {
     //Products
-    fun getAllProducts(): LiveData<List<Product>> = listDao.getAllProducts()
+    override fun getAllProducts(): LiveData<List<Product>> = listDao.getAllProducts()
 
-    suspend fun getProduct(id: Int) = listDao.getProduct(id)
+    override suspend fun getProduct(id: Int) = listDao.getProduct(id)
 
-    suspend fun addProduct(product: Product) = listDao.addProduct(product)
+    override suspend fun addProduct(product: Product) = listDao.addProduct(product)
 
-    suspend fun doesProductExists(name: String) = listDao.doesProductExists(name)
+    override suspend fun doesProductExists(name: String) = listDao.doesProductExists(name)
 
-    suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)
+    override suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)
 
-    suspend fun updateProduct(product: Product) = listDao.updateProduct(product)
+    override suspend fun updateProduct(product: Product) = listDao.updateProduct(product)
 
     //Categories
-    fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
+    override fun getAllCategories(): LiveData<List<Category>> = listDao.getAllCategories()
 
-    suspend fun getCategory(id: Int) = listDao.getCategory(id)
+    override suspend fun getCategory(id: Int) = listDao.getCategory(id)
 
-    suspend fun doesCategoryExists(name: String) = listDao.doesCategoryExists(name)
+    override suspend fun doesCategoryExists(name: String) = listDao.doesCategoryExists(name)
 
-    suspend fun addCategory(category: Category) = listDao.addCategory(category)
+    override suspend fun addCategory(category: Category) = listDao.addCategory(category)
 
-    suspend fun deleteCategory(category: Category) = listDao.deleteCategory(category)
+    override suspend fun deleteCategory(category: Category) = listDao.deleteCategory(category)
 
-    suspend fun updateCategory(category: Category) = listDao.updateCategory(category)
+    override suspend fun updateCategory(category: Category) = listDao.updateCategory(category)
 
 
     //Transactions
-    fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>> =
+    override fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>> =
         listDao.getCategoryWithProducts()
 }

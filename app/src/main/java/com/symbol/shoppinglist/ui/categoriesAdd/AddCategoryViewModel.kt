@@ -28,7 +28,6 @@ class AddCategoryViewModel @Inject constructor(
             ?: invalidId
     private var receivedCategoryName = ""
     private val _successObserver = MutableSharedFlow<Int>()
-    private var isCategoryValid = false
     val successObserver = _successObserver.asSharedFlow()
     val categories = repository.getAllCategories()
     var categoryName by mutableStateOf("")
@@ -42,7 +41,7 @@ class AddCategoryViewModel @Inject constructor(
 
     fun confirmButtonClick() = viewModelScope.launch {
         val action = if (categoryIdReceived == invalidId) ::addCategory else ::updateCategory
-        validateCategory(categoryName)
+        val isCategoryValid = checkCurrentName(categoryName) || checkExistingName(categoryName)
         if (isCategoryValid) {
             action()
         } else {
@@ -81,14 +80,12 @@ class AddCategoryViewModel @Inject constructor(
         repository.updateCategory(category)
     }
 
-    private suspend fun validateCategory(name: String) {
+    private suspend fun checkExistingName(name: String): Boolean {
         val count = repository.doesCategoryExists(name)
-        val duplicateValidation = count <= 0
-        val currentNameValidation = name == receivedCategoryName
-        isCategoryValid = duplicateValidation || currentNameValidation
+        return count <= 0
     }
 
-    private suspend fun validateCategoryName(name: String): Boolean{
-        return true
+    private fun checkCurrentName(name: String): Boolean{
+        return name == receivedCategoryName
     }
 }

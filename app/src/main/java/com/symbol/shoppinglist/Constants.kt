@@ -22,6 +22,11 @@ object Error{
     const val ERROR = "ERROR"
 }
 
+object Limits{
+    const val MAX_NAME_LENGTH = 20
+    const val MIN_NAME_LENGTH = 2
+}
+
 
 
 object NavigationRoutes{
