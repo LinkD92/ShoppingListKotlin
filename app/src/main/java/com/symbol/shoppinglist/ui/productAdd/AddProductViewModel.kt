@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productAdd
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+typealias ProductAction = suspend () -> Unit
+
 @HiltViewModel
 class AddProductViewModel @Inject constructor(
     private val repository: ListRepository,
@@ -27,7 +30,6 @@ class AddProductViewModel @Inject constructor(
     ViewModel() {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
     private val dummyCategory = Category(name = "Select category")
-    private var isProductValid = false
     private var receivedCategoryName = ""
     private val productIdReceived =
         savedStateHandle.get<Int>(NavigationRoutes.Products.Arguments.ID)
@@ -45,11 +47,9 @@ class AddProductViewModel @Inject constructor(
         getProduct(productIdReceived)
     }
 
-    fun confirmButtonClick() = viewModelScope.launch(dispatcher.main) {
-        val action = if (productIdReceived == invalidId) ::addProduct else ::updateProduct
-        validateProduct(productName)
-        if (isProductValid) {
-            action()
+    fun confirmButtonClick() = viewModelScope.launch {
+        if (validateProduct(productName)) {
+            getAction().invoke()
         } else {
             _successObserver.emit(R.string.product_exists)
         }
@@ -75,11 +75,11 @@ class AddProductViewModel @Inject constructor(
         repository.updateProduct(product)
     }
 
-    private suspend fun validateProduct(name: String) {
+    private suspend fun validateProduct(name: String): Boolean {
         val count = repository.doesProductExists(name)
         val duplicateValidation = count <= 0
         val currentNameValidation = name == receivedCategoryName
-        isProductValid = duplicateValidation || currentNameValidation
+        return duplicateValidation || currentNameValidation
     }
 
     private fun getProduct(id: Int) {
@@ -91,5 +91,9 @@ class AddProductViewModel @Inject constructor(
                 chooseCategory(repository.getCategory(product.categoryId))
             }
         }
+    }
+
+    private fun getAction(): ProductAction {
+        return if (productIdReceived == invalidId) ::addProduct else ::updateProduct
     }
 }
