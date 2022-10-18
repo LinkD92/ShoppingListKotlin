@@ -2,6 +2,7 @@ package com.symbol.shoppinglist.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -38,6 +39,7 @@ fun AppTopBar(
     val topBarTitle =
         getTopBarTitle(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
+        modifier = Modifier.padding(2.dp),
         title = { Text(text = topBarTitle) },
         navigationIcon = {
             if (showBackButton) {

@@ -29,13 +29,13 @@ sealed class CategoriesDirections(val route: String) {
 
 fun NavGraphBuilder.categoriesNavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    navHostController: NavHostController,
 ) {
     navigation(
         startDestination = CategoriesDirections.Root.route,
         route = BottomNavigationDirection.Categories.route
     ) {
-        composable(CategoriesDirections.Root.route) { ManageCategories(modifier, navController) }
+        composable(CategoriesDirections.Root.route) { ManageCategories(modifier, navHostController) }
         composable(CategoriesDirections.AddCategory.route,
             arguments = listOf(
                 navArgument(categoryId){
@@ -43,7 +43,7 @@ fun NavGraphBuilder.categoriesNavGraph(
                     defaultValue = NavigationRoutes.Arguments.INVALID_ID
                 }
             )
-        ) { AddCategory(modifier, navController) }
-        composable(CategoriesDirections.ColorPicker.route) { ColorPicker(modifier, navController) }
+        ) { AddCategory(modifier, navHostController) }
+        composable(CategoriesDirections.ColorPicker.route) { ColorPicker(modifier, navHostController) }
     }
 }

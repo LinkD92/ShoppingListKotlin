@@ -1,65 +1,90 @@
-package com.symbol.shoppinglist.product
+package com.symbol.shoppinglist.ui.productDisplay
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.ExpandCircleDown
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
+import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.navigation.ProductsDirections
-import com.symbol.shoppinglist.ui.productDisplay.DisplayProductViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DisplayProducts(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController,
+    navHostController: NavHostController = rememberNavController(),
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
     val list by viewModel.categoriesWithProducts.observeAsState()
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
         items(
             items = list ?: listOf()
         ) { categoryWithProduct ->
+            Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
-                modifier,
                 categoryWithProduct.category.name,
                 categoryWithProduct.category.isExpanded,
+                categoryWithProduct.category.color,
                 { isExpanded ->
                     viewModel.changeCategoryExpand(categoryWithProduct.category, isExpanded)
                 }
             ) {
-                StaggeredGrid {
+                FlowRow(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Min)
+                        .padding(10.dp),
+                    mainAxisSize = SizeMode.Wrap,
+                    mainAxisSpacing = 2.dp,
+                    mainAxisAlignment = MainAxisAlignment.SpaceEvenly,
+                    crossAxisSpacing = 10.dp,
+                    lastLineMainAxisAlignment = MainAxisAlignment.Start
+                ) {
                     categoryWithProduct.products.forEach { product ->
                         ProductItem(
                             product = product,
                             categoryColor = categoryWithProduct.category.color,
                             onClick = { viewModel.updateProduct(product) },
                             onLongPress = {
-                                navHostController.navigate(ProductsDirections.AddProduct.passArgument(product.id))
+                                navHostController.navigate(
+                                    ProductsDirections.AddProduct.passArgument(
+                                        product.id
+                                    )
+                                )
                             },
                             deleteProduct = { viewModel.deleteProduct(product) })
                     }
@@ -69,11 +94,47 @@ fun DisplayProducts(
     }
 }
 
+@Preview
+@Composable
+fun preview() {
+    val category = Category("test", 1999922222, true, 1)
+    val product = Product("test1", 1, true, 0, 1)
+    val product1 = Product("test1test1t", 1, true, 0, 1)
+    val product2 = Product("test1test1test1asdadstest1", 1, true, 0, 1)
+    val product3 = Product("test1test1test1test1", 1, true, 0, 1)
+    val list = mutableListOf<Product>()
+    list.add(product)
+    list.add(product1)
+    list.add(product2)
+    list.add(product3)
+
+    val categoryWithProduct = CategoryWithProducts(category, list)
+
+    FlowRow(
+        modifier = Modifier
+            .width(IntrinsicSize.Min),
+        mainAxisSize = SizeMode.Wrap,
+        mainAxisAlignment = MainAxisAlignment.SpaceAround,
+        crossAxisSpacing = 5.dp,
+        lastLineMainAxisAlignment = MainAxisAlignment.Start
+    ) {
+        categoryWithProduct.products.forEach { product ->
+            ProductItem(
+                product = product,
+                categoryColor = categoryWithProduct.category.color,
+                onClick = { },
+                onLongPress = {
+
+                },
+                deleteProduct = { })
+        }
+    }
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductItem(
-    modifier: Modifier = Modifier,
     product: Product,
     categoryColor: Long,
     onClick: (Product) -> Unit,
@@ -84,11 +145,12 @@ fun ProductItem(
     val alphaValue = if (isChecked) 1f else 0.3f
     val backgroundColor = Color(categoryColor).copy(alphaValue)
     Surface(
-        modifier = modifier,
+        modifier = Modifier,
         elevation = 10.dp,
+        shape = RoundedCornerShape(35)
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .combinedClickable(
                     onClick = {
                         isChecked = !isChecked
@@ -97,14 +159,22 @@ fun ProductItem(
                     onLongClick = { onLongPress(product) }
                 )
                 .background(color = backgroundColor)
+                .padding(horizontal = 10.dp, vertical = 2.dp)
         ) {
             Row(
-                modifier = modifier
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = product.name)
+                Text(
+                    modifier = Modifier,
+                    textAlign = TextAlign.Start,
+                    text = product.name
+                )
                 Icon(
                     Icons.Rounded.Delete, IconName.DELETE,
-                    modifier = modifier.clickable { deleteProduct(product) }
+                    modifier = Modifier
+                        .clickable { deleteProduct(product) }
                 )
             }
         }
@@ -113,94 +183,52 @@ fun ProductItem(
 
 @Composable
 fun ExpandableCategoryCard(
-    modifier: Modifier = Modifier,
     cardName: String,
     expandValue: Boolean,
+    categoryColor: Long,
     changeExpand: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
     Card(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         elevation = 10.dp
     ) {
         var expand by rememberSaveable {
             mutableStateOf(expandValue)
         }
-        Column() {
-            Row {
-                Text(text = cardName)
-                Icon(Icons.Rounded.ArrowDropDown, IconName.DROPDOWN,
-                    modifier = modifier
+        val rotateAngle = if (expand) 180f else 0f
+        Column {
+            Row(
+                modifier = Modifier.padding(2.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
+                    tint = Color(categoryColor),
+                    modifier = Modifier
                         .clickable {
                             expand = !expand
                             changeExpand(expand)
-                        })
-            }
-            if (expand) {
-
-                content()
-            }
-        }
-    }
-}
-
-@Composable
-fun StaggeredGrid(
-    modifier: Modifier = Modifier,
-    rows: Int = 3,
-    children: @Composable () -> Unit
-) {
-    Layout(
-        modifier = modifier,
-        content = children
-    ) { measurables, constraints ->
-        // Keep track of the width of each row
-        val rowWidths = IntArray(rows) { 0 }
-
-        // Keep track of the max height of each row
-        val rowMaxHeights = IntArray(rows) { 0 }
-
-        // Don't constrain child views further, measure them with given constraints
-        // List of measured children
-        val placeables = measurables.mapIndexed { index, measurable ->
-
-            // Measure each child
-            val placeable = measurable.measure(constraints)
-
-            // Track the width and max height of each row
-            val row = index % rows
-            rowWidths[row] = rowWidths[row] + placeable.width
-            rowMaxHeights[row] = kotlin.math.max(rowMaxHeights[row], placeable.height)
-
-            placeable
-        }
-
-        // Grid's width is the widest row
-        val width = rowWidths.maxOrNull()
-            ?.coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth)) ?: constraints.minWidth
-
-        // Grid's height is the sum of the tallest element of each row
-        // coerced to the height constraints
-        val height = rowMaxHeights.sumOf { it }
-            .coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
-
-        // Y of each row, based on the height accumulation of previous rows
-        val rowY = IntArray(rows) { 0 }
-        for (i in 1 until rows) {
-            rowY[i] = rowY[i - 1] + rowMaxHeights[i - 1]
-        }
-        // Set the size of the parent layout
-        layout(width, height) {
-            // x cord we have placed up to, per row
-            val rowX = IntArray(rows) { 0 }
-
-            placeables.forEachIndexed { index, placeable ->
-                val row = index % rows
-                placeable.placeRelative(
-                    x = rowX[row],
-                    y = rowY[row]
+                        }
+                        .rotate(rotateAngle)
+                        .padding(5.dp)
+                        .align(Alignment.CenterVertically)
                 )
-                rowX[row] += placeable.width
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(
+                    modifier = Modifier.padding(2.dp),
+                    text = cardName,
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .padding(1.dp)
+                    .background(Color.Black)
+            )
+            if (expand) {
+                content()
             }
         }
     }

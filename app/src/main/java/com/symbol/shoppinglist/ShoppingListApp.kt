@@ -1,5 +1,7 @@
 package com.symbol.shoppinglist
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,8 +25,9 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
             floatingActionButton = { AppFab(navController) },
             bottomBar = { AppBottomNavigation(navController) }
         ) {
-            it
-            AppNavGraph(modifier, navController)
+            Box(modifier = Modifier.padding(it)) {
+                AppNavGraph(modifier, navController)
+            }
         }
     }
 }

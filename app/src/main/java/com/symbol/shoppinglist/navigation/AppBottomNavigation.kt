@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -9,7 +10,9 @@ import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
@@ -37,7 +40,7 @@ fun AppBottomNavigation(navController: NavHostController) {
         BottomNavigationDirection.Products,
         BottomNavigationDirection.Categories
     )
-    BottomNavigation() {
+    BottomNavigation(modifier = Modifier) {
         listOfNavigationItems.forEach { item ->
             BottomNavigationItem(
                 selected = currentRoute == item.route,
