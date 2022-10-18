@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.navigation
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -10,14 +9,13 @@ import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.symbol.shoppinglist.NavigationRoutes
+import com.symbol.shoppinglist.ui.theme.MyColor
 
 
 sealed class BottomNavigationDirection(val route: String, val icon: ImageVector) {
@@ -40,10 +38,12 @@ fun AppBottomNavigation(navController: NavHostController) {
         BottomNavigationDirection.Products,
         BottomNavigationDirection.Categories
     )
-    BottomNavigation(modifier = Modifier) {
+    BottomNavigation() {
         listOfNavigationItems.forEach { item ->
             BottomNavigationItem(
-                selected = currentRoute == item.route,
+                selected = currentRoute.toString().startsWith(item.route),
+                selectedContentColor = MyColor.OnPrimary,
+                unselectedContentColor = MyColor.OnPrimary.copy(alpha = 0.3f),
                 onClick = {
                     if (currentRoute.toString().startsWith(item.route)) {
                         navController.navigate(findBottomNavRootRoute(item.route)) {

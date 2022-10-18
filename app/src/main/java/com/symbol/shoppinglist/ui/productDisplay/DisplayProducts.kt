@@ -38,11 +38,11 @@ import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.navigation.ProductsDirections
+import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DisplayProducts(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
@@ -50,7 +50,7 @@ fun DisplayProducts(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+            .padding(horizontal = 10.dp)
     ) {
         items(
             items = list ?: listOf()
@@ -189,49 +189,49 @@ fun ExpandableCategoryCard(
     changeExpand: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxSize(),
-        elevation = 10.dp
-    ) {
-        var expand by rememberSaveable {
-            mutableStateOf(expandValue)
-        }
-        val rotateAngle = if (expand) 180f else 0f
-        Column {
-            Row(
-                modifier = Modifier.padding(2.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
-                    tint = Color(categoryColor),
-                    modifier = Modifier
-                        .clickable {
-                            expand = !expand
-                            changeExpand(expand)
-                        }
-                        .rotate(rotateAngle)
-                        .padding(5.dp)
-                        .align(Alignment.CenterVertically)
-                )
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            elevation = 10.dp
+        ) {
+            var expand by rememberSaveable {
+                mutableStateOf(expandValue)
+            }
+            val rotateAngle = if (expand) 180f else 0f
+            Column {
+                Row(
                     modifier = Modifier.padding(2.dp),
-                    text = cardName,
-                    textAlign = TextAlign.Center,
-                    fontSize = 30.sp,
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
+                        tint = Color(categoryColor),
+                        modifier = Modifier
+                            .clickable {
+                                expand = !expand
+                                changeExpand(expand)
+                            }
+                            .rotate(rotateAngle)
+                            .padding(5.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(
+                        modifier = Modifier.padding(2.dp),
+                        text = cardName,
+                        textAlign = TextAlign.Center,
+                        fontSize = 30.sp,
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .background(Color.Black)
                 )
-            }
-            Spacer(
-                modifier = Modifier
-                    .padding(1.dp)
-                    .background(Color.Black)
-            )
-            if (expand) {
-                content()
+                if (expand) {
+                    content()
+                }
             }
         }
-    }
 }
 
 

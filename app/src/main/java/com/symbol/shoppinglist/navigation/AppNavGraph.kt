@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 
 @Composable
 fun AppNavGraph(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestination: String = BottomNavigationDirection.Products.route
 ) {

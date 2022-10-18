@@ -32,7 +32,7 @@ fun NavGraphBuilder.productsNavGraph(
         route = BottomNavigationDirection.Products.route
     ) {
         composable(ProductsDirections.Root.route) {
-            DisplayProducts(modifier, navHostController)
+            DisplayProducts(navHostController)
         }
         composable(ProductsDirections.AddProduct.route,
             arguments = listOf(

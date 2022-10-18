@@ -39,7 +39,7 @@ fun AppTopBar(
     val topBarTitle =
         getTopBarTitle(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
-        modifier = Modifier.padding(2.dp),
+        elevation = 10.dp,
         title = { Text(text = topBarTitle) },
         navigationIcon = {
             if (showBackButton) {
