@@ -2,6 +2,7 @@ package com.symbol.shoppinglist.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -140,7 +141,7 @@ fun LabelAndPlaceHolder(
 @Composable
 fun ConfirmButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 10.dp, vertical = 5.dp),
         onClick = onClick
     ) {
         Icon(Icons.Rounded.Check, Action.CHECK)

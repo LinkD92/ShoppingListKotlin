@@ -4,9 +4,8 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
@@ -34,11 +34,17 @@ fun AddCategory(
     val nameLabel = stringResource(id = R.string.category_label_name)
 
     Column {
-        LabelAndPlaceHolder(Modifier.fillMaxWidth(), viewModel.categoryName, nameLabel) {
+        LabelAndPlaceHolder(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 5.dp),
+            viewModel.categoryName,
+            nameLabel
+        ) {
             viewModel.updateName(it)
         }
         ColorPickerButton(
-            modifier.background(currentColor),
+            buttonColor = currentColor,
             onClick = { navController.navigate(CategoriesDirections.ColorPicker.route) })
         ConfirmButton(
             onClick = { viewModel.confirmButtonClick() })
@@ -52,10 +58,11 @@ fun AddCategory(
 }
 
 @Composable
-fun ColorPickerButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ColorPickerButton(modifier: Modifier = Modifier, buttonColor: Color, onClick: () -> Unit) {
     Button(
-        modifier = modifier,
-        onClick = onClick
+        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(buttonColor)
     ) {
         Icon(Icons.Rounded.Palette, IconName.PALETTE)
         Text(text = "Choose Color")
