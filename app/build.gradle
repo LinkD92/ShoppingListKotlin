@@ -87,7 +87,7 @@ dependencies {
     testImplementation ("com.google.dagger:hilt-android-testing:2.28-alpha")
     kaptTest ("com.google.dagger:hilt-android-compiler:2.28-alpha")
 
-    //Lifecycler
+    //Lifecycle
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"

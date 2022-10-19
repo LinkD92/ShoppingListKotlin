@@ -38,6 +38,7 @@ import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.navigation.ProductsDirections
+import com.symbol.shoppinglist.ui.theme.MyColor
 import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -222,12 +223,14 @@ fun ExpandableCategoryCard(
                         fontSize = 30.sp,
                     )
                 }
-                Spacer(
-                    modifier = Modifier
-                        .padding(1.dp)
-                        .background(Color.Black)
-                )
                 if (expand) {
+                    Spacer(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth(0.95f)
+                            .height(1.dp)
+                            .background(MyColor.OnSurface)
+                    )
                     content()
                 }
             }

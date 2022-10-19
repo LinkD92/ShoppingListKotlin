@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.productAdd
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
 import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.ui.theme.MyColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -42,6 +42,8 @@ class AddProductViewModel @Inject constructor(
         private set
     var productCategory by mutableStateOf(dummyCategory)
         private set
+    var productQuantity by mutableStateOf(1)
+        private set
 
     init {
         getProduct(productIdReceived)
@@ -61,6 +63,10 @@ class AddProductViewModel @Inject constructor(
 
     fun chooseCategory(input: Category) {
         productCategory = input
+    }
+
+    fun updateQuantity(input: String){
+        productQuantity = input.toInt()
     }
 
     private suspend fun addProduct() {

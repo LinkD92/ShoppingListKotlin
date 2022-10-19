@@ -6,11 +6,16 @@
     <string name="product_added">Product has been added</string>
     <string name="product_exists">Product already exists</string>
     <string name="product_updated">Product has been updated</string>
+    <string name="product_label_name">Product name</string>
+    <string name="product_label_quantity">Product quantity</string>
+
 
     <!--Categories-->
     <string name="category_added">Category has been added</string>
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
+    <string name="category_label_name">Category name</string>
+
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>

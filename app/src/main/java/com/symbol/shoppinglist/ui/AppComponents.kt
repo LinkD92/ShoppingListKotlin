@@ -2,9 +2,9 @@ package com.symbol.shoppinglist.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -39,7 +39,6 @@ fun AppTopBar(
     val topBarTitle =
         getTopBarTitle(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
-        elevation = 10.dp,
         title = { Text(text = topBarTitle) },
         navigationIcon = {
             if (showBackButton) {
@@ -49,7 +48,8 @@ fun AppTopBar(
                     Icon(Icons.Default.ArrowBack, contentDescription = Action.BACK)
                 }
             }
-        }
+        },
+        elevation = 10.dp,
     )
 }
 
@@ -86,18 +86,26 @@ private fun getTopBarTitle(route: String?, haveArguments: (String) -> Boolean): 
 @Composable
 fun AppFab(navController: NavHostController) {
     val currentScreen = navController.currentBackStackEntryAsState().value?.destination?.route
-    FloatingActionButton(onClick = {
-        when (currentScreen) {
-            ProductsDirections.Root.route -> {
-                navController.navigate(ProductsDirections.AddProduct.route)
-            }
-            CategoriesDirections.Root.route -> {
-                navController.navigate(CategoriesDirections.AddCategory.route)
-            }
+    val addProduct = ProductsDirections.AddProduct.route
+    val addCategory = CategoriesDirections.AddCategory.route
+
+    if (!(currentScreen == addProduct || currentScreen == addCategory))
+        FloatingActionButton(
+            modifier = Modifier,
+            elevation = FloatingActionButtonDefaults.elevation(10.dp),
+            onClick = {
+                when (currentScreen) {
+                    ProductsDirections.Root.route -> {
+                        navController.navigate(ProductsDirections.AddProduct.route)
+                    }
+                    CategoriesDirections.Root.route -> {
+                        navController.navigate(CategoriesDirections.AddCategory.route)
+                    }
+                }
+            }) {
+            Icon(Icons.Rounded.Add, Action.ADD)
         }
-    }) {
-        Icon(Icons.Rounded.Add, Action.ADD)
-    }
+
 }
 
 
@@ -112,17 +120,25 @@ fun ColorSquare(modifier: Modifier = Modifier, color: Long) {
 }
 
 @Composable
-fun LabelAndPlaceHolder(value: String, onValueChange: (String) -> Unit) {
+fun LabelAndPlaceHolder(
+    modifier: Modifier = Modifier,
+    value: String,
+    labelTitle: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    onValueChange: (String) -> Unit
+) {
     TextField(
+        modifier = modifier,
+        keyboardOptions = keyboardOptions,
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = "Your Label") },
-        placeholder = { Text(text = "Your Placeholder/Hint") },
+        label = { Text(text = labelTitle) },
+        placeholder = { Text(text = labelTitle) },
     )
 }
 
 @Composable
-fun AddButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ConfirmButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         modifier = modifier,
         onClick = onClick

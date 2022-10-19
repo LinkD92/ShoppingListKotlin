@@ -3,20 +3,27 @@ package com.symbol.shoppinglist.ui.productAdd
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.ArrowDropDownCircle
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
+import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.ui.AddButton
-import com.symbol.shoppinglist.ui.ColorSquare
+import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
+import com.symbol.shoppinglist.ui.categoriesManage.CategoryItem
 
 @Composable
 fun AddProduct(
@@ -24,19 +31,39 @@ fun AddProduct(
     viewModel: AddProductViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val categories = viewModel.allCategories.observeAsState().value ?: listOf()
+    val categories = viewModel.allCategories.observeAsState().value
+    val labelName = stringResource(id = R.string.product_label_name)
+    val labelAmount = stringResource(id = R.string.product_label_quantity)
+    val labelAndPlaceholderModifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 4.dp, horizontal = 10.dp)
 
-    Column {
-        LabelAndPlaceHolder(viewModel.productName) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        LabelAndPlaceHolder(
+            labelAndPlaceholderModifier,
+            viewModel.productName, labelName
+        ) {
             viewModel.updateName(it)
+        }
+        LabelAndPlaceHolder(
+            labelAndPlaceholderModifier,
+            viewModel.productQuantity.toString(),
+            labelAmount,
+            KeyboardOptions(keyboardType = KeyboardType.Number)
+        ) {
+            viewModel.updateQuantity(it)
         }
         CategoriesDropDown(
             modifier,
-            categories,
+            categories ?: listOf(),
             viewModel.productCategory
         ) { category ->
-            viewModel.chooseCategory(category) }
-        AddButton(modifier, onClick = { viewModel.confirmButtonClick() })
+            viewModel.chooseCategory(category)
+        }
+        ConfirmButton(
+            Modifier
+                .padding(10.dp)
+                .align(Alignment.End), onClick = { viewModel.confirmButtonClick() })
     }
 
     LaunchedEffect(true) {
@@ -56,26 +83,30 @@ fun CategoriesDropDown(
     var expanded by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = modifier
-                .clickable { expanded = !expanded },
+                .clickable { expanded = !expanded }
         ) {
-            Text(text = selectedCategory.name)
-            ColorSquare(color = selectedCategory.color)
-            Icon(Icons.Rounded.ArrowDropDown, IconName.DROPDOWN)
+            CategoryItem(category = selectedCategory, onClick = { expanded = !expanded }) {
+                Icon(Icons.Rounded.ArrowDropDownCircle, IconName.DROPDOWN)
+            }
             DropdownMenu(
-                modifier = modifier,
-                expanded = expanded, onDismissRequest = { expanded = false }) {
+                modifier = Modifier.fillMaxWidth(0.8f),
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
                 categories.forEach { category ->
-                    DropdownMenuItem(onClick = {
-                        expanded = false
-                        chooseCategory(category)
-                    }) {
-                        Text(text = category.name)
-                        ColorSquare(modifier, category.color)
+                    DropdownMenuItem(
+                        onClick = {
+                            expanded = false
+                            chooseCategory(category)
+                        },
+                    ) {
+                        CategoryItem(Modifier, category)
                     }
                 }
             }
