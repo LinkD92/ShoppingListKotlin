@@ -1,11 +1,13 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
@@ -65,6 +67,6 @@ fun ColorPickerButton(modifier: Modifier = Modifier, buttonColor: Color, onClick
         colors = ButtonDefaults.buttonColors(buttonColor)
     ) {
         Icon(Icons.Rounded.Palette, IconName.PALETTE)
-        Text(text = "Choose Color")
+        Text(text = stringResource(id = R.string.category_choose))
     }
 }

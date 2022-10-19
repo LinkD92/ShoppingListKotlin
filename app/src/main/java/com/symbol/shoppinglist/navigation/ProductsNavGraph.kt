@@ -4,8 +4,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.ui.productDisplay.DisplayProducts
 import com.symbol.shoppinglist.ui.productAdd.AddProduct
+import com.symbol.shoppinglist.ui.productDisplay.DisplayProducts
 
 private const val productId = NavigationRoutes.Products.Arguments.ID
 

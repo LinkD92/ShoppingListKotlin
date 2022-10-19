@@ -15,6 +15,8 @@
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Category name</string>
+    <string name="category_choose">Choose category</string>
+
 
 
     <!--TopBarScreenName-->

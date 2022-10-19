@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesManage
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,7 +22,6 @@ import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.navigation.CategoriesDirections
-import com.symbol.shoppinglist.ui.theme.Shapes
 
 @Composable
 fun ManageCategories(
@@ -83,8 +81,8 @@ fun CategoryItem(
                         .align(Alignment.CenterVertically)
                 )
             }
-            if(content != null)
-            content()
+            if (content != null)
+                content()
         }
     }
 }
@@ -96,10 +94,12 @@ fun ListOfCategories(
     onClick: (Int) -> Unit,
     deleteIconClick: (Category) -> Unit
 ) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp),
-    elevation = 10.dp) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = 10.dp
+    ) {
         LazyColumn(
             modifier = modifier
         ) {
@@ -113,11 +113,4 @@ fun ListOfCategories(
             }
         }
     }
-}
-
-
-@Composable
-@Preview
-fun Preview() {
-//    CategoryItem()
 }

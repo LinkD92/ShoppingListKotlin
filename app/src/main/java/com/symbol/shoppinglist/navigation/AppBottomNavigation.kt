@@ -66,7 +66,6 @@ fun AppBottomNavigation(navController: NavHostController) {
                 label = { Text(text = item.route) }
             )
         }
-
     }
 }
 

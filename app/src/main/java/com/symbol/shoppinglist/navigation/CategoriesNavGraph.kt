@@ -35,15 +35,19 @@ fun NavGraphBuilder.categoriesNavGraph(
         startDestination = CategoriesDirections.Root.route,
         route = BottomNavigationDirection.Categories.route
     ) {
-        composable(CategoriesDirections.Root.route) { ManageCategories(modifier, navHostController) }
+        composable(CategoriesDirections.Root.route) {
+            ManageCategories(modifier, navHostController)
+        }
         composable(CategoriesDirections.AddCategory.route,
             arguments = listOf(
-                navArgument(categoryId){
+                navArgument(categoryId) {
                     type = NavType.IntType
                     defaultValue = NavigationRoutes.Arguments.INVALID_ID
                 }
             )
         ) { AddCategory(modifier, navHostController) }
-        composable(CategoriesDirections.ColorPicker.route) { ColorPicker(modifier, navHostController) }
+        composable(CategoriesDirections.ColorPicker.route) {
+            ColorPicker(modifier, navHostController)
+        }
     }
 }

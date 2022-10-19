@@ -39,7 +39,6 @@ import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.theme.MyColor
-import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -94,44 +93,6 @@ fun DisplayProducts(
         }
     }
 }
-
-@Preview
-@Composable
-fun preview() {
-    val category = Category("test", 1999922222, true, 1)
-    val product = Product("test1", 1, true, 0, 1)
-    val product1 = Product("test1test1t", 1, true, 0, 1)
-    val product2 = Product("test1test1test1asdadstest1", 1, true, 0, 1)
-    val product3 = Product("test1test1test1test1", 1, true, 0, 1)
-    val list = mutableListOf<Product>()
-    list.add(product)
-    list.add(product1)
-    list.add(product2)
-    list.add(product3)
-
-    val categoryWithProduct = CategoryWithProducts(category, list)
-
-    FlowRow(
-        modifier = Modifier
-            .width(IntrinsicSize.Min),
-        mainAxisSize = SizeMode.Wrap,
-        mainAxisAlignment = MainAxisAlignment.SpaceAround,
-        crossAxisSpacing = 5.dp,
-        lastLineMainAxisAlignment = MainAxisAlignment.Start
-    ) {
-        categoryWithProduct.products.forEach { product ->
-            ProductItem(
-                product = product,
-                categoryColor = categoryWithProduct.category.color,
-                onClick = { },
-                onLongPress = {
-
-                },
-                deleteProduct = { })
-        }
-    }
-}
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -190,51 +151,51 @@ fun ExpandableCategoryCard(
     changeExpand: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
-        Card(
-            modifier = Modifier.fillMaxSize(),
-            elevation = 10.dp
-        ) {
-            var expand by rememberSaveable {
-                mutableStateOf(expandValue)
-            }
-            val rotateAngle = if (expand) 180f else 0f
-            Column {
-                Row(
+    Card(
+        modifier = Modifier.fillMaxSize(),
+        elevation = 10.dp
+    ) {
+        var expand by rememberSaveable {
+            mutableStateOf(expandValue)
+        }
+        val rotateAngle = if (expand) 180f else 0f
+        Column {
+            Row(
+                modifier = Modifier.padding(2.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
+                    tint = Color(categoryColor),
+                    modifier = Modifier
+                        .clickable {
+                            expand = !expand
+                            changeExpand(expand)
+                        }
+                        .rotate(rotateAngle)
+                        .padding(5.dp)
+                        .align(Alignment.CenterVertically)
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(
                     modifier = Modifier.padding(2.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
-                        tint = Color(categoryColor),
-                        modifier = Modifier
-                            .clickable {
-                                expand = !expand
-                                changeExpand(expand)
-                            }
-                            .rotate(rotateAngle)
-                            .padding(5.dp)
-                            .align(Alignment.CenterVertically)
-                    )
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(
-                        modifier = Modifier.padding(2.dp),
-                        text = cardName,
-                        textAlign = TextAlign.Center,
-                        fontSize = 30.sp,
-                    )
-                }
-                if (expand) {
-                    Spacer(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.95f)
-                            .height(1.dp)
-                            .background(MyColor.OnSurface)
-                    )
-                    content()
-                }
+                    text = cardName,
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                )
+            }
+            if (expand) {
+                Spacer(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(0.95f)
+                        .height(1.dp)
+                        .background(MyColor.OnSurface)
+                )
+                content()
             }
         }
+    }
 }
 
 
