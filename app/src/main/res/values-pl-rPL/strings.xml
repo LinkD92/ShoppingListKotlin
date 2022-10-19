@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Shopping list</string>
+
+    <!--FieldValidatior-->
+    <string name="category_invalid_color">Najpierw należy wybrać kolor</string>
+    <string name="name_invalid">Nazwa musi zawierać od 3 do 20 znaków</string>
+    <string name="name_exsists">Ta nazwa jest już zajęta</string>
+
+
     <!--Products-->
     <string name="product_added">Proukt został dodany</string>
     <string name="product_exists">Taki produkt już istnieje</string>
@@ -15,7 +22,6 @@
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Nazwa kategorii</string>
     <string name="category_choose">Wybierz kategorie</string>
-
 
     <!--TopBarScreenName-->
     <string name="products">Produkty</string>

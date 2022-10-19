@@ -1,11 +1,13 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.symbol.shoppinglist.FieldValidation
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
@@ -40,12 +42,12 @@ class AddCategoryViewModel @Inject constructor(
     }
 
     fun confirmButtonClick() = viewModelScope.launch {
+        val validatorMessage = validateFields()
         val action = if (categoryIdReceived == invalidId) ::addCategory else ::updateCategory
-        val isCategoryValid = checkCurrentName(categoryName) || checkExistingName(categoryName)
-        if (isCategoryValid) {
+        if (validatorMessage == 0) {
             action()
         } else {
-            _successObserver.emit(R.string.category_exists)
+            _successObserver.emit(validatorMessage)
         }
     }
 
@@ -75,7 +77,7 @@ class AddCategoryViewModel @Inject constructor(
     }
 
     private suspend fun updateCategory() {
-        val category = Category(categoryName, categoryColorLong, id=categoryIdReceived)
+        val category = Category(categoryName, categoryColorLong, id = categoryIdReceived)
         _successObserver.emit(R.string.category_updated)
         repository.updateCategory(category)
     }
@@ -85,7 +87,23 @@ class AddCategoryViewModel @Inject constructor(
         return count <= 0
     }
 
-    private fun checkCurrentName(name: String): Boolean{
+    private fun checkCurrentName(name: String): Boolean {
         return name == receivedCategoryName
+    }
+
+    private suspend fun validateFields(): Int {
+        val defaultColor = 0
+        if (categoryName.length < FieldValidation.MIN_NAME_LENGTH
+            || categoryName.length > FieldValidation.MAX_NAME_LENGTH
+        ) {
+            return R.string.name_invalid
+        }
+        if (categoryColorLong == defaultColor.toLong()) {
+            return R.string.category_invalid_color
+        }
+        if (!(checkCurrentName(categoryName) || checkExistingName(categoryName))) {
+            return R.string.name_exsists
+        }
+        return 0
     }
 }

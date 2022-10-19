@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">Shopping list</string>
 
+    <!--FieldValidatior-->
+    <string name="category_invalid_color">Please select color first</string>
+    <string name="name_invalid">Name have to be between 3 and 20 characters</string>
+    <string name="name_exsists">This name already exists</string>
+
     <!--Products-->
     <string name="product_added">Product has been added</string>
     <string name="product_exists">Product already exists</string>
@@ -9,15 +14,12 @@
     <string name="product_label_name">Product name</string>
     <string name="product_label_quantity">Product quantity</string>
 
-
     <!--Categories-->
     <string name="category_added">Category has been added</string>
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Category name</string>
     <string name="category_choose">Choose category</string>
-
-
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>
