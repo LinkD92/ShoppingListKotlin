@@ -24,6 +24,9 @@ interface ListDao {
     @Delete
     suspend fun deleteProduct(product: Product)
 
+    @Query("DELETE FROM products WHERE id = :productId")
+    suspend fun deleteProductById(productId: Int)
+
     @Update
     suspend fun updateProduct(product: Product)
 

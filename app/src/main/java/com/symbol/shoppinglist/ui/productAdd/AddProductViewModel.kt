@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.DispatcherProvider
+import com.symbol.shoppinglist.FieldValidation
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
@@ -49,10 +50,11 @@ class AddProductViewModel @Inject constructor(
     }
 
     fun confirmButtonClick() = viewModelScope.launch {
-        if (validateProduct(productName)) {
+        val validationResult = validateFields()
+        if (validationResult == 0) {
             getAction().invoke()
         } else {
-            _successObserver.emit(R.string.product_exists)
+            _successObserver.emit(validationResult)
         }
     }
 
@@ -85,6 +87,21 @@ class AddProductViewModel @Inject constructor(
         val duplicateValidation = count <= 0
         val currentNameValidation = name == receivedCategoryName
         return duplicateValidation || currentNameValidation
+    }
+
+    private suspend fun validateFields(): Int {
+        if (productName.length < FieldValidation.MIN_NAME_LENGTH
+            || productName.length > FieldValidation.MAX_NAME_LENGTH
+        ) {
+            return R.string.name_invalid
+        }
+        if (productCategory == dummyCategory) {
+            return R.string.category_invalid
+        }
+        if (!validateProduct(productName)) {
+            return R.string.name_exsists
+        }
+        return 0
     }
 
     private fun getProduct(id: Int) {

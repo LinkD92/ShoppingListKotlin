@@ -17,6 +17,8 @@ interface ListRepository {
 
     suspend fun deleteProduct(product: Product)
 
+    suspend fun deleteProductById(productId: Int)
+
     suspend fun updateProduct(product: Product)
 
     //Categories

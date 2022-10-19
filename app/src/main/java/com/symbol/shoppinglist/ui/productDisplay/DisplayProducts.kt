@@ -9,24 +9,25 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ExpandCircleDown
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -34,11 +35,12 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.local.entities.Product
-import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.theme.MyColor
+import com.symbol.shoppinglist.ui.theme.Shapes
+import org.w3c.dom.Text
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -47,6 +49,28 @@ fun DisplayProducts(
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
     val list by viewModel.categoriesWithProducts.observeAsState()
+    var openDialog = remember { mutableStateOf(false) }
+    var productId by remember { mutableStateOf(0) }
+    OptionsDialog(
+        openDialog,
+        stringResource(id = R.string.choose_action),
+        stringResource(id = R.string.action_edit),
+        Icons.Rounded.Edit,
+        {
+            openDialog.value = false
+            navHostController.navigate(
+                ProductsDirections.AddProduct.passArgument(
+                    productId
+                )
+            )
+        },
+        stringResource(id = R.string.action_delete),
+        Icons.Rounded.Delete,
+        {
+            viewModel.deleteProductById(productId)
+            openDialog.value = false
+        }
+    )
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +93,7 @@ fun DisplayProducts(
                         .width(IntrinsicSize.Min)
                         .padding(10.dp),
                     mainAxisSize = SizeMode.Wrap,
-                    mainAxisSpacing = 2.dp,
+                    mainAxisSpacing = 4.dp,
                     mainAxisAlignment = MainAxisAlignment.SpaceEvenly,
                     crossAxisSpacing = 10.dp,
                     lastLineMainAxisAlignment = MainAxisAlignment.Start
@@ -80,13 +104,9 @@ fun DisplayProducts(
                             categoryColor = categoryWithProduct.category.color,
                             onClick = { viewModel.updateProduct(product) },
                             onLongPress = {
-                                navHostController.navigate(
-                                    ProductsDirections.AddProduct.passArgument(
-                                        product.id
-                                    )
-                                )
-                            },
-                            deleteProduct = { viewModel.deleteProduct(product) })
+                                openDialog.value = true
+                                productId = product.id
+                            })
                     }
                 }
             }
@@ -100,8 +120,7 @@ fun ProductItem(
     product: Product,
     categoryColor: Long,
     onClick: (Product) -> Unit,
-    onLongPress: (Product) -> Unit,
-    deleteProduct: (Product) -> Unit,
+    onLongPress: () -> Unit,
 ) {
     var isChecked by remember { mutableStateOf(product.isChecked) }
     val alphaValue = if (isChecked) 1f else 0.3f
@@ -118,7 +137,7 @@ fun ProductItem(
                         isChecked = !isChecked
                         onClick(product.apply { this.isChecked = isChecked })
                     },
-                    onLongClick = { onLongPress(product) }
+                    onLongClick = { onLongPress() }
                 )
                 .background(color = backgroundColor)
                 .padding(horizontal = 10.dp, vertical = 2.dp)
@@ -129,14 +148,9 @@ fun ProductItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier,
+                    modifier = Modifier.alpha(alphaValue),
                     textAlign = TextAlign.Start,
                     text = product.name
-                )
-                Icon(
-                    Icons.Rounded.Delete, IconName.DELETE,
-                    modifier = Modifier
-                        .clickable { deleteProduct(product) }
                 )
             }
         }
@@ -196,6 +210,58 @@ fun ExpandableCategoryCard(
             }
         }
     }
+}
+
+@Composable
+fun OptionsDialog(
+    shouldOpenDialog: MutableState<Boolean>,
+    title: String,
+    btn1Title: String,
+    btn1Icon: ImageVector,
+    btn1OnClick: () -> Unit,
+    btn2Title: String,
+    btn2Icon: ImageVector,
+    btn2OnClick: () -> Unit
+) {
+    if (shouldOpenDialog.value)
+        Dialog(
+            onDismissRequest = { shouldOpenDialog.value = false },
+        ) {
+            Surface(shape = Shapes.medium) {
+                Column(
+                    modifier = Modifier
+                        .padding(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = title,
+                        textAlign = TextAlign.Center
+                    )
+                    Row(
+                        modifier = Modifier,
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Button(onClick = { btn1OnClick() }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(text = btn1Title)
+                                Icon(btn1Icon, null)
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(onClick = { btn2OnClick() }) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(text = btn2Title, textAlign = TextAlign.Center)
+                                Icon(btn2Icon, null)
+                            }
+                        }
+                    }
+                }
+            }
+        }
 }
 
 

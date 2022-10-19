@@ -2,10 +2,19 @@
 <resources>
     <string name="app_name">Shopping list</string>
 
+    <!--Actions-->
+    <string name="choose_action">What would you like to do?</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+
+
+
     <!--FieldValidatior-->
     <string name="category_invalid_color">Please select color first</string>
     <string name="name_invalid">Name have to be between 3 and 20 characters</string>
     <string name="name_exsists">This name already exists</string>
+    <string name="category_invalid">Please select category first</string>
+
 
     <!--Products-->
     <string name="product_added">Product has been added</string>

@@ -33,6 +33,12 @@ class DisplayProductViewModel @Inject constructor(
         }
     }
 
+    fun deleteProductById(productId: Int){
+        viewModelScope.launch {
+            repository.deleteProductById(productId)
+        }
+    }
+
     fun updateCategory(category: Category) {
         viewModelScope.launch {
             repository.updateCategory(category)

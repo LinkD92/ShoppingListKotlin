@@ -19,6 +19,8 @@ class DefaultListRepository @Inject constructor(private val listDao: ListDao): L
 
     override suspend fun deleteProduct(product: Product) = listDao.deleteProduct(product)
 
+    override suspend fun deleteProductById(productId: Int) = listDao.deleteProductById(productId)
+
     override suspend fun updateProduct(product: Product) = listDao.updateProduct(product)
 
     //Categories
