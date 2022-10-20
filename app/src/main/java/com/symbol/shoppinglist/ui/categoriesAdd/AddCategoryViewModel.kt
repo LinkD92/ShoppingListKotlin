@@ -57,6 +57,7 @@ class AddCategoryViewModel @Inject constructor(
 
     fun updateColor(input: String) {
         categoryColorLong = input.toLong(16)
+        Log.d("QWAS - updateColor:", "$categoryColorLong")
     }
 
     private fun getCategory(id: Int) {

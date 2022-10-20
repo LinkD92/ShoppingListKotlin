@@ -66,8 +66,7 @@ fun CategoryItem(
         ) {
             Text(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 4.dp),
+                    .align(Alignment.CenterVertically),
                 text = category.name,
                 textAlign = TextAlign.Left
             )

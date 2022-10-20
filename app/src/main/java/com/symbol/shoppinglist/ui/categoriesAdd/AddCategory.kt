@@ -67,6 +67,6 @@ fun ColorPickerButton(modifier: Modifier = Modifier, buttonColor: Color, onClick
         colors = ButtonDefaults.buttonColors(buttonColor)
     ) {
         Icon(Icons.Rounded.Palette, IconName.PALETTE)
-        Text(text = stringResource(id = R.string.category_choose))
+        Text(text = stringResource(id = R.string.color_select))
     }
 }

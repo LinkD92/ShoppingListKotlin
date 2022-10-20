@@ -29,7 +29,7 @@ class AddProductViewModel @Inject constructor(
 ) :
     ViewModel() {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
-    private val dummyCategory = Category(name = "Select category")
+    private val dummyCategory = Category(name = "Select category", color = 4294967295)
     private var receivedCategoryName = ""
     private val productIdReceived =
         savedStateHandle.get<Int>(NavigationRoutes.Products.Arguments.ID)

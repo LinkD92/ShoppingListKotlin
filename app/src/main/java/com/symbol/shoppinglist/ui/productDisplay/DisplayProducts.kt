@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,19 +39,18 @@ import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.theme.MyColor
 import com.symbol.shoppinglist.ui.theme.Shapes
-import org.w3c.dom.Text
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
     val list by viewModel.categoriesWithProducts.observeAsState()
-    var openDialog = remember { mutableStateOf(false) }
+    val openDialog = remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
+    if (openDialog.value)
     OptionsDialog(
-        openDialog,
+        {openDialog.value = false},
         stringResource(id = R.string.choose_action),
         stringResource(id = R.string.action_edit),
         Icons.Rounded.Edit,
@@ -214,7 +212,7 @@ fun ExpandableCategoryCard(
 
 @Composable
 fun OptionsDialog(
-    shouldOpenDialog: MutableState<Boolean>,
+    shouldOpenDialog: () -> Unit,
     title: String,
     btn1Title: String,
     btn1Icon: ImageVector,
@@ -223,45 +221,44 @@ fun OptionsDialog(
     btn2Icon: ImageVector,
     btn2OnClick: () -> Unit
 ) {
-    if (shouldOpenDialog.value)
-        Dialog(
-            onDismissRequest = { shouldOpenDialog.value = false },
-        ) {
-            Surface(shape = Shapes.medium) {
-                Column(
-                    modifier = Modifier
-                        .padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+    Dialog(
+        onDismissRequest = { shouldOpenDialog() },
+    ) {
+        Surface(shape = Shapes.medium) {
+            Column(
+                modifier = Modifier
+                    .padding(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title,
+                    textAlign = TextAlign.Center
+                )
+                Row(
+                    modifier = Modifier,
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = title,
-                        textAlign = TextAlign.Center
-                    )
-                    Row(
-                        modifier = Modifier,
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Button(onClick = { btn1OnClick() }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = btn1Title)
-                                Icon(btn1Icon, null)
-                            }
+                    Button(onClick = { btn1OnClick() }) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = btn1Title)
+                            Icon(btn1Icon, null)
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Button(onClick = { btn2OnClick() }) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(text = btn2Title, textAlign = TextAlign.Center)
-                                Icon(btn2Icon, null)
-                            }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Button(onClick = { btn2OnClick() }) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = btn2Title, textAlign = TextAlign.Center)
+                            Icon(btn2Icon, null)
                         }
                     }
                 }
             }
         }
+    }
 }
 
 

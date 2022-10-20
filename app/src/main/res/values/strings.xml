@@ -28,7 +28,7 @@
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Category name</string>
-    <string name="category_choose">Choose category</string>
+    <string name="color_select">Select category color</string>
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>
