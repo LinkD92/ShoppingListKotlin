@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,12 +23,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.flowlayout.FlowRow
@@ -39,53 +44,60 @@ import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.theme.MyColor
 import com.symbol.shoppinglist.ui.theme.Shapes
+import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
     viewModel: DisplayProductViewModel = hiltViewModel()
 ) {
-    val list by viewModel.categoriesWithProducts.observeAsState()
+    val categories by viewModel.categories.collectAsStateLifecycleAware(initial = emptyList())
     val openDialog = remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
     if (openDialog.value)
-    OptionsDialog(
-        {openDialog.value = false},
-        stringResource(id = R.string.choose_action),
-        stringResource(id = R.string.action_edit),
-        Icons.Rounded.Edit,
-        {
-            openDialog.value = false
-            navHostController.navigate(
-                ProductsDirections.AddProduct.passArgument(
-                    productId
+        OptionsDialog(
+            { openDialog.value = false },
+            stringResource(id = R.string.choose_action),
+            stringResource(id = R.string.action_edit),
+            Icons.Rounded.Edit,
+            {
+                openDialog.value = false
+                navHostController.navigate(
+                    ProductsDirections.AddProduct.passArgument(
+                        productId
+                    )
                 )
-            )
-        },
-        stringResource(id = R.string.action_delete),
-        Icons.Rounded.Delete,
-        {
-            viewModel.deleteProductById(productId)
-            openDialog.value = false
-        }
-    )
+            },
+            stringResource(id = R.string.action_delete),
+            Icons.Rounded.Delete,
+            {
+                viewModel.deleteProductById(productId)
+                openDialog.value = false
+            }
+        )
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp)
     ) {
         items(
-            items = list ?: listOf()
-        ) { categoryWithProduct ->
+            items = categories
+        ) { category ->
             Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
-                categoryWithProduct.category.name,
-                categoryWithProduct.category.isExpanded,
-                categoryWithProduct.category.color,
+                category.name,
+                category.isExpanded,
+                category.color,
                 { isExpanded ->
-                    viewModel.changeCategoryExpand(categoryWithProduct.category, isExpanded)
+                    viewModel.changeCategoryExpand(category, isExpanded)
                 }
             ) {
+                val products by viewModel.getCategoriesProduct(category.id)
+                    .collectAsStateLifecycleAware(
+                        initial = emptyList()
+                    )
                 FlowRow(
                     modifier = Modifier
                         .width(IntrinsicSize.Min)
@@ -96,11 +108,19 @@ fun DisplayProducts(
                     crossAxisSpacing = 10.dp,
                     lastLineMainAxisAlignment = MainAxisAlignment.Start
                 ) {
-                    categoryWithProduct.products.forEach { product ->
+                    products.forEach { product ->
+                        var isCheckedV by rememberSaveable { mutableStateOf(product.isChecked) }
+                        val alphaValue = if (product.isChecked) 1f else 0.3f
+                        val backgroundColor = Color(category.color).copy(alphaValue)
                         ProductItem(
                             product = product,
-                            categoryColor = categoryWithProduct.category.color,
-                            onClick = { viewModel.updateProduct(product) },
+                            categoryColor = backgroundColor,
+                            onClick = {
+                                isCheckedV = !isCheckedV
+                                viewModel.updateProduct(product.apply {
+                                    this.isChecked = !this.isChecked
+                                })
+                            },
                             onLongPress = {
                                 openDialog.value = true
                                 productId = product.id
@@ -116,13 +136,10 @@ fun DisplayProducts(
 @Composable
 fun ProductItem(
     product: Product,
-    categoryColor: Long,
-    onClick: (Product) -> Unit,
+    categoryColor: Color,
+    onClick: () -> Unit,
     onLongPress: () -> Unit,
 ) {
-    var isChecked by remember { mutableStateOf(product.isChecked) }
-    val alphaValue = if (isChecked) 1f else 0.3f
-    val backgroundColor = Color(categoryColor).copy(alphaValue)
     Surface(
         modifier = Modifier,
         elevation = 10.dp,
@@ -132,12 +149,11 @@ fun ProductItem(
             modifier = Modifier
                 .combinedClickable(
                     onClick = {
-                        isChecked = !isChecked
-                        onClick(product.apply { this.isChecked = isChecked })
+                        onClick()
                     },
                     onLongClick = { onLongPress() }
                 )
-                .background(color = backgroundColor)
+                .background(color = categoryColor)
                 .padding(horizontal = 10.dp, vertical = 2.dp)
         ) {
             Row(
@@ -146,7 +162,7 @@ fun ProductItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.alpha(alphaValue),
+                    modifier = Modifier.alpha(categoryColor.alpha),
                     textAlign = TextAlign.Start,
                     text = product.name
                 )
@@ -262,3 +278,22 @@ fun OptionsDialog(
 }
 
 
+@Composable
+fun <T> rememberFlow(
+    flow: Flow<T>,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+): Flow<T> {
+    return remember(
+        key1 = flow,
+        key2 = lifecycleOwner
+    ) { flow.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED) }
+}
+
+@Composable
+fun <T : R, R> Flow<T>.collectAsStateLifecycleAware(
+    initial: R,
+    context: CoroutineContext = EmptyCoroutineContext
+): State<R> {
+    val lifecycleAwareFlow = rememberFlow(flow = this)
+    return lifecycleAwareFlow.collectAsState(initial = initial, context = context)
+}

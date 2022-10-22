@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
+import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
 
     fun getAllProducts(): LiveData<List<Product>>
 
     suspend fun getProduct(id: Int): Product
+
+    fun getCategoryProducts(categoryId: Int): Flow<List<Product>>
 
     suspend fun addProduct(product: Product)
 
@@ -24,6 +27,8 @@ interface ListRepository {
     //Categories
     fun getAllCategories(): LiveData<List<Category>>
 
+    fun getCategories(): Flow<List<Category>>
+
     suspend fun getCategory(id: Int): Category
 
     suspend fun doesCategoryExists(name: String): Int
@@ -36,4 +41,6 @@ interface ListRepository {
 
     //Transactions
     fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>>
+
+    fun getCategoriesWithProductsFlow(): Flow<List<CategoryWithProducts>>
 }
