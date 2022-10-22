@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
 
-    fun getAllProducts(): LiveData<List<Product>>
-
-    suspend fun getProduct(id: Int): Product
+    fun getAllProducts(): Flow<List<Product>>
 
     fun getCategoryProducts(categoryId: Int): Flow<List<Product>>
+
+    suspend fun getProduct(id: Int): Product
 
     suspend fun addProduct(product: Product)
 
@@ -25,9 +25,7 @@ interface ListRepository {
     suspend fun updateProduct(product: Product)
 
     //Categories
-    fun getAllCategories(): LiveData<List<Category>>
-
-    fun getCategories(): Flow<List<Category>>
+    fun getAllCategories(): Flow<List<Category>>
 
     suspend fun getCategory(id: Int): Category
 
@@ -40,7 +38,5 @@ interface ListRepository {
     suspend fun updateCategory(category: Category)
 
     //Transactions
-    fun getCategoriesWithProducts(): LiveData<List<CategoryWithProducts>>
-
-    fun getCategoriesWithProductsFlow(): Flow<List<CategoryWithProducts>>
+    fun getCategoriesWithProducts(): Flow<List<CategoryWithProducts>>
 }

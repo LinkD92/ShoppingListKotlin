@@ -8,7 +8,7 @@ import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.database.local.entities.Product
 
 @Database(entities = [Product::class, Category::class], version = 2)
-abstract class ListDatabase : RoomDatabase() {
+abstract class ListRoomDatabase : RoomDatabase() {
     abstract fun productsDao(): ProductsDao
     abstract fun categoriesDao(): CategoriesDao
 }

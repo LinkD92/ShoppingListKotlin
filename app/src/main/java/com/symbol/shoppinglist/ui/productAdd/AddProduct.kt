@@ -26,6 +26,7 @@ import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 import com.symbol.shoppinglist.ui.categoriesManage.CategoryItem
+import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 
 @Composable
 fun AddProduct(
@@ -33,7 +34,7 @@ fun AddProduct(
     viewModel: AddProductViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val categories = viewModel.allCategories.observeAsState().value
+    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
     val labelName = stringResource(id = R.string.product_label_name)
     val labelAmount = stringResource(id = R.string.product_label_quantity)
     val labelAndPlaceholderModifier = Modifier

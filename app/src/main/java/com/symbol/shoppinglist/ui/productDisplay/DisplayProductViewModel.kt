@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -20,18 +21,11 @@ class DisplayProductViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-
-    private val _categoriesWithProducts = repository.getCategoriesWithProducts()
-    val categoriesWithProducts: LiveData<List<CategoryWithProducts>> = _categoriesWithProducts
-
-    val categories = repository.getCategories()
-
-    val state = repository.getCategoriesWithProductsFlow()
+    val categories = repository.getAllCategories()
 
     fun updateProduct(product: Product) {
         viewModelScope.launch {
             delay(50)
-
             repository.updateProduct(product)
         }
     }

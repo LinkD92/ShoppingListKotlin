@@ -10,18 +10,18 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.database.local.entities.Category
 import com.symbol.shoppinglist.navigation.CategoriesDirections
+import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 
 @Composable
 fun ManageCategories(
@@ -29,7 +29,7 @@ fun ManageCategories(
     navHostController: NavHostController,
     viewModel: ManageCategoriesViewModel = hiltViewModel()
 ) {
-    val categories = viewModel.allCategories.observeAsState().value ?: listOf()
+    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
     ListOfCategories(
         modifier = modifier,
         categories = categories,
