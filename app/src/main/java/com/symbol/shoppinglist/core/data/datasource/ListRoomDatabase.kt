@@ -2,10 +2,10 @@ package com.symbol.shoppinglist.database.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.symbol.shoppinglist.database.local.dao.CategoriesDao
-import com.symbol.shoppinglist.database.local.dao.ProductsDao
-import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_category.data.data_source.CategoriesDao
+import com.symbol.shoppinglist.feature_product.data.data_source.ProductsDao
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 
 @Database(entities = [Product::class, Category::class], version = 2)
 abstract class ListRoomDatabase : RoomDatabase() {

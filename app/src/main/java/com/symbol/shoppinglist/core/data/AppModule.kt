@@ -6,9 +6,9 @@ import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.database.DefaultListRepository
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.local.ListRoomDatabase
-import com.symbol.shoppinglist.database.local.dao.CategoriesDao
-import com.symbol.shoppinglist.database.local.dao.ProductsDao
+import com.symbol.shoppinglist.core.data.datasource.ListRoomDatabase
+import com.symbol.shoppinglist.feature_category.data.data_source.CategoriesDao
+import com.symbol.shoppinglist.feature_product.data.data_source.ProductsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
