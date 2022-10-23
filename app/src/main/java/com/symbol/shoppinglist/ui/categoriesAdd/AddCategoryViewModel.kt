@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,7 +10,7 @@ import com.symbol.shoppinglist.FieldValidation
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

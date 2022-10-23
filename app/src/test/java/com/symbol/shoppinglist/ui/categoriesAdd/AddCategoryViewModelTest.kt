@@ -1,17 +1,13 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.FakeListRepository
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
 
 class AddCategoryViewModelTest {
     @get:Rule

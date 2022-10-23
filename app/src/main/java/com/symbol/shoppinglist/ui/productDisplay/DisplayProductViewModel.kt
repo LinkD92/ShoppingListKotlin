@@ -1,13 +1,11 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
-import android.util.Log
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

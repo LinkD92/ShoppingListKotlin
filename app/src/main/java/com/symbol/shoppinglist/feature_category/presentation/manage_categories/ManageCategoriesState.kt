@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui.categoriesManage
+package com.symbol.shoppinglist.feature_category.presentation.manage_categories
 
 import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_category.domain.model.Category

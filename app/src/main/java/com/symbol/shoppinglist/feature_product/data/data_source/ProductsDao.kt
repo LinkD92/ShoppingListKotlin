@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.database.local.dao
+package com.symbol.shoppinglist.feature_product.data.data_source
 
 import androidx.room.*
 import com.symbol.shoppinglist.feature_product.domain.model.Product
@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductsDao {
-    //Products
     @Query("SELECT * FROM products")
     fun getAllProducts(): Flow<List<Product>>
 
@@ -20,7 +19,7 @@ interface ProductsDao {
     @Query("SELECT COUNT(*) FROM products WHERE name = :name")
     suspend fun doesProductExists(name: String): Int
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProduct(product: Product)
 
     @Delete

@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,9 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesEvent
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesViewModel
 import com.symbol.shoppinglist.navigation.CategoriesDirections
-import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 
 @Composable
 fun ManageCategories(
@@ -29,14 +30,16 @@ fun ManageCategories(
     navHostController: NavHostController,
     viewModel: ManageCategoriesViewModel = hiltViewModel()
 ) {
-    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
+    val state = viewModel.state.value
+    val scope = rememberCoroutineScope()
+//    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
     ListOfCategories(
         modifier = modifier,
-        categories = categories,
+        categories = state.categories,
         onClick = { categoryId ->
             navHostController.navigate(CategoriesDirections.AddCategory.passArgument(categoryId))
         },
-        deleteIconClick = { category -> viewModel.deleteCategory(category) }
+        deleteIconClick = { category -> viewModel.onEvent(ManageCategoriesEvent.DeleteCategory(category)) }
     )
 }
 

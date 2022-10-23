@@ -1,12 +1,11 @@
 package com.symbol.shoppinglist.ui.productAdd
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.test.internal.util.ReflectionUtil
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.FakeListRepository
 import com.symbol.shoppinglist.TestDispatchers
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -14,7 +13,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 

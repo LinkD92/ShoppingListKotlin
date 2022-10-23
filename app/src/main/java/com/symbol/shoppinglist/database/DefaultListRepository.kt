@@ -1,9 +1,9 @@
 package com.symbol.shoppinglist.database
 
-import com.symbol.shoppinglist.database.local.dao.CategoriesDao
-import com.symbol.shoppinglist.database.local.dao.ProductsDao
-import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_category.data.data_source.CategoriesDao
+import com.symbol.shoppinglist.feature_product.data.data_source.ProductsDao
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

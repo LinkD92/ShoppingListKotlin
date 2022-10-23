@@ -1,4 +1,11 @@
 package com.symbol.shoppinglist.feature_category.domain.use_case
 
-class DeleteCategory {
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
+
+class DeleteCategory(private val repository: CategoriesRepository) {
+
+    suspend operator fun invoke(category: Category){
+        repository.deleteCategory(category)
+    }
 }

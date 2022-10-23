@@ -1,14 +1,10 @@
 package com.symbol.shoppinglist.ui.categoriesManage
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.SavedStateHandle
 import com.symbol.shoppinglist.FakeListRepository
-import com.symbol.shoppinglist.database.local.entities.Category
-import org.junit.Assert.*
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesViewModel
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
-import org.mockito.Mock
 
 class ManageCategoriesViewModelTest{
 

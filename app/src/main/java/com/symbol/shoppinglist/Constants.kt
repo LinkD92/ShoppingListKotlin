@@ -2,6 +2,10 @@ package com.symbol.shoppinglist
 
 import android.app.SearchManager.QUERY
 
+object Database{
+    const val NAME = "products_database"
+}
+
 object Action {
     const val CHECK = "Check"
     const val BACK = "Back"
@@ -25,6 +29,7 @@ object Error{
 object FieldValidation{
     const val MAX_NAME_LENGTH = 20
     const val MIN_NAME_LENGTH = 3
+    const val DEFAULT_COLOR = 0
 }
 
 

@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.flowlayout.FlowRow
@@ -35,12 +34,11 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import com.symbol.shoppinglist.ui.theme.MyColor
 import com.symbol.shoppinglist.ui.theme.Shapes
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun DisplayProducts(

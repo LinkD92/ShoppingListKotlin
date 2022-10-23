@@ -1,7 +1,7 @@
-package com.symbol.shoppinglist.database.local.dao
+package com.symbol.shoppinglist.feature_category.data.data_source
 
 import androidx.room.*
-import com.symbol.shoppinglist.database.local.entities.Category
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,7 +15,7 @@ interface CategoriesDao {
     @Query("SELECT COUNT(*) FROM categories WHERE name = :name")
     suspend fun doesCategoryExists(name: String): Int
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCategory(category: Category)
 
     @Delete

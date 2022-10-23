@@ -1,8 +1,7 @@
 package com.symbol.shoppinglist.database
 
-import androidx.lifecycle.LiveData
-import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import kotlinx.coroutines.flow.Flow
 

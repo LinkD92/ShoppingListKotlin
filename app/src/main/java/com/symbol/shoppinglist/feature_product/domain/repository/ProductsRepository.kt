@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.feature_product.data.repository
+package com.symbol.shoppinglist.feature_product.domain.repository
 
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import kotlinx.coroutines.flow.Flow

@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.database.local
+package com.symbol.shoppinglist.core.data.datasource
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

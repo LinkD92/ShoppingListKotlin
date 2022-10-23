@@ -3,8 +3,8 @@ package com.symbol.shoppinglist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.symbol.shoppinglist.database.ListRepository
-import com.symbol.shoppinglist.database.local.entities.Category
-import com.symbol.shoppinglist.database.local.entities.Product
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 
 class FakeListRepository : ListRepository {
