@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
 import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
@@ -29,10 +30,12 @@ import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 fun AddCategory(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: AddCategoryViewModel = hiltViewModel()
+    viewModel: AddEditCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val currentColor = Color(viewModel.categoryColorLong)
+    val nameState = viewModel.categoryName.value
+    val colorState = viewModel.categoryColor.value
+    val currentColor = Color(colorState)
     val nameLabel = stringResource(id = R.string.category_label_name)
 
     Column {
@@ -40,22 +43,24 @@ fun AddCategory(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp, vertical = 5.dp),
-            viewModel.categoryName,
-            nameLabel
+            nameState,
+            nameLabel,
         ) {
-            viewModel.updateName(it)
+            viewModel.onEvent(AddEditCategoryEvent.EnteredName(it))
         }
         ColorPickerButton(
             buttonColor = currentColor,
             onClick = { navController.navigate(CategoriesDirections.ColorPicker.route) })
         ConfirmButton(
-            onClick = { viewModel.confirmButtonClick() })
+            onClick = {
+                viewModel.onEvent(AddEditCategoryEvent.SaveCategory)
+            })
     }
 
     LaunchedEffect(true) {
-        viewModel.successObserver.collect {
-            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
-        }
+//        viewModel.successObserver.collect {
+//            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
+//        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.core.data
+package com.symbol.shoppinglist.core
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

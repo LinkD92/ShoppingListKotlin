@@ -1,7 +1,6 @@
 package com.symbol.shoppinglist.ui.categoriesAdd
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -9,7 +8,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +21,8 @@ import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.symbol.shoppinglist.IconName
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
 import com.symbol.shoppinglist.navigation.CategoriesDirections
 
 @SuppressLint("UnrememberedGetBackStackEntry")
@@ -32,7 +34,7 @@ fun ColorPicker(
     val backStackEntry = remember {
         navHostController.getBackStackEntry(CategoriesDirections.AddCategory.route)
     }
-    val viewModel: AddCategoryViewModel = viewModel(backStackEntry)
+    val viewModel: AddEditCategoryViewModel = viewModel(backStackEntry)
     val controller = rememberColorPickerController()
     Surface(
         color = Color.Black.copy(alpha = 0.5f)
@@ -68,7 +70,7 @@ fun ColorPicker(
                     .padding(10.dp),
                 controller = controller,
                 onColorChanged = {
-                    viewModel.updateColor(it.hexCode)
+                    viewModel.onEvent(AddEditCategoryEvent.ChangeColor(it.hexCode.toLong(16)))
                 }
             )
         }

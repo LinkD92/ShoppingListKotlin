@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui.categoriesAdd
+package com.symbol.shoppinglist.feature_category.presentation.add_edit_category
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

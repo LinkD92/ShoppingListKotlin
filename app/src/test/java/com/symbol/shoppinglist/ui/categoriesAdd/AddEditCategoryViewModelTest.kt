@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.FakeListRepository
 import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddCategoryViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

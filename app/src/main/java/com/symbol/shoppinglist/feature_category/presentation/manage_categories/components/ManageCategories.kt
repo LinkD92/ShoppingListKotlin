@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui.categoriesManage
+package com.symbol.shoppinglist.feature_category.presentation.manage_categories
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,12 +32,11 @@ fun ManageCategories(
 ) {
     val state = viewModel.state.value
     val scope = rememberCoroutineScope()
-//    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
     ListOfCategories(
         modifier = modifier,
         categories = state.categories,
         onClick = { categoryId ->
-            navHostController.navigate(CategoriesDirections.AddCategory.passArgument(categoryId))
+            navHostController.navigate(CategoriesDirections.AddCategory.passArgument(categoryId!!))
         },
         deleteIconClick = { category -> viewModel.onEvent(ManageCategoriesEvent.DeleteCategory(category)) }
     )
@@ -47,7 +46,7 @@ fun ManageCategories(
 fun CategoryItem(
     modifier: Modifier = Modifier,
     category: Category,
-    onClick: ((Int) -> Unit)? = null,
+    onClick: ((Int?) -> Unit)? = null,
     deleteIconClick: ((Category) -> Unit)? = null,
     content: @Composable (() -> Unit)? = null
 ) {
@@ -93,7 +92,7 @@ fun CategoryItem(
 fun ListOfCategories(
     modifier: Modifier,
     categories: List<Category>,
-    onClick: (Int) -> Unit,
+    onClick: (Int?) -> Unit,
     deleteIconClick: (Category) -> Unit
 ) {
     Card(
@@ -105,7 +104,7 @@ fun ListOfCategories(
         LazyColumn(
             modifier = modifier
         ) {
-            items(categories, key = { it.id }) { item ->
+            items(categories, key = { it.id!! }) { item ->
                 CategoryItem(
                     category = item,
                     onClick = onClick,
