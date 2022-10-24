@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui.categoriesAdd
+package com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

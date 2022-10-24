@@ -10,6 +10,6 @@ data class Category(
     var color: Long = 0,
     var isExpanded: Boolean = false,
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int = 0
 )
 

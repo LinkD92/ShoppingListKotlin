@@ -4,9 +4,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.ui.categoriesAdd.AddCategory
-import com.symbol.shoppinglist.ui.categoriesAdd.ColorPicker
-import com.symbol.shoppinglist.ui.categoriesManage.ManageCategories
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.AddCategory
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.ColorPicker
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.ManageCategories
 
 private const val categoryId = NavigationRoutes.Categories.Arguments.ID
 

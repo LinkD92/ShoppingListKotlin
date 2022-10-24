@@ -8,7 +8,4 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 
 @Database(entities = [Product::class, Category::class], version = 2)
-abstract class ListRoomDatabase : RoomDatabase() {
-    abstract fun productsDao(): ProductsDao
-    abstract fun categoriesDao(): CategoriesDao
-}
+abstract class ListRoomDatabase : RoomDatabase(), ListDatabase

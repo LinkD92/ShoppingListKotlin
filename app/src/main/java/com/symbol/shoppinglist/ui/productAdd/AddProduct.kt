@@ -20,9 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.CategoryItem
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
-import com.symbol.shoppinglist.ui.categoriesManage.CategoryItem
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 
 @Composable

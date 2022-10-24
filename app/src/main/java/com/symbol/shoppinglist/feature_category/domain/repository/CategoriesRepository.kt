@@ -10,9 +10,7 @@ interface CategoriesRepository {
 
     suspend fun doesCategoryExists(name: String): Int
 
-    suspend fun addCategory(category: Category)
+    suspend fun insertCategory(category: Category)
 
     suspend fun deleteCategory(category: Category)
-
-    suspend fun updateCategory(category: Category)
 }

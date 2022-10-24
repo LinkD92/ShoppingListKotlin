@@ -16,11 +16,8 @@ interface CategoriesDao {
     suspend fun doesCategoryExists(name: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addCategory(category: Category)
+    suspend fun insertCategory(category: Category)
 
     @Delete
     suspend fun deleteCategory(category: Category)
-
-    @Update
-    suspend fun updateCategory(category: Category)
 }

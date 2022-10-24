@@ -38,7 +38,7 @@ class DefaultListRepository @Inject constructor(
 
     override suspend fun doesCategoryExists(name: String) = categoriesDao.doesCategoryExists(name)
 
-    override suspend fun addCategory(category: Category) = categoriesDao.addCategory(category)
+    override suspend fun addCategory(category: Category) = categoriesDao.insertCategory(category)
 
     override suspend fun deleteCategory(category: Category) = categoriesDao.deleteCategory(category)
 

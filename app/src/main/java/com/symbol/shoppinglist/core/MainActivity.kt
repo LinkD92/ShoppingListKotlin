@@ -1,8 +1,9 @@
-package com.symbol.shoppinglist
+package com.symbol.shoppinglist.core
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.symbol.shoppinglist.ShoppingListApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

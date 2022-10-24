@@ -5,16 +5,16 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.FakeListRepository
 import com.symbol.shoppinglist.feature_category.domain.model.Category
-import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddCategoryViewModel
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class AddCategoryViewModelTest {
+class AddEditCategoryViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var viewModel: AddCategoryViewModel
+    private lateinit var viewModel: AddEditCategoryViewModel
 
     lateinit var savedStateHandle: SavedStateHandle
 
@@ -24,7 +24,7 @@ class AddCategoryViewModelTest {
     fun setup() {
         category = Category("Name", 100, false, 1)
         savedStateHandle = SavedStateHandle()
-        viewModel = AddCategoryViewModel(FakeListRepository(), savedStateHandle)
+        viewModel = AddEditCategoryViewModel(FakeListRepository(), savedStateHandle)
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.feature_category.presentation.manage_categories
+package com.symbol.shoppinglist.feature_category.presentation.manage_categories.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
