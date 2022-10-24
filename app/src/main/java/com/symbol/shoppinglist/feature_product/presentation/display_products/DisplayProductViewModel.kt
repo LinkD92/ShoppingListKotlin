@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.core.domain.util.OrderType
-import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
-import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -28,8 +28,8 @@ class DisplayProductViewModel @Inject constructor(
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
 
-    private val _products = mutableStateOf<List<Product>>(emptyList())
-    val products: State<List<Product>> = _products
+    private var _products = emptyFlow<List<Product>>()
+    val products = _products
 
 
     private var recentlyDeletedProduct: Product? = null
@@ -61,8 +61,9 @@ class DisplayProductViewModel @Inject constructor(
             is DisplayProductsEvent.CreateProduct -> {}
             is DisplayProductsEvent.ExpandCategory -> {
                 viewModelScope.launch {
-                    _products.value = productUseCases.getCategoryProducts(event.category)
-                    productUseCases.expandCategory(event.category.apply { isExpanded = !isExpanded })
+                    productUseCases.expandCategory(event.category.apply {
+                        isExpanded = !isExpanded
+                    })
                 }
             }
             is DisplayProductsEvent.ChangeProductSelection -> {
@@ -86,41 +87,8 @@ class DisplayProductViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-
-//    val categories = repository.getAllCategories()
-//
-//    fun updateProduct(product: Product) {
-//        viewModelScope.launch {
-//            delay(50)
-//            repository.updateProduct(product)
-//        }
-//    }
-//
-//    fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
-//        repository.getCategoryProducts(categoryId)
-//
-//    fun deleteProduct(product: Product) {
-//        viewModelScope.launch {
-//            repository.deleteProduct(product)
-//        }
-//    }
-//
-//    fun deleteProductById(productId: Int) {
-//        viewModelScope.launch {
-//            repository.deleteProductById(productId)
-//        }
-//    }
-//
-//    fun updateCategory(category: Category) {
-//        viewModelScope.launch {
-//            repository.updateCategory(category)
-//        }
-//    }
-//
-//    fun changeCategoryExpand(category: Category, isExpanded: Boolean) {
-//        viewModelScope.launch {
-//            repository.updateCategory(category.apply { this.isExpanded = isExpanded })
-//        }
-//    }
+    // TODO: 24/10/2022
+    fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
+        productUseCases.getCategoryProducts(categoryId)
 }
 

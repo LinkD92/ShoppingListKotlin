@@ -35,8 +35,6 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
-import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
-import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
@@ -95,11 +93,20 @@ fun DisplayProducts(
                 }
             ) {
                 Log.d("QWAS - DisplayProducts:", "Recomposition3")
-
+                val products =
+                    productViewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+                        initial = emptyList()
+                    ).value
                 ProductItemsList(
                     categoryColor = category.color,
-                    productsFlow = categoryProducts ?: listOf(),
-                    onItemClick = { product -> productViewModel.onEvent(DisplayProductsEvent.EditProduct(product)) },
+                    productsFlow = products,
+                    onItemClick = { product ->
+                        productViewModel.onEvent(
+                            DisplayProductsEvent.ChangeProductSelection(
+                                product
+                            )
+                        )
+                    },
                     onLongClick = { openDialog = true }
                 )
             }
@@ -162,14 +169,14 @@ fun ProductItemsList(
         lastLineMainAxisAlignment = MainAxisAlignment.Start
     ) {
         productsFlow.forEach { product ->
-//            var isCheckedState by remember(product.id) { mutableStateOf(product.isChecked) }
-            val alphaValue = if (product.isChecked) 1f else 0.3f
+            var isCheckedState by remember(product.id) { mutableStateOf(product.isChecked) }
+            val alphaValue = if (isCheckedState) 1f else 0.3f
             val backgroundColor = Color(categoryColor).copy(alphaValue)
             ProductItem(
                 product = product,
                 categoryColor = backgroundColor,
                 onClick = {
-//                    isCheckedState = !isCheckedState .apply { isChecked = isCheckedState }
+                    isCheckedState = !isCheckedState
                     onItemClick(product)
                 },
                 onLongClick = onLongClick
