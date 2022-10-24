@@ -5,7 +5,7 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryValidationError
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
 
-class AddCategory(private val repository: CategoriesRepository) {
+class InsertCategory(private val repository: CategoriesRepository) {
 
     suspend operator fun invoke(category: Category): CategoryValidationError {
         if (category.name.length < FieldValidation.MIN_NAME_LENGTH

@@ -63,7 +63,7 @@ class AddEditCategoryViewModel @Inject constructor(
             is AddEditCategoryEvent.SaveCategory -> {
                 viewModelScope.launch {
                     if (currentCategoryId == invalidId) {
-                        categoryUseCases.addCategory(
+                        categoryUseCases.insertCategory(
                             Category(
                                 name = categoryName.value,
                                 color = categoryColor.value,
@@ -71,7 +71,7 @@ class AddEditCategoryViewModel @Inject constructor(
                         )
                         _eventFlow.emit(UiEvent.SaveCategory)
                     } else {
-                        categoryUseCases.addCategory(
+                        categoryUseCases.insertCategory(
                             Category(
                                 name = categoryName.value,
                                 color = categoryColor.value,

@@ -1,8 +1,8 @@
 package com.symbol.shoppinglist.feature_product.data.data_source
 
 import androidx.room.*
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
-import com.symbol.shoppinglist.database.local.entities.relations.CategoryWithProducts
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,19 +20,11 @@ interface ProductsDao {
     suspend fun doesProductExists(name: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addProduct(product: Product)
+    suspend fun insertProduct(product: Product)
 
     @Delete
     suspend fun deleteProduct(product: Product)
 
     @Query("DELETE FROM products WHERE id = :productId")
     suspend fun deleteProductById(productId: Int)
-
-    @Update
-    suspend fun updateProduct(product: Product)
-
-    //Transactions
-    @Transaction
-    @Query("SELECT * FROM categories")
-    fun getCategoryWithProducts(): Flow<List<CategoryWithProducts>>
 }

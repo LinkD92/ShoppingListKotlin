@@ -1,11 +1,10 @@
-package com.symbol.shoppinglist.feature_category.domain.model
+package com.symbol.shoppinglist.feature_product.domain.model
 
 import com.symbol.shoppinglist.R
 
-sealed class CategoryValidationError(resourceString: Int) {
-    object InvalidLength: CategoryValidationError(R.string.name_invalid)
-    object InvalidColor: CategoryValidationError(R.string.category_invalid_color)
-    object ExistingName: CategoryValidationError(R.string.name_exsists)
-    object Success: CategoryValidationError(R.string.category_added)
-
+sealed class ProductValidationError(resourceString: Int) {
+    object InvalidLength: ProductValidationError(R.string.name_invalid)
+    object InvalidCategory: ProductValidationError(R.string.category_invalid)
+    object ExistingName: ProductValidationError(R.string.name_exsists)
+    object Success: ProductValidationError(R.string.product_added)
 }

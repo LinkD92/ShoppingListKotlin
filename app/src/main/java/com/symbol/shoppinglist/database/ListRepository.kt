@@ -21,8 +21,6 @@ interface ListRepository {
 
     suspend fun deleteProductById(productId: Int)
 
-    suspend fun updateProduct(product: Product)
-
     //Categories
     fun getAllCategories(): Flow<List<Category>>
 
@@ -33,9 +31,4 @@ interface ListRepository {
     suspend fun addCategory(category: Category)
 
     suspend fun deleteCategory(category: Category)
-
-    suspend fun updateCategory(category: Category)
-
-    //Transactions
-    fun getCategoriesWithProducts(): Flow<List<CategoryWithProducts>>
 }

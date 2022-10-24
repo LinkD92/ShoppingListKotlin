@@ -2,7 +2,6 @@ package com.symbol.shoppinglist.core.data
 
 import android.app.Application
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.symbol.shoppinglist.Database
 import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
@@ -14,6 +13,9 @@ import com.symbol.shoppinglist.feature_category.data.repository.CategoriesReposi
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
 import com.symbol.shoppinglist.feature_category.domain.use_case.*
 import com.symbol.shoppinglist.feature_product.data.data_source.ProductsDao
+import com.symbol.shoppinglist.feature_product.data.repository.ProductsRepositoryImpl
+import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
+import com.symbol.shoppinglist.feature_product.domain.use_case.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -55,8 +57,24 @@ object AppModule {
         return CategoryUseCases(
             getCategories = GetCategories(repository),
             deleteCategory = DeleteCategory(repository),
-            addCategory = AddCategory(repository),
-            getCategory = GetCategory(repository)
+            insertCategory = InsertCategory(repository),
+            getCategory = GetCategory(repository),
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductUseCases(
+        productsRepository: ProductsRepository,
+        categoriesRepository: CategoriesRepository,
+    ): ProductUseCases {
+        return ProductUseCases(
+            getProducts = GetProducts(productsRepository),
+            deleteProduct = DeleteProduct(productsRepository),
+            insertProduct = InsertProduct(productsRepository),
+            getProduct = GetProduct(productsRepository),
+            expandCategory = ExpandCategory(categoriesRepository),
+            getCategoryProducts = GetCategoryProducts(productsRepository)
         )
     }
 
@@ -72,4 +90,10 @@ abstract class ModuleBinds {
     abstract fun bindCategoryRepository(
         categoriesRepositoryImpl: CategoriesRepositoryImpl
     ): CategoriesRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindProductRepository(
+        productsRepositoryImpl: ProductsRepositoryImpl
+    ): ProductsRepository
 }

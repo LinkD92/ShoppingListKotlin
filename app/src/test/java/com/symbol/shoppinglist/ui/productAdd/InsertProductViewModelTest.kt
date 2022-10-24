@@ -17,7 +17,7 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
-class AddProductViewModelTest {
+class InsertProductViewModelTest {
 
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: AddProductViewModel

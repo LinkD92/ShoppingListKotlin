@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +35,11 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
 import com.symbol.shoppinglist.feature_product.domain.model.Product
+import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
+import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
 import com.symbol.shoppinglist.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import com.symbol.shoppinglist.ui.theme.MyColor
@@ -43,9 +48,11 @@ import com.symbol.shoppinglist.ui.theme.Shapes
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
-    viewModel: DisplayProductViewModel = hiltViewModel()
+    productViewModel: DisplayProductViewModel = hiltViewModel(),
 ) {
-    val categories by viewModel.categories.collectAsStateLifecycleAware(initial = emptyList())
+    Log.d("QWAS - DisplayProducts:", "Recomposition1")
+    val state = productViewModel.state.value
+    val categories = state.categories
     var openDialog by remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
     if (openDialog)
@@ -65,7 +72,7 @@ fun DisplayProducts(
             stringResource(id = R.string.action_delete),
             Icons.Rounded.Delete,
             {
-                viewModel.deleteProductById(productId)
+                productViewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
                 openDialog = false
             }
         )
@@ -77,22 +84,22 @@ fun DisplayProducts(
         items(
             items = categories
         ) { category ->
+            Log.d("QWAS - DisplayProducts:", "Recomposition2")
             Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
                 category.name,
                 category.isExpanded,
                 category.color,
-                { isExpanded ->
-                    viewModel.changeCategoryExpand(category, isExpanded)
+                {
+                    productViewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
                 }
             ) {
-                val products by viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-                    initial = emptyList()
-                )
+                Log.d("QWAS - DisplayProducts:", "Recomposition3")
+
                 ProductItemsList(
                     categoryColor = category.color,
-                    productsFlow = products,
-                    onItemClick = { product -> viewModel.updateProduct(product) },
+                    productsFlow = categoryProducts ?: listOf(),
+                    onItemClick = { product -> productViewModel.onEvent(DisplayProductsEvent.EditProduct(product)) },
                     onLongClick = { openDialog = true }
                 )
             }
@@ -155,15 +162,15 @@ fun ProductItemsList(
         lastLineMainAxisAlignment = MainAxisAlignment.Start
     ) {
         productsFlow.forEach { product ->
-            var isCheckedState by remember(product.id) { mutableStateOf(product.isChecked) }
-            val alphaValue = if (isCheckedState) 1f else 0.3f
+//            var isCheckedState by remember(product.id) { mutableStateOf(product.isChecked) }
+            val alphaValue = if (product.isChecked) 1f else 0.3f
             val backgroundColor = Color(categoryColor).copy(alphaValue)
             ProductItem(
                 product = product,
                 categoryColor = backgroundColor,
                 onClick = {
-                    isCheckedState = !isCheckedState
-                    onItemClick(product.apply { isChecked = isCheckedState })
+//                    isCheckedState = !isCheckedState .apply { isChecked = isCheckedState }
+                    onItemClick(product)
                 },
                 onLongClick = onLongClick
             )
@@ -179,6 +186,7 @@ fun ExpandableCategoryCard(
     changeExpand: (Boolean) -> Unit,
     content: @Composable () -> Unit
 ) {
+    Log.d("QWAS - DisplayProducts:", "Recomposition2 - 1")
     Card(
         modifier = Modifier.fillMaxSize(),
         elevation = 10.dp
@@ -193,6 +201,8 @@ fun ExpandableCategoryCard(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                Log.d("QWAS - DisplayProducts:", "Recomposition2 - 2")
+
                 Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
                     tint = Color(categoryColor),
                     modifier = Modifier

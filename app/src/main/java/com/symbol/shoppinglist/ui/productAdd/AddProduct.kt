@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.feature_category.domain.model.Category
-import com.symbol.shoppinglist.feature_category.presentation.manage_categories.CategoryItem
+import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.CategoryItem
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
@@ -30,47 +30,47 @@ fun AddProduct(
     modifier: Modifier = Modifier,
     viewModel: AddProductViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
-    val labelName = stringResource(id = R.string.product_label_name)
-    val labelAmount = stringResource(id = R.string.product_label_quantity)
-    val labelAndPlaceholderModifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp, horizontal = 10.dp)
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        LabelAndPlaceHolder(
-            labelAndPlaceholderModifier,
-            viewModel.productName, labelName
-        ) {
-            viewModel.updateName(it)
-        }
-        LabelAndPlaceHolder(
-            labelAndPlaceholderModifier,
-            viewModel.productQuantity.toString(),
-            labelAmount,
-            KeyboardOptions(keyboardType = KeyboardType.Number)
-        ) {
-            viewModel.updateQuantity(it)
-        }
-        CategoriesDropDown(
-            modifier,
-            categories ?: listOf(),
-            viewModel.productCategory
-        ) { category ->
-            viewModel.chooseCategory(category)
-        }
-        ConfirmButton(
-            Modifier
-                .padding(10.dp)
-                .align(Alignment.End), onClick = { viewModel.confirmButtonClick() })
-    }
-
-    LaunchedEffect(true) {
-        viewModel.successObserver.collect {
-            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
-        }
-    }
+//    val context = LocalContext.current
+//    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
+//    val labelName = stringResource(id = R.string.product_label_name)
+//    val labelAmount = stringResource(id = R.string.product_label_quantity)
+//    val labelAndPlaceholderModifier = Modifier
+//        .fillMaxWidth()
+//        .padding(vertical = 4.dp, horizontal = 10.dp)
+//
+//    Column(modifier = Modifier.fillMaxWidth()) {
+//        LabelAndPlaceHolder(
+//            labelAndPlaceholderModifier,
+//            viewModel.productName, labelName
+//        ) {
+//            viewModel.updateName(it)
+//        }
+//        LabelAndPlaceHolder(
+//            labelAndPlaceholderModifier,
+//            viewModel.productQuantity.toString(),
+//            labelAmount,
+//            KeyboardOptions(keyboardType = KeyboardType.Number)
+//        ) {
+//            viewModel.updateQuantity(it)
+//        }
+//        CategoriesDropDown(
+//            modifier,
+//            categories ?: listOf(),
+//            viewModel.productCategory
+//        ) { category ->
+//            viewModel.chooseCategory(category)
+//        }
+//        ConfirmButton(
+//            Modifier
+//                .padding(10.dp)
+//                .align(Alignment.End), onClick = { viewModel.confirmButtonClick() })
+//    }
+//
+//    LaunchedEffect(true) {
+//        viewModel.successObserver.collect {
+//            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }
 
 @Composable

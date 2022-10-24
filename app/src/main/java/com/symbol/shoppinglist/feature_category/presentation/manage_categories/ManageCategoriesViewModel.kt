@@ -39,10 +39,11 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
                     recentlyDeletedCategory = event.category
                 }
             }
+            // TODO: 24/10/2022
             is ManageCategoriesEvent.EditCategory -> {}
             is ManageCategoriesEvent.RestoreCategory -> {
                 viewModelScope.launch {
-                    categoryUseCases.addCategory(recentlyDeletedCategory ?: return@launch)
+                    categoryUseCases.insertCategory(recentlyDeletedCategory ?: return@launch)
                     recentlyDeletedCategory = null
                 }
 

@@ -1,10 +1,8 @@
 package com.symbol.shoppinglist.ui.productDisplay
 
 import com.symbol.shoppinglist.FakeListRepository
+import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
 import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 
 class DisplayProductViewModelTest {
 
