@@ -22,7 +22,7 @@ import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesEvent
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesViewModel
-import com.symbol.shoppinglist.navigation.CategoriesDirections
+import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 
 @Composable
 fun ManageCategories(

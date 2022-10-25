@@ -8,11 +8,11 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.symbol.shoppinglist.navigation.AppBottomNavigation
-import com.symbol.shoppinglist.navigation.AppNavGraph
+import com.symbol.shoppinglist.core.presentation.navigation.AppBottomNavigation
+import com.symbol.shoppinglist.core.presentation.navigation.AppNavGraph
 import com.symbol.shoppinglist.ui.AppFab
 import com.symbol.shoppinglist.ui.AppTopBar
-import com.symbol.shoppinglist.ui.theme.ShoppingListTheme
+import com.symbol.shoppinglist.core.presentation.ui.theme.ShoppingListTheme
 
 
 @Composable
@@ -30,7 +30,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
         ) {
             Box(modifier = Modifier.padding(it)
                 .fillMaxSize()){
-                AppNavGraph(navController = navController)
+                AppNavGraph(navController = navController, scaffoldState.snackbarHostState)
             }
         }
     }

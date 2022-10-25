@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.FakeListRepository
 import com.symbol.shoppinglist.TestDispatchers
 import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.AddEditProductViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -20,7 +21,7 @@ import org.mockito.MockitoAnnotations
 class InsertProductViewModelTest {
 
     private lateinit var savedStateHandle: SavedStateHandle
-    private lateinit var viewModel: AddProductViewModel
+    private lateinit var viewModel: AddEditProductViewModel
     private lateinit var category: Category
     private lateinit var dispatcher: TestDispatchers
     private var categoryIdReceived = mock(MutableSharedFlow::class.java)
@@ -31,7 +32,7 @@ class InsertProductViewModelTest {
         dispatcher = TestDispatchers()
         category = Category("TestCat", 100, false, 1)
         savedStateHandle = SavedStateHandle()
-        viewModel = AddProductViewModel(FakeListRepository(), savedStateHandle, dispatcher)
+        viewModel = AddEditProductViewModel(FakeListRepository(), savedStateHandle, dispatcher)
     }
 
     @After

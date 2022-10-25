@@ -1,5 +1,6 @@
-package com.symbol.shoppinglist.navigation
+package com.symbol.shoppinglist.core.presentation.navigation
 
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -30,6 +31,7 @@ sealed class CategoriesDirections(val route: String) {
 fun NavGraphBuilder.categoriesNavGraph(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     navigation(
         startDestination = CategoriesDirections.Root.route,
@@ -38,14 +40,15 @@ fun NavGraphBuilder.categoriesNavGraph(
         composable(CategoriesDirections.Root.route) {
             ManageCategories(modifier, navHostController)
         }
-        composable(CategoriesDirections.AddCategory.route,
+        composable(
+            CategoriesDirections.AddCategory.route,
             arguments = listOf(
                 navArgument(categoryId) {
                     type = NavType.IntType
                     defaultValue = NavigationRoutes.Arguments.INVALID_ID
                 }
             )
-        ) { AddCategory(modifier, navHostController) }
+        ) { AddCategory(modifier, navHostController, snackbarHostState) }
         composable(CategoriesDirections.ColorPicker.route) {
             ColorPicker(modifier, navHostController)
         }

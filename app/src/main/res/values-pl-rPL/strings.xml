@@ -23,7 +23,7 @@
 
 
     <!--Categories-->
-    <string name="category_added">Category has been added</string>
+    <string name="category_saved">Kategoria została zapisana</string>
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Nazwa kategorii</string>

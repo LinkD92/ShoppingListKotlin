@@ -38,10 +38,10 @@ import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
-import com.symbol.shoppinglist.navigation.ProductsDirections
+import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
-import com.symbol.shoppinglist.ui.theme.MyColor
-import com.symbol.shoppinglist.ui.theme.Shapes
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
+import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
 
 @Composable
 fun DisplayProducts(

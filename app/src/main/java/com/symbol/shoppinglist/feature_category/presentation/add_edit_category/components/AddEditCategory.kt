@@ -1,16 +1,15 @@
 package com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -20,16 +19,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
-import com.symbol.shoppinglist.navigation.CategoriesDirections
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddCategory(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
     viewModel: AddEditCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -37,7 +39,16 @@ fun AddCategory(
     val colorState = viewModel.categoryColor.value
     val currentColor = Color(colorState)
     val nameLabel = stringResource(id = R.string.category_label_name)
-
+    val snackScope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { error ->
+            snackScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = context.getText(error.resourceString).toString()
+                )
+            }
+        }
+    }
     Column {
         LabelAndPlaceHolder(
             Modifier
@@ -55,12 +66,6 @@ fun AddCategory(
             onClick = {
                 viewModel.onEvent(AddEditCategoryEvent.SaveCategory)
             })
-    }
-
-    LaunchedEffect(true) {
-//        viewModel.successObserver.collect {
-//            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
-//        }
     }
 }
 

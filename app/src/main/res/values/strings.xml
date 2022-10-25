@@ -24,7 +24,7 @@
     <string name="product_label_quantity">Product quantity</string>
 
     <!--Categories-->
-    <string name="category_added">Category has been added</string>
+    <string name="category_saved">Category has been saved</string>
     <string name="category_exists">Category already exists</string>
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Category name</string>

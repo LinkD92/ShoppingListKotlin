@@ -1,20 +1,20 @@
-package com.symbol.shoppinglist.ui.theme
+package com.symbol.shoppinglist.core.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import com.symbol.shoppinglist.ui.theme.MyColor.Background
-import com.symbol.shoppinglist.ui.theme.MyColor.OnBackground
-import com.symbol.shoppinglist.ui.theme.MyColor.OnPrimary
-import com.symbol.shoppinglist.ui.theme.MyColor.OnSecondary
-import com.symbol.shoppinglist.ui.theme.MyColor.OnSurface
-import com.symbol.shoppinglist.ui.theme.MyColor.Primary
-import com.symbol.shoppinglist.ui.theme.MyColor.Purple700
-import com.symbol.shoppinglist.ui.theme.MyColor.Secondary
-import com.symbol.shoppinglist.ui.theme.MyColor.Teal200
-import com.symbol.shoppinglist.ui.theme.MyColor.Surface
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Background
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.OnBackground
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.OnPrimary
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.OnSecondary
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.OnSurface
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Primary
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Purple700
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Secondary
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Teal200
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Surface
 
 private val DarkColorPalette = darkColors(
     primary = Primary,

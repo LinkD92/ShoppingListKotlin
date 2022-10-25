@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.feature_category.domain.model.Category
+import com.symbol.shoppinglist.feature_category.domain.model.CategoryValidationError
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,6 +24,8 @@ class AddEditCategoryViewModel @Inject constructor(
 
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
     private var currentCategoryId: Int = invalidId
+    private var categoryNameValidator: String =""
+    private var recentlyDeletedCategory: Category? = null
 
     private val _categoryName = mutableStateOf("")
     val categoryName: State<String> = _categoryName
@@ -30,7 +33,7 @@ class AddEditCategoryViewModel @Inject constructor(
     private val _categoryColor = mutableStateOf<Long>(0)
     val categoryColor: State<Long> = _categoryColor
 
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    private val _eventFlow = MutableSharedFlow<CategoryValidationError>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
@@ -41,15 +44,11 @@ class AddEditCategoryViewModel @Inject constructor(
                         currentCategoryId = category.id
                         _categoryName.value = category.name
                         _categoryColor.value = category.color
+                        categoryNameValidator = category.name
                     }
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class ShowSnackbar(val message: String) : UiEvent()
-        object SaveCategory : UiEvent()
     }
 
     fun onEvent(event: AddEditCategoryEvent) {
@@ -62,28 +61,27 @@ class AddEditCategoryViewModel @Inject constructor(
             }
             is AddEditCategoryEvent.SaveCategory -> {
                 viewModelScope.launch {
-                    if (currentCategoryId == invalidId) {
-                        categoryUseCases.insertCategory(
+                    val toastMessage = categoryUseCases.insertCategory(
+                        if (currentCategoryId == invalidId) {
                             Category(
                                 name = categoryName.value,
                                 color = categoryColor.value,
                             )
-                        )
-                        _eventFlow.emit(UiEvent.SaveCategory)
-                    } else {
-                        categoryUseCases.insertCategory(
+                        } else {
                             Category(
                                 name = categoryName.value,
                                 color = categoryColor.value,
                                 id = currentCategoryId
                             )
-                        )
-                        _eventFlow.emit(UiEvent.SaveCategory)
-                    }
+                        },
+                     categoryNameValidator
+                    )
+                    _eventFlow.emit(toastMessage)
                 }
             }
         }
     }
+}
 
 
 //    private val invalidId = NavigationRoutes.Arguments.INVALID_ID
@@ -168,4 +166,3 @@ class AddEditCategoryViewModel @Inject constructor(
 //        }
 //        return 0
 //    }
-}

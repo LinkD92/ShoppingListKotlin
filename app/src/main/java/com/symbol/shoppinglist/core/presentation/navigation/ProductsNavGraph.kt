@@ -1,10 +1,10 @@
-package com.symbol.shoppinglist.navigation
+package com.symbol.shoppinglist.core.presentation.navigation
 
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.ui.productAdd.AddProduct
+import com.symbol.shoppinglist.ui.productAdd.AddEditProduct
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProducts
 
 private const val productId = NavigationRoutes.Products.Arguments.ID
@@ -34,7 +34,8 @@ fun NavGraphBuilder.productsNavGraph(
         composable(ProductsDirections.Root.route) {
             DisplayProducts(navHostController)
         }
-        composable(ProductsDirections.AddProduct.route,
+        composable(
+            ProductsDirections.AddProduct.route,
             arguments = listOf(
                 navArgument(productId) {
                     type = NavType.IntType
@@ -42,7 +43,7 @@ fun NavGraphBuilder.productsNavGraph(
                 }
             )
         ) {
-            AddProduct(modifier)
+            AddEditProduct(modifier)
         }
     }
 }

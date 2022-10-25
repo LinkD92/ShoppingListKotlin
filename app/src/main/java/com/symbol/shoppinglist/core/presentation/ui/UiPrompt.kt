@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui
+package com.symbol.shoppinglist.core.presentation.ui
 
 import androidx.annotation.StringRes
 

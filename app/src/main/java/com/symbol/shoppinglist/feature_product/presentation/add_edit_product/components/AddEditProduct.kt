@@ -21,17 +21,22 @@ import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.CategoryItem
+import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.AddEditProductEvent
+import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.AddEditProductViewModel
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 
 @Composable
-fun AddProduct(
+fun AddEditProduct(
     modifier: Modifier = Modifier,
-    viewModel: AddProductViewModel = hiltViewModel()
+    viewModel: AddEditProductViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val categories by viewModel.allCategories.collectAsStateLifecycleAware(initial = emptyList())
+    val categories = viewModel.categories.value
+    val productName = viewModel.productName.value
+    val productQuantity = viewModel.productQuantity.value
+    val productCategory = viewModel.productCategory.value
     val labelName = stringResource(id = R.string.product_label_name)
     val labelAmount = stringResource(id = R.string.product_label_quantity)
     val labelAndPlaceholderModifier = Modifier
@@ -41,36 +46,36 @@ fun AddProduct(
     Column(modifier = Modifier.fillMaxWidth()) {
         LabelAndPlaceHolder(
             labelAndPlaceholderModifier,
-            viewModel.productName, labelName
+            productName, labelName
         ) {
-            viewModel.updateName(it)
+            viewModel.onEvent(AddEditProductEvent.EnteredName(it))
         }
         LabelAndPlaceHolder(
             labelAndPlaceholderModifier,
-            viewModel.productQuantity.toString(),
+            productQuantity,
             labelAmount,
             KeyboardOptions(keyboardType = KeyboardType.Number)
         ) {
-            viewModel.updateQuantity(it)
+            viewModel.onEvent(AddEditProductEvent.EnteredQuantity(it))
         }
         CategoriesDropDown(
             modifier,
-            categories ?: listOf(),
-            viewModel.productCategory
+            categories,
+            productCategory
         ) { category ->
-            viewModel.chooseCategory(category)
+            viewModel.onEvent(AddEditProductEvent.ChooseCategory(category))
         }
         ConfirmButton(
             Modifier
                 .padding(10.dp)
-                .align(Alignment.End), onClick = { viewModel.confirmButtonClick() })
+                .align(Alignment.End), onClick = {viewModel.onEvent(AddEditProductEvent.SaveProduct) })
     }
 
-    LaunchedEffect(true) {
-        viewModel.successObserver.collect {
-            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
-        }
-    }
+//    LaunchedEffect(true) {
+//        viewModel.successObserver.collect {
+//            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }
 
 @Composable

@@ -24,7 +24,7 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
-import com.symbol.shoppinglist.navigation.CategoriesDirections
+import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable

@@ -46,7 +46,6 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
                     categoryUseCases.insertCategory(recentlyDeletedCategory ?: return@launch)
                     recentlyDeletedCategory = null
                 }
-
             }
             is ManageCategoriesEvent.CreateCategory -> {}
         }

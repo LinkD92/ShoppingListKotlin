@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.navigation
+package com.symbol.shoppinglist.core.presentation.navigation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -15,7 +15,7 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.ui.theme.MyColor
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 
 
 sealed class BottomNavigationDirection(val route: String, val icon: ImageVector) {

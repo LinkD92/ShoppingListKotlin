@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.navigation
+package com.symbol.shoppinglist.core.presentation.navigation
 
 
 val listOfRootRoutes = listOf(

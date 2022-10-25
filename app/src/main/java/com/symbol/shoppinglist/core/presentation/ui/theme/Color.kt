@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.ui.theme
+package com.symbol.shoppinglist.core.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

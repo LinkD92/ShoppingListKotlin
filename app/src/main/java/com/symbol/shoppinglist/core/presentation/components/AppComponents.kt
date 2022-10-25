@@ -19,9 +19,9 @@ import com.symbol.shoppinglist.Action
 import com.symbol.shoppinglist.Error
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.R
-import com.symbol.shoppinglist.navigation.CategoriesDirections
-import com.symbol.shoppinglist.navigation.ProductsDirections
-import com.symbol.shoppinglist.navigation.listOfRootRoutes
+import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
+import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
+import com.symbol.shoppinglist.core.presentation.navigation.listOfRootRoutes
 
 
 @Composable
