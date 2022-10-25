@@ -7,5 +7,6 @@ data class ProductUseCases(
     val insertProduct: InsertProduct,
     val getProduct: GetProduct,
     val expandCategory: ExpandCategory,
-    val getCategoryProducts: GetCategoryProducts
+    val getCategoryProducts: GetCategoryProducts,
+    val insertProducts: InsertProducts
     )

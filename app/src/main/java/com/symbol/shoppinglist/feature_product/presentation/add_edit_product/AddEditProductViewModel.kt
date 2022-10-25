@@ -33,6 +33,7 @@ class AddEditProductViewModel @Inject constructor(
 
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
     private val dummyCategory = Category(name = "Select category", color = 4294967295)
+    private var productNameValidator: String =""
 
     private val _productName = mutableStateOf("")
     val productName: State<String> = _productName
@@ -56,7 +57,6 @@ class AddEditProductViewModel @Inject constructor(
             ?: invalidId
 
     init {
-        Log.d("QWAS - :", "$currentProductId")
         getProduct(currentProductId)
         getCategories()
     }
@@ -76,7 +76,8 @@ class AddEditProductViewModel @Inject constructor(
                                 0,
                                 currentProductId
                             )
-                        }
+                        },
+                        productNameValidator
                     )
                     _eventFlow.emit(prompt)
                 }
@@ -91,7 +92,7 @@ class AddEditProductViewModel @Inject constructor(
         if (id != invalidId) {
             viewModelScope.launch {
                 val product = productUseCases.getProduct(id)
-                _productCategory.value = dummyCategory
+                _productCategory.value = categoryUseCases.getCategory(product.categoryId)
                 _productName.value = product.name
             }
         }
@@ -105,83 +106,4 @@ class AddEditProductViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
-
-
-//    private var receivedCategoryName = ""
-
-//    private val _successObserver = MutableSharedFlow<Int>()
-//    val successObserver = _successObserver.asSharedFlow()
-//    val allProducts = repository.getAllProducts()
-//    val allCategories = repository.getAllCategories()
-//    var productName by mutableStateOf("")
-//        private set
-//    var productCategory by mutableStateOf(dummyCategory)
-//        private set
-//    var productQuantity by mutableStateOf(1)
-//        private set
-//
-//    init {
-//        getProduct(productIdReceived)
-//    }
-//
-//    fun confirmButtonClick() = viewModelScope.launch {
-//        val validationResult = validateFields()
-//        if (validationResult == 0) {
-//            getAction().invoke()
-//        } else {
-//            _successObserver.emit(validationResult)
-//        }
-//    }
-//
-//    fun updateName(input: String) {
-//        productName = input
-//    }
-//
-//    fun chooseCategory(input: Category) {
-//        productCategory = input
-//    }
-//
-//    fun updateQuantity(input: String) {
-//        productQuantity = input.toInt()
-//    }
-//
-//    private suspend fun addProduct() {
-//        val product = Product(name = productName, categoryId = productCategory.id)
-//        _successObserver.emit(R.string.product_added)
-//        repository.addProduct(product)
-//    }
-//
-//    private suspend fun updateProduct() {
-//        val product = Product(productName, productCategory.id, id = productIdReceived)
-//        _successObserver.emit(R.string.product_updated)
-//        repository.updateProduct(product)
-//    }
-//
-//    private suspend fun validateProduct(name: String): Boolean {
-//        val count = repository.doesProductExists(name)
-//        val duplicateValidation = count <= 0
-//        val currentNameValidation = name == receivedCategoryName
-//        return duplicateValidation || currentNameValidation
-//    }
-//
-//    private suspend fun validateFields(): Int {
-//        if (productName.length < FieldValidation.MIN_NAME_LENGTH
-//            || productName.length > FieldValidation.MAX_NAME_LENGTH
-//        ) {
-//            return R.string.name_invalid
-//        }
-//        if (productCategory == dummyCategory) {
-//            return R.string.category_invalid
-//        }
-//        if (!validateProduct(productName)) {
-//            return R.string.name_exsists
-//        }
-//        return 0
-//    }
-//
-
-//
-//    private fun getAction(): ProductAction {
-//        return if (productIdReceived == invalidId) ::addProduct else ::updateProduct
-//    }
 }

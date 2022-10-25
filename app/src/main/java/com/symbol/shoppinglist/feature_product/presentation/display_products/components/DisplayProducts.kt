@@ -40,7 +40,8 @@ import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
 import com.symbol.shoppinglist.feature_product.domain.model.Product
-import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
+import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
+import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsViewModel
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import kotlinx.coroutines.flow.collectLatest
@@ -50,7 +51,7 @@ import kotlinx.coroutines.launch
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
     snackbarHostState: SnackbarHostState,
-    viewModel: DisplayProductViewModel = hiltViewModel(),
+    viewModel: DisplayProductsViewModel = hiltViewModel(),
 ) {
     Log.d("QWAS - DisplayProducts:", "Recomposition1")
     val state = viewModel.state.value
@@ -65,9 +66,12 @@ fun DisplayProducts(
             snackScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(message.resourceString),
-                    actionLabel = context.getString(R.string.action_undo)
+                    actionLabel =
+                    if (message is ProductPromptMessage.ProductDeleted)
+                        context.getString(R.string.action_undo)
+                    else null
                 )
-                if (result == SnackbarResult.ActionPerformed){
+                if (result == SnackbarResult.ActionPerformed) {
                     viewModel.onEvent(DisplayProductsEvent.RestoreProduct)
                 }
             }
@@ -119,12 +123,13 @@ fun DisplayProducts(
                     productsFlow = products,
                     onItemClick = { product ->
                         viewModel.onEvent(
-                            DisplayProductsEvent.ChangeProductSelection(
-                                product
-                            )
+                            DisplayProductsEvent.ChangeProductSelection(product)
                         )
                     },
-                    onLongClick = { openDialog = true }
+                    onLongClick = { product ->
+                        productId = product.id
+                        openDialog = true
+                    }
                 )
             }
         }
@@ -196,7 +201,7 @@ fun ProductItemsList(
                     isCheckedState = !isCheckedState
                     onItemClick(product)
                 },
-                onLongClick = {onLongClick(product)}
+                onLongClick = { onLongClick(product) }
             )
         }
     }

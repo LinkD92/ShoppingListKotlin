@@ -18,7 +18,7 @@
 
 
     <!--Products-->
-    <string name="product_added">Proukt został dodany</string>
+    <string name="product_saved">Proukt został zapisany</string>
     <string name="product_exists">Taki produkt już istnieje</string>
     <string name="product_updated">Produk został zaktualizowany</string>
     <string name="product_label_name">Nazwa produktu</string>

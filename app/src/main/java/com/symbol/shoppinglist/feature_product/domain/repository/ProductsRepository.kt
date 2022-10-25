@@ -14,9 +14,13 @@ interface ProductsRepository {
 
     suspend fun insertProduct(product: Product)
 
+    suspend fun insertProducts(products: List<Product>)
+
     suspend fun doesProductExists(name: String): Int
 
     suspend fun deleteProduct(product: Product)
+
+    suspend fun deleteCategoryProducts(categoryId: Int)
 
     suspend fun deleteProductById(productId: Int)
 }

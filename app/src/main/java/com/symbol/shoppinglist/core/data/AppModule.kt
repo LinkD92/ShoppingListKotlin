@@ -53,12 +53,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCategoryUseCases(repository: CategoriesRepository): CategoryUseCases {
+    fun provideCategoryUseCases(categoriesRepository: CategoriesRepository,
+    productsRepository: ProductsRepository): CategoryUseCases {
         return CategoryUseCases(
-            getCategories = GetCategories(repository),
-            deleteCategory = DeleteCategory(repository),
-            insertCategory = InsertCategory(repository),
-            getCategory = GetCategory(repository),
+            getCategories = GetCategories(categoriesRepository),
+            deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
+            insertCategory = InsertCategory(categoriesRepository),
+            getCategory = GetCategory(categoriesRepository),
         )
     }
 
@@ -74,11 +75,10 @@ object AppModule {
             insertProduct = InsertProduct(productsRepository),
             getProduct = GetProduct(productsRepository),
             expandCategory = ExpandCategory(categoriesRepository),
-            getCategoryProducts = GetCategoryProducts(productsRepository)
+            getCategoryProducts = GetCategoryProducts(productsRepository),
+            insertProducts = InsertProducts(productsRepository)
         )
     }
-
-
 }
 
 @Module

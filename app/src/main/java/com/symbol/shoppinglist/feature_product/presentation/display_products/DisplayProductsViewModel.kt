@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DisplayProductViewModel @Inject constructor(
+class DisplayProductsViewModel @Inject constructor(
     private val productUseCases: ProductUseCases,
     private val categoryUseCases: CategoryUseCases
 ) :
@@ -45,9 +45,9 @@ class DisplayProductViewModel @Inject constructor(
             is DisplayProductsEvent.Order -> {}
             is DisplayProductsEvent.DeleteProduct -> {
                 viewModelScope.launch {
-                    productUseCases.deleteProduct(event.productId)
-                    recentlyDeletedProduct = null
-//                    recentlyDeletedProduct = productUseCases.getProduct(event.productId)
+                    recentlyDeletedProduct = productUseCases.getProduct(event.productId)
+                    val prompt = productUseCases.deleteProduct(event.productId)
+                    _eventFlow.emit(prompt)
                 }
             }
             is DisplayProductsEvent.EditProduct -> {
@@ -70,7 +70,8 @@ class DisplayProductViewModel @Inject constructor(
             }
             is DisplayProductsEvent.ChangeProductSelection -> {
                 viewModelScope.launch {
-                    productUseCases.insertProduct(event.product.apply { isChecked = !isChecked })
+                    productUseCases.insertProduct(event.product.apply { isChecked = !isChecked },
+                    event.product.name)
                 }
             }
         }

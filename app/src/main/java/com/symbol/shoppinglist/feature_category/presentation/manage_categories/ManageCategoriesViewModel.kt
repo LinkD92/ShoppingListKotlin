@@ -9,6 +9,8 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
+import com.symbol.shoppinglist.feature_product.domain.model.Product
+import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +21,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases: CategoryUseCases) :
+class ManageCategoriesViewModel @Inject constructor(
+    private val categoryUseCases: CategoryUseCases,
+    private val productUseCases: ProductUseCases
+    ) :
     ViewModel() {
 
     private val _state = mutableStateOf(ManageCategoriesState())
@@ -29,8 +34,10 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var recentlyDeletedCategory: Category? = null
+    private var recentlyRemovedProducts: List<Product>? = null
 
     private var getCategoriesJob: Job? = null
+    private var getCategoryProductsJob: Job? = null
 
     init {
         getCategories(CategoryOrder.Name(OrderType.Ascending))
@@ -42,6 +49,7 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
             is ManageCategoriesEvent.DeleteCategory -> {
                 viewModelScope.launch {
                     val prompt = categoryUseCases.deleteCategory(event.category)
+                    getCategoryProducts(event.category.id)
                     recentlyDeletedCategory = event.category
                     _eventFlow.emit(prompt)
                 }
@@ -50,6 +58,7 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
                 viewModelScope.launch {
                     val prompt =
                         categoryUseCases.insertCategory(recentlyDeletedCategory ?: return@launch)
+                    productUseCases.insertProducts(recentlyRemovedProducts ?: return@launch)
                     recentlyDeletedCategory = null
                     _eventFlow.emit(prompt)
                 }
@@ -66,6 +75,15 @@ class ManageCategoriesViewModel @Inject constructor(private val categoryUseCases
                         categories = categories,
                         categoryOrder = categoryOrder
                     )
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun getCategoryProducts(categoryId: Int) {
+        getCategoryProductsJob?.cancel()
+        getCategoryProductsJob = productUseCases.getCategoryProducts(categoryId)
+            .onEach { products ->
+                recentlyRemovedProducts = products
             }
             .launchIn(viewModelScope)
     }

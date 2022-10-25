@@ -7,7 +7,7 @@ import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepo
 
 class InsertCategory(private val repository: CategoriesRepository) {
 
-    suspend operator fun invoke(category: Category, validationName: String? = null): CategoryPromptMessage {
+    suspend operator fun invoke(category: Category, validationName: String = category.name): CategoryPromptMessage {
         val isNameValid = validationName == category.name
         val doesCategoryExists = repository.doesCategoryExists(category.name) >= 1
         if (category.name.length < FieldValidation.MIN_NAME_LENGTH
