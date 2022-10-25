@@ -15,7 +15,7 @@ fun AppNavGraph(
         navController = navController,
         startDestination = startDestination,
     ) {
-        productsNavGraph(navHostController = navController)
+        productsNavGraph(navHostController = navController, snackbarHostState = snackbarHostState)
         categoriesNavGraph(navHostController = navController, snackbarHostState = snackbarHostState)
     }
 }

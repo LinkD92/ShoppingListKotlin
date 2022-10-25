@@ -3,22 +3,22 @@ package com.symbol.shoppinglist.feature_product.domain.use_case
 import com.symbol.shoppinglist.FieldValidation
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.feature_product.domain.model.Product
-import com.symbol.shoppinglist.feature_product.domain.model.ProductValidationError
+import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
 
 class InsertProduct(private val repository: ProductsRepository) {
     private val invalidId = NavigationRoutes.Arguments.INVALID_ID
 
-    suspend operator fun invoke(product: Product): ProductValidationError {
+    suspend operator fun invoke(product: Product): ProductPromptMessage {
         if (product.name.length < FieldValidation.MIN_NAME_LENGTH
             || product.name.length > FieldValidation.MAX_NAME_LENGTH
         ) {
-            return ProductValidationError.InvalidLength
+            return ProductPromptMessage.InvalidLength
         }
         if (product.categoryId == invalidId) {
-            return ProductValidationError.InvalidCategory
+            return ProductPromptMessage.InvalidCategory
         }
         repository.insertProduct(product)
-        return ProductValidationError.Success
+        return ProductPromptMessage.Success
     }
 }

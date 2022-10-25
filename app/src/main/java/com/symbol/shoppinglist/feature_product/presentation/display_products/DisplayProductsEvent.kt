@@ -9,7 +9,7 @@ sealed class DisplayProductsEvent {
     data class Order(val productOrder: ProductOrder): DisplayProductsEvent()
     data class DeleteProduct(val productId: Int): DisplayProductsEvent()
     data class EditProduct(val product: Product): DisplayProductsEvent()
-    data class RestoreProduct(val product: Product): DisplayProductsEvent()
+    object RestoreProduct: DisplayProductsEvent()
     object CreateProduct: DisplayProductsEvent()
     data class ExpandCategory(val category: Category): DisplayProductsEvent()
     data class ChangeProductSelection(val product: Product): DisplayProductsEvent()

@@ -2,10 +2,11 @@ package com.symbol.shoppinglist.feature_category.domain.model
 
 import com.symbol.shoppinglist.R
 
-sealed class CategoryValidationError(val resourceString: Int) {
-    object InvalidLength: CategoryValidationError(R.string.name_invalid)
-    object InvalidColor: CategoryValidationError(R.string.category_invalid_color)
-    object ExistingName: CategoryValidationError(R.string.name_exsists)
-    object Success: CategoryValidationError(R.string.category_saved)
+sealed class CategoryPromptMessage(val resourceString: Int) {
+    object InvalidLength: CategoryPromptMessage(R.string.name_invalid)
+    object InvalidColor: CategoryPromptMessage(R.string.category_invalid_color)
+    object ExistingName: CategoryPromptMessage(R.string.name_exsists)
+    object CategoryDeleted: CategoryPromptMessage(R.string.category_deleted)
+    object Success: CategoryPromptMessage(R.string.category_saved)
 
 }

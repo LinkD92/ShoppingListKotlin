@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.feature_product.presentation.add_edit_product
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -10,9 +11,12 @@ import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_product.domain.model.Product
+import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -42,6 +46,9 @@ class AddEditProductViewModel @Inject constructor(
     private val _categories = mutableStateOf<List<Category>>(emptyList())
     val categories: State<List<Category>> = _categories
 
+    private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     private var getCategoriesJob: Job? = null
 
     private val currentProductId =
@@ -49,6 +56,7 @@ class AddEditProductViewModel @Inject constructor(
             ?: invalidId
 
     init {
+        Log.d("QWAS - :", "$currentProductId")
         getProduct(currentProductId)
         getCategories()
     }
@@ -57,7 +65,7 @@ class AddEditProductViewModel @Inject constructor(
         when (event) {
             is AddEditProductEvent.SaveProduct -> {
                 viewModelScope.launch {
-                   productUseCases.insertProduct(
+                    val prompt = productUseCases.insertProduct(
                         if (currentProductId == invalidId) {
                             Product(productName.value, productCategory.value.id, true, 0)
                         } else {
@@ -70,12 +78,12 @@ class AddEditProductViewModel @Inject constructor(
                             )
                         }
                     )
-
+                    _eventFlow.emit(prompt)
                 }
             }
-            is AddEditProductEvent.EnteredName -> { _productName.value = event.value}
-            is AddEditProductEvent.EnteredQuantity -> {_productQuantity.value = event.value}
-            is AddEditProductEvent.ChooseCategory -> {_productCategory.value = event.value}
+            is AddEditProductEvent.EnteredName -> _productName.value = event.value
+            is AddEditProductEvent.EnteredQuantity -> _productQuantity.value = event.value
+            is AddEditProductEvent.ChooseCategory -> _productCategory.value = event.value
         }
     }
 

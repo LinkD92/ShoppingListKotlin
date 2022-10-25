@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.core.presentation.navigation
 
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -26,13 +27,14 @@ sealed class ProductsDirections(val route: String) {
 fun NavGraphBuilder.productsNavGraph(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     navigation(
         startDestination = ProductsDirections.Root.route,
         route = BottomNavigationDirection.Products.route
     ) {
         composable(ProductsDirections.Root.route) {
-            DisplayProducts(navHostController)
+            DisplayProducts(navHostController = navHostController, snackbarHostState = snackbarHostState)
         }
         composable(
             ProductsDirections.AddProduct.route,
@@ -43,7 +45,7 @@ fun NavGraphBuilder.productsNavGraph(
                 }
             )
         ) {
-            AddEditProduct(modifier)
+            AddEditProduct(modifier = modifier, snackbarHostState = snackbarHostState)
         }
     }
 }

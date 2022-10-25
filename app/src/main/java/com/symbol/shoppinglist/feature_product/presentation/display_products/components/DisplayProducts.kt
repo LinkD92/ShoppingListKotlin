@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,24 +36,44 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
+import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductViewModel
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
-import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
-import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
-import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
-    productViewModel: DisplayProductViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState,
+    viewModel: DisplayProductViewModel = hiltViewModel(),
 ) {
     Log.d("QWAS - DisplayProducts:", "Recomposition1")
-    val state = productViewModel.state.value
+    val state = viewModel.state.value
     val categories = state.categories
     var openDialog by remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
+    val snackScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { message ->
+            snackScope.launch {
+                val result = snackbarHostState.showSnackbar(
+                    message = context.getString(message.resourceString),
+                    actionLabel = context.getString(R.string.action_undo)
+                )
+                if (result == SnackbarResult.ActionPerformed){
+                    viewModel.onEvent(DisplayProductsEvent.RestoreProduct)
+                }
+            }
+        }
+    }
+
     if (openDialog)
         OptionsDialog(
             { openDialog = false },
@@ -61,17 +82,13 @@ fun DisplayProducts(
             Icons.Rounded.Edit,
             {
                 openDialog = false
-                navHostController.navigate(
-                    ProductsDirections.AddProduct.passArgument(
-                        productId
-                    )
-                )
+                navHostController.navigate(ProductsDirections.AddProduct.passArgument(productId))
             },
             stringResource(id = R.string.action_delete),
             Icons.Rounded.Delete,
             {
-                productViewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
                 openDialog = false
+                viewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
             }
         )
     LazyColumn(
@@ -89,19 +106,19 @@ fun DisplayProducts(
                 category.isExpanded,
                 category.color,
                 {
-                    productViewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
+                    viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
                 }
             ) {
                 Log.d("QWAS - DisplayProducts:", "Recomposition3")
                 val products =
-                    productViewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
                         initial = emptyList()
                     ).value
                 ProductItemsList(
                     categoryColor = category.color,
                     productsFlow = products,
                     onItemClick = { product ->
-                        productViewModel.onEvent(
+                        viewModel.onEvent(
                             DisplayProductsEvent.ChangeProductSelection(
                                 product
                             )
@@ -156,7 +173,7 @@ fun ProductItemsList(
     categoryColor: Long,
     productsFlow: List<Product>,
     onItemClick: (Product) -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: (Product) -> Unit
 ) {
     FlowRow(
         modifier = Modifier
@@ -179,7 +196,7 @@ fun ProductItemsList(
                     isCheckedState = !isCheckedState
                     onItemClick(product)
                 },
-                onLongClick = onLongClick
+                onLongClick = {onLongClick(product)}
             )
         }
     }

@@ -38,7 +38,7 @@ fun NavGraphBuilder.categoriesNavGraph(
         route = BottomNavigationDirection.Categories.route
     ) {
         composable(CategoriesDirections.Root.route) {
-            ManageCategories(modifier, navHostController)
+            ManageCategories(modifier, navHostController, snackbarHostState)
         }
         composable(
             CategoriesDirections.AddCategory.route,

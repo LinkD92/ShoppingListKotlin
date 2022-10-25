@@ -44,7 +44,7 @@ fun AddCategory(
         viewModel.eventFlow.collectLatest { error ->
             snackScope.launch {
                 snackbarHostState.showSnackbar(
-                    message = context.getText(error.resourceString).toString()
+                    message = context.getString(error.resourceString)
                 )
             }
         }

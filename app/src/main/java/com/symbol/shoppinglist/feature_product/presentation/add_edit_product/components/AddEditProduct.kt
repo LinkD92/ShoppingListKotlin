@@ -1,12 +1,12 @@
 package com.symbol.shoppinglist.ui.productAdd
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDownCircle
 import androidx.compose.runtime.*
@@ -25,24 +25,36 @@ import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.Add
 import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.AddEditProductViewModel
 import com.symbol.shoppinglist.ui.ConfirmButton
 import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
-import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddEditProduct(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: AddEditProductViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val snackScope = rememberCoroutineScope()
     val categories = viewModel.categories.value
     val productName = viewModel.productName.value
     val productQuantity = viewModel.productQuantity.value
     val productCategory = viewModel.productCategory.value
     val labelName = stringResource(id = R.string.product_label_name)
     val labelAmount = stringResource(id = R.string.product_label_quantity)
+
+
+    LaunchedEffect(true) {
+        snackScope.launch {
+            viewModel.eventFlow.collectLatest { message ->
+                snackbarHostState.showSnackbar(message = context.getString(message.resourceString))
+            }
+        }
+    }
+
     val labelAndPlaceholderModifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 4.dp, horizontal = 10.dp)
-
     Column(modifier = Modifier.fillMaxWidth()) {
         LabelAndPlaceHolder(
             labelAndPlaceholderModifier,
@@ -68,14 +80,9 @@ fun AddEditProduct(
         ConfirmButton(
             Modifier
                 .padding(10.dp)
-                .align(Alignment.End), onClick = {viewModel.onEvent(AddEditProductEvent.SaveProduct) })
+                .align(Alignment.End),
+            onClick = { viewModel.onEvent(AddEditProductEvent.SaveProduct) })
     }
-
-//    LaunchedEffect(true) {
-//        viewModel.successObserver.collect {
-//            Toast.makeText(context, context.getText(it), Toast.LENGTH_SHORT).show()
-//        }
-//    }
 }
 
 @Composable

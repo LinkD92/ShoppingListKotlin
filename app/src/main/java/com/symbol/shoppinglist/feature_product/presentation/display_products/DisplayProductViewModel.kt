@@ -8,13 +8,11 @@ import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
+import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +29,8 @@ class DisplayProductViewModel @Inject constructor(
     private var _products = emptyFlow<List<Product>>()
     val products = _products
 
+    private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     private var recentlyDeletedProduct: Product? = null
 
@@ -45,8 +45,9 @@ class DisplayProductViewModel @Inject constructor(
             is DisplayProductsEvent.Order -> {}
             is DisplayProductsEvent.DeleteProduct -> {
                 viewModelScope.launch {
-                    recentlyDeletedProduct = productUseCases.getProduct(event.productId)
                     productUseCases.deleteProduct(event.productId)
+                    recentlyDeletedProduct = null
+//                    recentlyDeletedProduct = productUseCases.getProduct(event.productId)
                 }
             }
             is DisplayProductsEvent.EditProduct -> {
@@ -54,7 +55,8 @@ class DisplayProductViewModel @Inject constructor(
             }
             is DisplayProductsEvent.RestoreProduct -> {
                 viewModelScope.launch {
-                    productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
+                    val prompt = productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
+                    _eventFlow.emit(prompt)
                     recentlyDeletedProduct = null
                 }
             }

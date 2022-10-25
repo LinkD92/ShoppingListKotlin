@@ -6,6 +6,7 @@
     <string name="choose_action">What would you like to do?</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="action_undo">Undo</string>
 
 
 
@@ -22,6 +23,9 @@
     <string name="product_updated">Product has been updated</string>
     <string name="product_label_name">Product name</string>
     <string name="product_label_quantity">Product quantity</string>
+    <string name="product_deleted">Product has been deleted</string>
+
+
 
     <!--Categories-->
     <string name="category_saved">Category has been saved</string>
@@ -29,6 +33,7 @@
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Category name</string>
     <string name="color_select">Select category color</string>
+    <string name="category_deleted">Category has been deleted</string>
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>

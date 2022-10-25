@@ -6,12 +6,15 @@
     <string name="choose_action">Co chcesz zrobić?</string>
     <string name="action_edit">Edytuj</string>
     <string name="action_delete">Usuń</string>
+    <string name="action_undo">Cofnij</string>
+
 
     <!--FieldValidatior-->
     <string name="category_invalid_color">Najpierw należy wybrać kolor</string>
     <string name="name_invalid">Nazwa musi zawierać od 3 do 20 znaków</string>
     <string name="name_exsists">Ta nazwa jest już zajęta</string>
     <string name="category_invalid">Proszę wybrać kategorię</string>
+    <string name="product_deleted">Product został usunięty</string>
 
 
     <!--Products-->
@@ -28,6 +31,8 @@
     <string name="category_updated">Category has been updated</string>
     <string name="category_label_name">Nazwa kategorii</string>
     <string name="color_select">Wybierz kolor kategorii</string>
+    <string name="category_deleted">Category has been deleted</string>
+
 
     <!--TopBarScreenName-->
     <string name="products">Produkty</string>
