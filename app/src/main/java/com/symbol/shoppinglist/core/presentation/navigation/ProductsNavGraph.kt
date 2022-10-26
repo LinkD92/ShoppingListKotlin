@@ -1,12 +1,11 @@
 package com.symbol.shoppinglist.core.presentation.navigation
 
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
 import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.components.AddEditProduct
-import com.symbol.shoppinglist.ui.productDisplay.DisplayProducts
+import com.symbol.shoppinglist.feature_product.presentation.display_products.components.DisplayProducts
 
 private const val productId = NavigationRoutes.Products.Arguments.ID
 

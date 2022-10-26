@@ -1,10 +1,12 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
+import androidx.compose.compiler.plugins.kotlin.lower.forEachWith
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.core.domain.util.OrderType
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
@@ -36,6 +38,13 @@ class DisplayProductsViewModel @Inject constructor(
 
     private var getCategoriesJob: Job? = null
 
+    private var getCategoryProductsJob: Job? = null
+
+    private var testJob: Job? = null
+
+    private val _productsOfCategory = mutableStateOf<Map<Category, List<Product>>>(emptyMap())
+    val productsOfCategory: State<Map<Category, List<Product>>> = _productsOfCategory
+
     init {
         getCategories(CategoryOrder.Name(OrderType.Ascending))
     }
@@ -50,17 +59,17 @@ class DisplayProductsViewModel @Inject constructor(
                     _eventFlow.emit(prompt)
                 }
             }
-            is DisplayProductsEvent.EditProduct -> {
-
+            is DisplayProductsEvent.OnProductLongClick -> {
+                _state.value.longPressProduct = event.product
             }
             is DisplayProductsEvent.RestoreProduct -> {
                 viewModelScope.launch {
-                    val prompt = productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
+                    val prompt =
+                        productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
                     _eventFlow.emit(prompt)
                     recentlyDeletedProduct = null
                 }
             }
-            is DisplayProductsEvent.CreateProduct -> {}
             is DisplayProductsEvent.ExpandCategory -> {
                 viewModelScope.launch {
                     productUseCases.expandCategory(event.category.apply {
@@ -70,8 +79,10 @@ class DisplayProductsViewModel @Inject constructor(
             }
             is DisplayProductsEvent.ChangeProductSelection -> {
                 viewModelScope.launch {
-                    productUseCases.insertProduct(event.product.apply { isChecked = !isChecked },
-                    event.product.name)
+                    productUseCases.insertProduct(
+                        event.product.apply { isChecked = !isChecked },
+                        event.product.name
+                    )
                 }
             }
         }
@@ -81,6 +92,7 @@ class DisplayProductsViewModel @Inject constructor(
         getCategoriesJob?.cancel()
         getCategoriesJob = categoryUseCases.getCategories(categoryOrder)
             .onEach { categories ->
+                test(categories)
                 _state.value =
                     state.value.copy(
                         categories = categories,
@@ -93,5 +105,21 @@ class DisplayProductsViewModel @Inject constructor(
     // TODO: 24/10/2022
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)
+
+    fun test(categoires: List<Category>) {
+        getCategoryProductsJob?.cancel()
+        categoires.forEach { category ->
+            val mutableMap = mutableMapOf<Category, List<Product>>()
+            getCategoryProductsJob = productUseCases.getCategoryProducts(category.id)
+                .onEach { products ->
+                    mutableMap[category] = products
+                    _state.value =
+                        state.value.copy(
+                            productsOfCategory = mutableMap
+                        )
+                }
+                .launchIn(viewModelScope)
+        }
+    }
 }
 
