@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ManageCategories(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
     viewModel: ManageCategoriesViewModel = hiltViewModel()
@@ -52,7 +51,9 @@ fun ManageCategories(
         }
     }
     ListOfCategories(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
         categories = state.categories,
         onClick = { categoryId ->
             navHostController.navigate(CategoriesDirections.AddCategory.passArgument(categoryId!!))
@@ -72,18 +73,16 @@ fun CategoryItem(
     content: @Composable (() -> Unit)? = null
 ) {
     val chooseModifier =
-        if (onClick != null) Modifier.clickable { onClick(category.id) } else Modifier
+        if (onClick != null) modifier.clickable { onClick(category.id) } else modifier
     Card(
-        modifier = chooseModifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 2.dp),
-        elevation = 3.dp,
+        modifier = chooseModifier,
+        elevation = 5.dp,
         backgroundColor = Color(category.color)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .padding(4.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -97,9 +96,7 @@ fun CategoryItem(
                 Icon(
                     Icons.Rounded.Delete, IconName.DELETE,
                     Modifier
-                        .clickable {
-                            deleteIconClick(category)
-                        }
+                        .clickable { deleteIconClick(category) }
                         .align(Alignment.CenterVertically)
                 )
             }
@@ -117,16 +114,15 @@ fun ListOfCategories(
     deleteIconClick: (Category) -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = modifier,
         elevation = 10.dp
     ) {
         LazyColumn(
             modifier = modifier
         ) {
-            items(categories, key = { it.id!! }) { item ->
+            items(categories, key = { it.id }) { item ->
                 CategoryItem(
+                    modifier = modifier,
                     category = item,
                     onClick = onClick,
                     deleteIconClick = deleteIconClick,

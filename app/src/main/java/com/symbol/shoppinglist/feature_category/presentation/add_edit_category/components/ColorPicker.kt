@@ -29,7 +29,6 @@ import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 fun ColorPicker(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
 ) {
     val backStackEntry = remember {
@@ -41,24 +40,24 @@ fun ColorPicker(
         color = Color.Black.copy(alpha = 0.5f)
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(all = 30.dp)
         ) {
             Row(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    modifier = modifier.padding(10.dp),
+                    modifier = Modifier.padding(10.dp),
                     onClick = {
                         navHostController.popBackStack()
                     }) {
                     Icon(Icons.Rounded.Check, IconName.CHECK)
                 }
                 AlphaTile(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(60.dp)
                         .clip(RoundedCornerShape(6.dp)),
                     controller = controller
@@ -66,7 +65,7 @@ fun ColorPicker(
 
             }
             HsvColorPicker(
-                modifier = modifier
+                modifier = Modifier
                     .height(200.dp)
                     .padding(10.dp),
                 controller = controller,

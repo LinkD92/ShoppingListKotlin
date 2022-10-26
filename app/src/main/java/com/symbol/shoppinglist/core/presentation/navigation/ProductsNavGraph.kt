@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.ui.productAdd.AddEditProduct
+import com.symbol.shoppinglist.feature_product.presentation.add_edit_product.components.AddEditProduct
 import com.symbol.shoppinglist.ui.productDisplay.DisplayProducts
 
 private const val productId = NavigationRoutes.Products.Arguments.ID
@@ -25,7 +25,6 @@ sealed class ProductsDirections(val route: String) {
 }
 
 fun NavGraphBuilder.productsNavGraph(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
@@ -45,7 +44,7 @@ fun NavGraphBuilder.productsNavGraph(
                 }
             )
         ) {
-            AddEditProduct(modifier = modifier, snackbarHostState = snackbarHostState)
+            AddEditProduct(snackbarHostState = snackbarHostState)
         }
     }
 }

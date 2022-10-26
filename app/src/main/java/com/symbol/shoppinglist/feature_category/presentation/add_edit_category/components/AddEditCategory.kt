@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +9,7 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -19,18 +19,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.presentation.components.ConfirmButton
+import com.symbol.shoppinglist.core.presentation.components.LabelAndPlaceHolder
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryViewModel
-import com.symbol.shoppinglist.ui.ConfirmButton
-import com.symbol.shoppinglist.ui.LabelAndPlaceHolder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun AddCategory(
-    modifier: Modifier = Modifier,
-    navController: NavHostController,
+fun AddEditCategory(
+    navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
     viewModel: AddEditCategoryViewModel = hiltViewModel()
 ) {
@@ -38,8 +37,9 @@ fun AddCategory(
     val nameState = viewModel.categoryName.value
     val colorState = viewModel.categoryColor.value
     val currentColor = Color(colorState)
-    val nameLabel = stringResource(id = R.string.category_label_name)
     val snackScope = rememberCoroutineScope()
+    val nameLabel = stringResource(id = R.string.category_label_name)
+
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { error ->
             snackScope.launch {
@@ -49,7 +49,7 @@ fun AddCategory(
             }
         }
     }
-    Column {
+    Column(modifier = Modifier.fillMaxWidth()) {
         LabelAndPlaceHolder(
             Modifier
                 .fillMaxWidth()
@@ -60,19 +60,24 @@ fun AddCategory(
             viewModel.onEvent(AddEditCategoryEvent.EnteredName(it))
         }
         ColorPickerButton(
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .fillMaxWidth(),
             buttonColor = currentColor,
-            onClick = { navController.navigate(CategoriesDirections.ColorPicker.route) })
+            onClick = { navHostController.navigate(CategoriesDirections.ColorPicker.route) })
         ConfirmButton(
-            onClick = {
-                viewModel.onEvent(AddEditCategoryEvent.SaveCategory)
-            })
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .align(Alignment.End),
+            onClick = { viewModel.onEvent(AddEditCategoryEvent.SaveCategory) }
+        )
     }
 }
 
 @Composable
 fun ColorPickerButton(modifier: Modifier = Modifier, buttonColor: Color, onClick: () -> Unit) {
     Button(
-        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+        modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(buttonColor)
     ) {

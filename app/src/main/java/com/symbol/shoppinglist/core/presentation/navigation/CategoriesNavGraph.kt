@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.NavigationRoutes
-import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.AddCategory
+import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.AddEditCategory
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.ColorPicker
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.ManageCategories
 
@@ -38,7 +38,10 @@ fun NavGraphBuilder.categoriesNavGraph(
         route = BottomNavigationDirection.Categories.route
     ) {
         composable(CategoriesDirections.Root.route) {
-            ManageCategories(modifier, navHostController, snackbarHostState)
+            ManageCategories(
+                navHostController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
         }
         composable(
             CategoriesDirections.AddCategory.route,
@@ -48,9 +51,14 @@ fun NavGraphBuilder.categoriesNavGraph(
                     defaultValue = NavigationRoutes.Arguments.INVALID_ID
                 }
             )
-        ) { AddCategory(modifier, navHostController, snackbarHostState) }
+        ) {
+            AddEditCategory(
+                navHostController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
         composable(CategoriesDirections.ColorPicker.route) {
-            ColorPicker(modifier, navHostController)
+            ColorPicker(navHostController = navHostController)
         }
     }
 }
