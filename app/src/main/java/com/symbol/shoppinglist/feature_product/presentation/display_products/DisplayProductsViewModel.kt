@@ -1,12 +1,10 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
-import androidx.compose.compiler.plugins.kotlin.lower.forEachWith
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.core.domain.util.OrderType
-import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
@@ -37,13 +35,6 @@ class DisplayProductsViewModel @Inject constructor(
     private var recentlyDeletedProduct: Product? = null
 
     private var getCategoriesJob: Job? = null
-
-    private var getCategoryProductsJob: Job? = null
-
-    private var testJob: Job? = null
-
-    private val _productsOfCategory = mutableStateOf<Map<Category, List<Product>>>(emptyMap())
-    val productsOfCategory: State<Map<Category, List<Product>>> = _productsOfCategory
 
     init {
         getCategories(CategoryOrder.Name(OrderType.Ascending))
@@ -92,7 +83,6 @@ class DisplayProductsViewModel @Inject constructor(
         getCategoriesJob?.cancel()
         getCategoriesJob = categoryUseCases.getCategories(categoryOrder)
             .onEach { categories ->
-                test(categories)
                 _state.value =
                     state.value.copy(
                         categories = categories,
@@ -102,24 +92,8 @@ class DisplayProductsViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    // TODO: 24/10/2022
+    // TODO: 24/10/2022 - to not call it in compose
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)
-
-    fun test(categoires: List<Category>) {
-        getCategoryProductsJob?.cancel()
-        categoires.forEach { category ->
-            val mutableMap = mutableMapOf<Category, List<Product>>()
-            getCategoryProductsJob = productUseCases.getCategoryProducts(category.id)
-                .onEach { products ->
-                    mutableMap[category] = products
-                    _state.value =
-                        state.value.copy(
-                            productsOfCategory = mutableMap
-                        )
-                }
-                .launchIn(viewModelScope)
-        }
-    }
 }
 

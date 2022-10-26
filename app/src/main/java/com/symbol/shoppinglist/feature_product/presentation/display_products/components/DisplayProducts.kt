@@ -57,7 +57,6 @@ fun DisplayProducts(
         }
     }
 
-    // TODO: 26/10/2022 !! asserts
     if (openDialog)
         OptionsDialog(
             modifier = Modifier,
@@ -97,8 +96,6 @@ fun DisplayProducts(
                 }
             ) {
                 Log.d("QWAS - DisplayProducts:", "Recomposition3")
-                val products2 = viewModel.state.value.productsOfCategory[category] ?: emptyList()
-                Log.d("QWAS - DisplayProducts:", " PRODUCTS2 $products2")
                 val products =
                     viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
                         initial = emptyList()
@@ -108,7 +105,7 @@ fun DisplayProducts(
                         .width(IntrinsicSize.Min)
                         .padding(10.dp),
                     backgroundColor = category.color,
-                    products = products2,
+                    products = products,
                     onItemClick = { product ->
                         viewModel.onEvent(
                             DisplayProductsEvent.ChangeProductSelection(product)
