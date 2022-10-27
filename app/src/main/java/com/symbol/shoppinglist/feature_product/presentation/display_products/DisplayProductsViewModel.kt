@@ -1,16 +1,19 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.core.domain.util.OrderType
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -79,21 +82,20 @@ class DisplayProductsViewModel @Inject constructor(
         }
     }
 
+
     private fun getCategories(categoryOrder: CategoryOrder) {
-        getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(categoryOrder)
-            .onEach { categories ->
+        viewModelScope.launch {
+            categoryUseCases.getCategories(categoryOrder).collect { categories ->
                 _state.value =
                     state.value.copy(
                         categories = categories,
                         categoryOrder = categoryOrder
                     )
             }
-            .launchIn(viewModelScope)
+        }
     }
 
-    // TODO: 24/10/2022 - to not call it in compose
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)
-}
 
+}
