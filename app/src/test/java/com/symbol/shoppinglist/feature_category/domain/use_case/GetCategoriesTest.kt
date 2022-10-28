@@ -32,7 +32,7 @@ class GetCategoriesTest {
     @Before
     fun setUp() {
         dispatcherProvider = TestDispatchers()
-        fakeCategoryRepository = FakeCategoryRepository().apply { categories }
+        fakeCategoryRepository = FakeCategoryRepository()
 
         getCategories = GetCategories(repository, dispatcherProvider)
 

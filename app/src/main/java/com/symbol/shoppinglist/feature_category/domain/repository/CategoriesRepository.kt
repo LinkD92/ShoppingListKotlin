@@ -8,7 +8,7 @@ interface CategoriesRepository {
 
     suspend fun getCategory(id: Int): Category
 
-    suspend fun doesCategoryExists(name: String): Int
+    suspend fun isCategoryNameTaken(name: String): Boolean
 
     suspend fun insertCategory(category: Category)
 

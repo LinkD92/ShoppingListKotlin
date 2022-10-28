@@ -13,7 +13,7 @@ interface CategoriesDao {
     suspend fun getCategory(id: Int): Category
 
     @Query("SELECT COUNT(*) FROM categories WHERE name = :name")
-    suspend fun doesCategoryExists(name: String): Int
+    suspend fun categoryNameCount(name: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category: Category)

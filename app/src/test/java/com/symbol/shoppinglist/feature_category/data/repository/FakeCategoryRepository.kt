@@ -24,12 +24,12 @@ class FakeCategoryRepository : CategoriesRepository {
         return categories[id]
     }
 
-    override suspend fun doesCategoryExists(name: String): Int {
+    override suspend fun isCategoryNameTaken(name: String): Boolean {
         var categoriesWithNameFound = 0
         categories.forEach {
             if (it.name == name) categoriesWithNameFound++
         }
-        return categoriesWithNameFound
+        return categoriesWithNameFound >= 1
     }
 
     override suspend fun insertCategory(category: Category) {

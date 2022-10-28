@@ -13,7 +13,9 @@ class CategoriesRepositoryImpl @Inject constructor(private val categoriesDao: Ca
 
     override suspend fun getCategory(id: Int) = categoriesDao.getCategory(id)
 
-    override suspend fun doesCategoryExists(name: String) = categoriesDao.doesCategoryExists(name)
+    override suspend fun isCategoryNameTaken(name: String): Boolean =
+        (categoriesDao.categoryNameCount(name) >= 1)
+
 
     override suspend fun insertCategory(category: Category) = categoriesDao.insertCategory(category)
 

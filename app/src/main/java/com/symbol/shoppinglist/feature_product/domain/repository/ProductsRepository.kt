@@ -1,6 +1,6 @@
 package com.symbol.shoppinglist.feature_product.domain.repository
 
-import com.symbol.shoppinglist.feature_category.domain.model.Category
+import android.util.Log
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +16,7 @@ interface ProductsRepository {
 
     suspend fun insertProducts(products: List<Product>)
 
-    suspend fun doesProductExists(name: String): Int
+    suspend fun isProductNameTaken(name: String): Boolean
 
     suspend fun deleteProduct(product: Product)
 

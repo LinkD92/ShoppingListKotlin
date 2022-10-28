@@ -21,7 +21,7 @@ class ProductsRepositoryImpl @Inject constructor(private val productsDao: Produc
     override suspend fun insertProducts(products: List<Product>) =
         productsDao.insertProducts(products)
 
-    override suspend fun doesProductExists(name: String) = productsDao.doesProductExists(name)
+    override suspend fun isProductNameTaken(name: String) = productsDao.productNameCount(name) >= 1
 
     override suspend fun deleteProduct(product: Product) = productsDao.deleteProduct(product)
 

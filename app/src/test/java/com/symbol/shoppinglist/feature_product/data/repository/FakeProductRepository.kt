@@ -33,12 +33,12 @@ class FakeProductRepository: ProductsRepository {
         }
     }
 
-    override suspend fun doesProductExists(name: String): Int {
+    override suspend fun isProductNameTaken(name: String): Boolean {
         var productsWithNameFound = 0
             productsList.forEach {
             if (it.name == name) productsWithNameFound++
         }
-        return productsWithNameFound
+        return productsWithNameFound >= 1
     }
 
     override suspend fun deleteProduct(product: Product) {
