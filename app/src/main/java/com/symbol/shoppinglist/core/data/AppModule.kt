@@ -44,10 +44,11 @@ object AppModule {
     @Singleton
     fun provideCategoryUseCases(
         categoriesRepository: CategoriesRepository,
-        productsRepository: ProductsRepository
+        productsRepository: ProductsRepository,
+        dispatcherProvider: DispatcherProvider
     ): CategoryUseCases {
         return CategoryUseCases(
-            getCategories = GetCategories(categoriesRepository),
+            getCategories = GetCategories(categoriesRepository, dispatcherProvider),
             deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
             insertCategory = InsertCategory(categoriesRepository),
             getCategory = GetCategory(categoriesRepository),

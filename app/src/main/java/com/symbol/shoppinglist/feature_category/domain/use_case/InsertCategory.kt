@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.feature_category.domain.use_case
 
+import android.util.Log
 import com.symbol.shoppinglist.FieldValidation
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
@@ -18,7 +19,7 @@ class InsertCategory(private val repository: CategoriesRepository) {
         if (category.color == FieldValidation.DEFAULT_COLOR.toLong()) {
             return CategoryPromptMessage.InvalidColor
         }
-        if(!isNameValid && doesCategoryExists){
+        if(doesCategoryExists && !isNameValid){
             return CategoryPromptMessage.ExistingName
         }
         repository.insertCategory(category)

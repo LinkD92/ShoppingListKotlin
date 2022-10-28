@@ -13,7 +13,7 @@ interface ProductsDao {
     @Query("SELECT * FROM products WHERE id = :id")
     suspend fun getProduct(id: Int): Product
 
-    @Query("SELECT * FROM products WHERE categoryId = :categoryId ORDER BY products.isChecked DESC")
+    @Query("SELECT * FROM products WHERE categoryId = :categoryId ORDER BY products.isChecked DESC , products.name ASC")
     fun getCategoryProducts(categoryId: Int): Flow<List<Product>>
 
     @Query("SELECT COUNT(*) FROM products WHERE name = :name")

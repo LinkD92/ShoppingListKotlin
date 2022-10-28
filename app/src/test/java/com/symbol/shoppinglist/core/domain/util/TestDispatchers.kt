@@ -1,14 +1,14 @@
-package com.symbol.shoppinglist
+package com.symbol.shoppinglist.core.domain.util
 
+import com.symbol.shoppinglist.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 
 @ExperimentalCoroutinesApi
 class TestDispatchers: DispatcherProvider {
-    val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
     override val main: CoroutineDispatcher
         get() = dispatcher
     override val io: CoroutineDispatcher
