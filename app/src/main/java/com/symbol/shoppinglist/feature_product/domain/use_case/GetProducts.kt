@@ -16,8 +16,8 @@ class GetProducts(private val repository: ProductsRepository) {
     ): Flow<List<Product>> {
         return repository.getAllProducts().map { products ->
             when(productOrder.orderType){
-                is OrderType.Ascending -> products.sortedBy { it.isChecked }
-                is OrderType.Descending -> products.sortedByDescending { it.isChecked }
+                is OrderType.Ascending -> products.sortedBy { it.name }
+                is OrderType.Descending -> products.sortedByDescending { it.name }
             }
         }
     }

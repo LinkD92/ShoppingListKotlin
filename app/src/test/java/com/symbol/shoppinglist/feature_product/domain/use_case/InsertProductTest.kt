@@ -2,8 +2,6 @@ package com.symbol.shoppinglist.feature_product.domain.use_case
 
 import com.google.common.truth.Truth
 import com.symbol.shoppinglist.FieldValidation
-import com.symbol.shoppinglist.feature_category.domain.model.Category
-import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_product.data.repository.FakeProductRepository
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage

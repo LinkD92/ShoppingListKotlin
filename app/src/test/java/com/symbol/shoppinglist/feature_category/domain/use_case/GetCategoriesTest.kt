@@ -85,6 +85,7 @@ class GetCategoriesTest {
             assertThat(list[0]).isEqualTo(category3)
             assertThat(list[1]).isEqualTo(category2)
             assertThat(list[2]).isEqualTo(category1)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }
