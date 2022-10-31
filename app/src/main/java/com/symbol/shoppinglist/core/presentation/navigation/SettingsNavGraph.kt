@@ -5,7 +5,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProducts
-import com.symbol.shoppinglist.feature_settings.presentation.Settings
+import com.symbol.shoppinglist.feature_settings.presentation.settings.Settings
 import com.symbol.shoppinglist.feature_settings.presentation.categories.SettingsCategories
 import com.symbol.shoppinglist.feature_settings.presentation.products.SettingsProducts
 

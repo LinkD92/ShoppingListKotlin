@@ -14,13 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.data.util.Action
 import com.symbol.shoppinglist.core.data.util.Error
 import com.symbol.shoppinglist.core.data.util.NavigationRoutes
-import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.presentation.TopBarAction
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
+import com.symbol.shoppinglist.core.presentation.navigation.SettingsDirections
 import com.symbol.shoppinglist.core.presentation.navigation.listOfRootRoutes
 
 @Composable
@@ -34,7 +35,7 @@ fun AppTopBar(
         getTopBarDetails(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
         title = { Text(text = topBarDetail.title) },
-        actions = {TopBarAction()},
+        actions = { TopBarAction() },
         navigationIcon = {
             if (showBackButton) {
                 IconButton(onClick = {
@@ -69,7 +70,7 @@ private fun getTopBarDetails(route: String?, haveArguments: (String) -> Boolean)
             }
             TopBarDetail(title)
         }
-        CategoriesDirections.Root.route ->{
+        CategoriesDirections.Root.route -> {
             val title = stringResource(id = R.string.categories)
             TopBarDetail(title)
         }
@@ -85,13 +86,34 @@ private fun getTopBarDetails(route: String?, haveArguments: (String) -> Boolean)
             val title = stringResource(id = R.string.color_picker)
             TopBarDetail(title)
         }
-        else -> TopBarDetail(Error.LOADING)
+        SettingsDirections.Root.route -> {
+            val title = stringResource(id = R.string.settings)
+            TopBarDetail(title)
+        }
+        SettingsDirections.DisplayProducts.route -> {
+            val title = mergeSettingsTopBarName(R.string.display_products)
+            TopBarDetail(title)
+        }
+        SettingsDirections.Categories.route -> {
+            val title = mergeSettingsTopBarName(R.string.categories)
+            TopBarDetail(title)
+        }
+        SettingsDirections.Products.route -> {
+            val title = mergeSettingsTopBarName(R.string.products)
+            TopBarDetail(title)
+        }
+        else -> TopBarDetail(Error.IN_PROGRESS)
     }
 }
 
 @Composable
-private fun TopBarAction(){
-        Icon(Icons.Rounded.MoreVert, null)
+private fun mergeSettingsTopBarName(resource1: Int): String{
+    return stringResource(id = R.string.settings) + ": " + stringResource(id = resource1)
+}
+
+@Composable
+private fun TopBarAction() {
+    Icon(Icons.Rounded.MoreVert, null)
 }
 
 data class TopBarDetail(val title: String, val actions: TopBarAction? = null)

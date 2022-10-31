@@ -19,19 +19,19 @@ import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 @Composable
 fun AppFab(navController: NavHostController) {
     val currentScreen = navController.currentBackStackEntryAsState().value?.destination?.route
-    val addProduct = ProductsDirections.AddProduct.route
-    val addCategory = CategoriesDirections.AddCategory.route
+    val rootProducts = ProductsDirections.Root.route
+    val rootCategories = CategoriesDirections.Root.route
 
-    if (!(currentScreen == addProduct || currentScreen == addCategory))
+    if (currentScreen == rootProducts || currentScreen == rootCategories)
         FloatingActionButton(
             modifier = Modifier,
             elevation = FloatingActionButtonDefaults.elevation(10.dp),
             onClick = {
                 when (currentScreen) {
-                    ProductsDirections.Root.route -> {
+                    rootProducts -> {
                         navController.navigate(ProductsDirections.AddProduct.route)
                     }
-                    CategoriesDirections.Root.route -> {
+                    rootCategories -> {
                         navController.navigate(CategoriesDirections.AddCategory.route)
                     }
                 }

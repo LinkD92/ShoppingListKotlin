@@ -44,5 +44,7 @@
     <string name="add_category">Dodaj kategorie</string>
     <string name="edit_category">Edytuj kategorie</string>
     <string name="color_picker">Wybierz kolor</string>
+    <string name="settings">Ustawienia</string>
+    <string name="display_products">Ustawienia wyświetlania produktów</string>
 
 </resources>

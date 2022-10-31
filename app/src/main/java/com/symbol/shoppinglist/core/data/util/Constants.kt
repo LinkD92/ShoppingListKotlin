@@ -9,6 +9,7 @@ object Action {
     const val BACK = "Back"
     const val ADD = "Add"
     const val HOME = "Home"
+    const val NEXT = "Next"
 }
 
 object IconName {
@@ -22,6 +23,7 @@ object IconName {
 object Error {
     const val LOADING = "Loading..."
     const val ERROR = "ERROR"
+    const val IN_PROGRESS = "In progress..."
 }
 
 object FieldValidation {
