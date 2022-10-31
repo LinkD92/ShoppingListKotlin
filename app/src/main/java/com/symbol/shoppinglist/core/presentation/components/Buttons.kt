@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.core.presentation.components
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -13,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.symbol.shoppinglist.Action
+import com.symbol.shoppinglist.core.data.util.Action
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 

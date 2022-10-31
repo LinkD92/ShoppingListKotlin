@@ -1,10 +1,9 @@
 package com.symbol.shoppinglist.core.presentation.navigation
 
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.symbol.shoppinglist.NavigationRoutes
+import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.AddEditCategory
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.components.ColorPicker
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.ManageCategories
@@ -29,7 +28,6 @@ sealed class CategoriesDirections(val route: String) {
 
 
 fun NavGraphBuilder.categoriesNavGraph(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {

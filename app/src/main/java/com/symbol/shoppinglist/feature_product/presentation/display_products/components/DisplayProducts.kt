@@ -34,11 +34,17 @@ fun DisplayProducts(
     viewModel: DisplayProductsViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.value
-    val categories = state.categories
+    var categories = state.categories
     var openDialog by remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
     val snackScope = rememberCoroutineScope()
     val context = LocalContext.current
+//    val test = rememberReorderableLazyListState(onMove = { from, to ->
+//        Log.d("QWAS - DisplayProducts:", "SIZEO : ${categories.size}")
+//        categories = categories.toMutableList().apply {
+//            add(to.index, removeAt(from.index))
+//        }
+//    })
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { message ->
@@ -82,12 +88,13 @@ fun DisplayProducts(
             .padding(horizontal = 10.dp)
     ) {
         items(
-            items = categories
+            items = categories,
         ) { category ->
             Log.d("QWAS - DisplayProducts:", "Recomposition2")
             Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 cardName = category.name,
                 expandValue = category.isExpanded,
                 backgroundColor = category.color,
@@ -121,3 +128,4 @@ fun DisplayProducts(
         }
     }
 }
+

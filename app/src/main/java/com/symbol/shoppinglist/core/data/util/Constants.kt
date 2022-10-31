@@ -1,8 +1,6 @@
-package com.symbol.shoppinglist
+package com.symbol.shoppinglist.core.data.util
 
-import android.app.SearchManager.QUERY
-
-object Database{
+object Database {
     const val NAME = "products_database"
 }
 
@@ -21,52 +19,63 @@ object IconName {
     const val DROPDOWN = "Dropdown"
 }
 
-object Error{
+object Error {
     const val LOADING = "Loading..."
     const val ERROR = "ERROR"
 }
 
-object FieldValidation{
+object FieldValidation {
     const val MAX_NAME_LENGTH = 20
     const val MIN_NAME_LENGTH = 3
     const val DEFAULT_COLOR = 0
 }
 
 
-
-object NavigationRoutes{
+object NavigationRoutes {
     private const val OPTIONAL_ARGUMENT = "?"
-    fun addArgumentName(argumentName: String): String{
+    fun addArgumentName(argumentName: String): String {
         return "$OPTIONAL_ARGUMENT${argumentName}={${argumentName}}"
     }
-    fun addArgument(argumentName: String, argument: Int = -1): String{
+
+    fun addArgument(argumentName: String, argument: Int = -1): String {
         return "$OPTIONAL_ARGUMENT${argumentName}=${argument}"
     }
+
     object NavGraphs {
         const val PRODUCTS = "products"
         const val CATEGORIES = "categories"
+        const val SETTINGS = "settings"
     }
 
-    object Products{
+    object Products {
         const val ROOT = "products/"
-        const val ADD_PRODUCT = ROOT+"addProduct/"
-        object Arguments{
+        const val ADD_PRODUCT = ROOT + "addProduct/"
+
+        object Arguments {
             const val ID = "productId"
             const val NAME = "productName"
         }
     }
 
-    object Categories{
+    object Categories {
         const val ROOT = "categories/"
-        const val ADD_CATEGORY = ROOT+"addCategory/"
-        const val COLOR_PICKER = ADD_CATEGORY+"colorPicker/"
-        object Arguments{
+        const val ADD_CATEGORY = ROOT + "addCategory/"
+        const val COLOR_PICKER = ADD_CATEGORY + "colorPicker/"
+
+        object Arguments {
             const val ID = "categoryId"
             const val NAME = "categoryName"
         }
     }
 
-    object Arguments{
+    object Settings {
+        const val ROOT = "settings/"
+        const val DISPLAY_PRODUCTS = ROOT + "displayProducts/"
+        const val CATEGORIES = ROOT + "categories/"
+        const val PRODUCTS = ROOT + "products/"
+    }
+
+    object Arguments {
         const val INVALID_ID = -1
     }
 }

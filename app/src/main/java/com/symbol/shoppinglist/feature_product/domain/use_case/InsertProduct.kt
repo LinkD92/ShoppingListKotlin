@@ -1,7 +1,7 @@
 package com.symbol.shoppinglist.feature_product.domain.use_case
 
-import com.symbol.shoppinglist.FieldValidation
-import com.symbol.shoppinglist.NavigationRoutes
+import com.symbol.shoppinglist.core.data.util.FieldValidation
+import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository

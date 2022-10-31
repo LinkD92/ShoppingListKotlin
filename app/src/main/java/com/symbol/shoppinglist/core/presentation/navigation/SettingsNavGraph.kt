@@ -23,7 +23,7 @@ fun NavGraphBuilder.settingsNavGraph(
 ) {
     navigation(
         startDestination = SettingsDirections.Root.route,
-        route = BottomNavigationDirection.Categories.route
+        route = BottomNavigationDirection.Settings.route
     ) {
         composable(SettingsDirections.Root.route) {
             Settings(

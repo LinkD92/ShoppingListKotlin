@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ReorderableLazyListState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -94,6 +95,9 @@ class DisplayProductsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getCategories(): Flow<List<Category>> = categoryUseCases.getCategories()
+
 
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)

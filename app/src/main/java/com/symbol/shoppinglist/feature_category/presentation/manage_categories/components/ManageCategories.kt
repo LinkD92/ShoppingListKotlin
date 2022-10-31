@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.symbol.shoppinglist.IconName
+import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.feature_category.domain.model.Category

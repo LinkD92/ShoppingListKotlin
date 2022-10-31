@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Category
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,7 +15,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.symbol.shoppinglist.NavigationRoutes
+import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 
 
@@ -28,6 +29,12 @@ sealed class BottomNavigationDirection(val route: String, val icon: ImageVector)
         NavigationRoutes.NavGraphs.CATEGORIES,
         Icons.Rounded.Category
     )
+
+    object Settings : BottomNavigationDirection(
+        NavigationRoutes.NavGraphs.SETTINGS,
+        Icons.Rounded.Settings
+    )
+
 }
 
 @Composable
@@ -36,7 +43,8 @@ fun AppBottomNavigation(navController: NavHostController) {
     val currentRoute = backStackEntry?.destination?.route ?: BottomNavigationDirection.Products
     val listOfNavigationItems = listOf(
         BottomNavigationDirection.Products,
-        BottomNavigationDirection.Categories
+        BottomNavigationDirection.Categories,
+        BottomNavigationDirection.Settings
     )
     BottomNavigation() {
         listOfNavigationItems.forEach { item ->
@@ -72,7 +80,8 @@ fun AppBottomNavigation(navController: NavHostController) {
 private fun findBottomNavRootRoute(bottomNavigationDirection: String): String {
     return when (bottomNavigationDirection) {
         BottomNavigationDirection.Products.route -> ProductsDirections.Root.route
-        else -> CategoriesDirections.Root.route
+        BottomNavigationDirection.Categories.route -> CategoriesDirections.Root.route
+        else -> SettingsDirections.Root.route
 //        BottomNavigationDirection.Products.route -> CategoriesDirections.Root.route
     }
 }

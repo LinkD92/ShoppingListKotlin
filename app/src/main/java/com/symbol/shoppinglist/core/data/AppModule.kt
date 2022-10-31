@@ -2,7 +2,7 @@ package com.symbol.shoppinglist.core.data
 
 import android.app.Application
 import androidx.room.Room
-import com.symbol.shoppinglist.Database
+import com.symbol.shoppinglist.core.data.util.Database
 import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.core.data.datasource.ListRoomDatabase

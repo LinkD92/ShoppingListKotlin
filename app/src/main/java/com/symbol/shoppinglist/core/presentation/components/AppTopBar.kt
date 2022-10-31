@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -13,10 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.symbol.shoppinglist.Action
-import com.symbol.shoppinglist.Error
-import com.symbol.shoppinglist.NavigationRoutes
+import com.symbol.shoppinglist.core.data.util.Action
+import com.symbol.shoppinglist.core.data.util.Error
+import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.presentation.TopBarAction
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.core.presentation.navigation.listOfRootRoutes
@@ -28,10 +30,11 @@ fun AppTopBar(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
     val showBackButton = !listOfRootRoutes.contains(route)
-    val topBarTitle =
-        getTopBarTitle(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
+    val topBarDetail =
+        getTopBarDetails(route) { argumentName -> haveArguments(backStackEntry, argumentName) }
     TopAppBar(
-        title = { Text(text = topBarTitle) },
+        title = { Text(text = topBarDetail.title) },
+        actions = {TopBarAction()},
         navigationIcon = {
             if (showBackButton) {
                 IconButton(onClick = {
@@ -51,25 +54,44 @@ private fun haveArguments(backStackEntry: NavBackStackEntry?, argumentName: Stri
 }
 
 @Composable
-private fun getTopBarTitle(route: String?, haveArguments: (String) -> Boolean): String {
+private fun getTopBarDetails(route: String?, haveArguments: (String) -> Boolean): TopBarDetail {
     return when (route) {
-        ProductsDirections.Root.route -> stringResource(id = R.string.products)
+        ProductsDirections.Root.route -> {
+            val title = stringResource(id = R.string.products)
+            TopBarDetail(title)
+        }
         ProductsDirections.AddProduct.route -> {
             val productId = NavigationRoutes.Products.Arguments.ID
-            if (haveArguments(productId))
+            val title = if (haveArguments(productId)) {
                 stringResource(id = R.string.edit_product)
-            else
+            } else {
                 stringResource(id = R.string.add_product)
+            }
+            TopBarDetail(title)
         }
-        CategoriesDirections.Root.route -> stringResource(id = R.string.categories)
+        CategoriesDirections.Root.route ->{
+            val title = stringResource(id = R.string.categories)
+            TopBarDetail(title)
+        }
         CategoriesDirections.AddCategory.route -> {
             val categoryId = NavigationRoutes.Categories.Arguments.ID
-            if (haveArguments(categoryId))
+            val title = if (haveArguments(categoryId))
                 stringResource(id = R.string.edit_category)
             else
                 stringResource(id = R.string.add_category)
+            TopBarDetail(title)
         }
-        CategoriesDirections.ColorPicker.route -> stringResource(id = R.string.color_picker)
-        else -> Error.LOADING
+        CategoriesDirections.ColorPicker.route -> {
+            val title = stringResource(id = R.string.color_picker)
+            TopBarDetail(title)
+        }
+        else -> TopBarDetail(Error.LOADING)
     }
 }
+
+@Composable
+private fun TopBarAction(){
+        Icon(Icons.Rounded.MoreVert, null)
+}
+
+data class TopBarDetail(val title: String, val actions: TopBarAction? = null)

@@ -32,6 +32,8 @@
     <string name="category_label_name">Nazwa kategorii</string>
     <string name="color_select">Wybierz kolor kategorii</string>
     <string name="category_deleted">Category has been deleted</string>
+    <string name="category_reorder">Zmień kolejność kategorii</string>
+
 
 
     <!--TopBarScreenName-->

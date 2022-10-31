@@ -1,7 +1,7 @@
 package com.symbol.shoppinglist.feature_product.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
-import com.symbol.shoppinglist.FieldValidation
+import com.symbol.shoppinglist.core.data.util.FieldValidation
 import com.symbol.shoppinglist.feature_product.data.repository.FakeProductRepository
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage

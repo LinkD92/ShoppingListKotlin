@@ -34,6 +34,7 @@
     <string name="category_label_name">Category name</string>
     <string name="color_select">Select category color</string>
     <string name="category_deleted">Category has been deleted</string>
+    <string name="category_reorder">Reorder categories</string>
 
     <!--TopBarScreenName-->
     <string name="products">Products</string>

@@ -1,6 +1,6 @@
 package com.symbol.shoppinglist.feature_category.domain.use_case
 
-import com.symbol.shoppinglist.FieldValidation
+import com.symbol.shoppinglist.core.data.util.FieldValidation
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository

@@ -17,17 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
-import com.symbol.shoppinglist.IconName
+import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
-import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 
 @OptIn(ExperimentalFoundationApi::class)
