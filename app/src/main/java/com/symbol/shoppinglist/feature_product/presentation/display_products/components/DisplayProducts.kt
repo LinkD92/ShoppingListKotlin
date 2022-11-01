@@ -3,19 +3,10 @@ package com.symbol.shoppinglist.feature_product.presentation.display_products.co
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
@@ -42,6 +33,7 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
@@ -54,6 +46,9 @@ fun DisplayProducts(
     val snackScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+
+
+    // TODO: 01/11/2022
     val reorderState = rememberReorderableLazyListState(onMove = { from, to ->
         viewModel.reorder(state.value.categories.toMutableList().apply {
             add(to.index, removeAt(from.index))
@@ -155,40 +150,3 @@ fun DisplayProducts(
         }
     }
 }
-
-
-//            ExpandableCategoryCard(
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//                cardName = category.name,
-//                expandValue = category.isExpanded,
-//                backgroundColor = category.color,
-//                expandIconOnClick = {
-//                    viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
-//                }
-//            ) {
-//                Log.d("QWAS - DisplayProducts:", "Recomposition3")
-//                val products =
-//                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-//                        initial = emptyList()
-//                    ).value
-//                ProductItemsList(
-//                    modifier = Modifier
-//                        .width(IntrinsicSize.Min)
-//                        .padding(10.dp),
-//                    backgroundColor = category.color,
-//                    products = products,
-//                    onItemClick = { product ->
-//                        viewModel.onEvent(
-//                            DisplayProductsEvent.ChangeProductSelection(product)
-//                        )
-//                    },
-//                    onLongClick = { product ->
-//                        productId = product.id
-////                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
-//                        openDialog = true
-//                    }
-//                )
-//            }
-
-

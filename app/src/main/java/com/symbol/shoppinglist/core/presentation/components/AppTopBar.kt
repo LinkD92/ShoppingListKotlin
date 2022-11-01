@@ -1,5 +1,7 @@
 package com.symbol.shoppinglist.core.presentation.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -9,7 +11,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -23,6 +27,7 @@ import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.core.presentation.navigation.SettingsDirections
 import com.symbol.shoppinglist.core.presentation.navigation.listOfRootRoutes
+
 
 @Composable
 fun AppTopBar(
@@ -107,13 +112,15 @@ private fun getTopBarDetails(route: String?, haveArguments: (String) -> Boolean)
 }
 
 @Composable
-private fun mergeSettingsTopBarName(resource1: Int): String{
+private fun mergeSettingsTopBarName(resource1: Int): String {
     return stringResource(id = R.string.settings) + ": " + stringResource(id = resource1)
 }
 
 @Composable
 private fun TopBarAction() {
-    Icon(Icons.Rounded.MoreVert, null)
+    Icon(Icons.Rounded.MoreVert, null, Modifier.clickable {
+        
+    })
 }
 
 data class TopBarDetail(val title: String, val actions: TopBarAction? = null)
