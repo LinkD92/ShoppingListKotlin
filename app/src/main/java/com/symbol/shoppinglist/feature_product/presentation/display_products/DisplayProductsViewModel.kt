@@ -96,6 +96,17 @@ class DisplayProductsViewModel @Inject constructor(
         }
     }
 
+    fun reorder(categories: List<Category>){
+        _state.value = state.value.copy(
+            categories = categories
+        )
+    }
+
+    fun pushReorder(categories: List<Category>){
+        viewModelScope.launch { productUseCases.reorderCategories(categories) }
+
+    }
+
     fun getCategories(): Flow<List<Category>> = categoryUseCases.getCategories()
 
 

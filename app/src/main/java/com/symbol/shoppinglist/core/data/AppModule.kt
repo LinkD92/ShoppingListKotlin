@@ -68,7 +68,8 @@ object AppModule {
             getProduct = GetProduct(productsRepository),
             expandCategory = ExpandCategory(categoriesRepository),
             getCategoryProducts = GetCategoryProducts(productsRepository),
-            insertProducts = InsertProducts(productsRepository)
+            insertProducts = InsertProducts(productsRepository),
+            reorderCategories = ReorderCategories(categoriesRepository)
         )
     }
 }

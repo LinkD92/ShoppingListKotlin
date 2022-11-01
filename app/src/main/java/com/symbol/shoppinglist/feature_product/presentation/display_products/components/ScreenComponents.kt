@@ -1,13 +1,11 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products.components
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandCircleDown
 import androidx.compose.runtime.*
@@ -18,6 +16,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
@@ -106,12 +105,15 @@ fun ExpandableCategoryCard(
     expandValue: Boolean,
     backgroundColor: Long,
     expandIconOnClick: (Boolean) -> Unit,
+    elevation: Dp = 10.dp,
+    borderColor: Color = Color(backgroundColor),
     content: @Composable () -> Unit
 ) {
-    Log.d("QWAS - ExpandableCategoryCard:", "Recomposition1")
+    Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition1")
     Card(
         modifier = modifier.fillMaxSize(),
-        elevation = 10.dp
+        elevation = elevation,
+        border = BorderStroke(2.dp, borderColor)
     ) {
         var expand by rememberSaveable { mutableStateOf(expandValue) }
         val rotateAngle = if (expand) 180f else 0f
@@ -121,7 +123,7 @@ fun ExpandableCategoryCard(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Log.d("QWAS - ExpandableCategoryCard:", "Recomposition2")
+                Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition2")
                 Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
                     tint = Color(backgroundColor),
                     modifier = Modifier

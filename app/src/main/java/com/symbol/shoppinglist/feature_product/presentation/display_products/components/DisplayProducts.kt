@@ -1,16 +1,27 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products.components
 
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,6 +37,10 @@ import com.symbol.shoppinglist.feature_product.presentation.display_products.Dis
 import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 fun DisplayProducts(
@@ -33,18 +48,17 @@ fun DisplayProducts(
     snackbarHostState: SnackbarHostState,
     viewModel: DisplayProductsViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.value
-    var categories = state.categories
+    val state = viewModel.state
     var openDialog by remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
     val snackScope = rememberCoroutineScope()
     val context = LocalContext.current
-//    val test = rememberReorderableLazyListState(onMove = { from, to ->
-//        Log.d("QWAS - DisplayProducts:", "SIZEO : ${categories.size}")
-//        categories = categories.toMutableList().apply {
-//            add(to.index, removeAt(from.index))
-//        }
-//    })
+
+    val reorderState = rememberReorderableLazyListState(onMove = { from, to ->
+        viewModel.reorder(state.value.categories.toMutableList().apply {
+            add(to.index, removeAt(from.index))
+        })
+    })
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { message ->
@@ -83,49 +97,98 @@ fun DisplayProducts(
         )
 
     LazyColumn(
+        state = reorderState.listState,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp)
+            .reorderable(reorderState)
+            .detectReorderAfterLongPress(reorderState)
     ) {
-        items(
-            items = categories,
-        ) { category ->
-            Log.d("QWAS - DisplayProducts:", "Recomposition2")
+        items(state.value.categories,
+            key = { it.id }) { category ->
             Spacer(modifier = Modifier.padding(4.dp))
-            ExpandableCategoryCard(
-                modifier = Modifier
-                    .fillMaxSize(),
-                cardName = category.name,
-                expandValue = category.isExpanded,
-                backgroundColor = category.color,
-                expandIconOnClick = {
-                    viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
-                }
-            ) {
-                Log.d("QWAS - DisplayProducts:", "Recomposition3")
-                val products =
-                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-                        initial = emptyList()
-                    ).value
-                ProductItemsList(
+            ReorderableItem(reorderState, key = category.id) { isDragging ->
+                val elevation = animateDpAsState(if (isDragging) 26.dp else 10.dp)
+                val borderColor =
+                    animateColorAsState(
+                        if (isDragging)
+                            Color(category.color)
+                        else
+                            Color(category.color).copy(alpha = 0.0f)
+                    )
+                ExpandableCategoryCard(
                     modifier = Modifier
-                        .width(IntrinsicSize.Min)
-                        .padding(10.dp),
+                        .fillMaxSize(),
+                    cardName = category.name,
+                    expandValue = category.isExpanded,
                     backgroundColor = category.color,
-                    products = products,
-                    onItemClick = { product ->
-                        viewModel.onEvent(
-                            DisplayProductsEvent.ChangeProductSelection(product)
-                        )
-                    },
-                    onLongClick = { product ->
-                        productId = product.id
-//                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
-                        openDialog = true
+                    elevation = elevation.value,
+                    borderColor = borderColor.value,
+                    expandIconOnClick = {
+                        viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
                     }
-                )
+                ) {
+                    Log.d("Recomposition - DisplayProducts:", "Recomposition3")
+                    val products =
+                        viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+                            initial = emptyList()
+                        ).value
+                    ProductItemsList(
+                        modifier = Modifier
+                            .width(IntrinsicSize.Min)
+                            .padding(10.dp),
+                        backgroundColor = category.color,
+                        products = products,
+                        onItemClick = { product ->
+                            viewModel.onEvent(
+                                DisplayProductsEvent.ChangeProductSelection(product)
+                            )
+                        },
+                        onLongClick = { product ->
+                            productId = product.id
+//                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
+                            openDialog = true
+                        }
+                    )
+                }
             }
         }
     }
 }
+
+
+//            ExpandableCategoryCard(
+//                modifier = Modifier
+//                    .fillMaxSize(),
+//                cardName = category.name,
+//                expandValue = category.isExpanded,
+//                backgroundColor = category.color,
+//                expandIconOnClick = {
+//                    viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
+//                }
+//            ) {
+//                Log.d("QWAS - DisplayProducts:", "Recomposition3")
+//                val products =
+//                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+//                        initial = emptyList()
+//                    ).value
+//                ProductItemsList(
+//                    modifier = Modifier
+//                        .width(IntrinsicSize.Min)
+//                        .padding(10.dp),
+//                    backgroundColor = category.color,
+//                    products = products,
+//                    onItemClick = { product ->
+//                        viewModel.onEvent(
+//                            DisplayProductsEvent.ChangeProductSelection(product)
+//                        )
+//                    },
+//                    onLongClick = { product ->
+//                        productId = product.id
+////                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
+//                        openDialog = true
+//                    }
+//                )
+//            }
+
 

@@ -10,6 +10,7 @@ data class Category(
     val name: String,
     var color: Long = 0,
     var isExpanded: Boolean = false,
+    var customOrder: Int = 0,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )

@@ -19,5 +19,7 @@ class CategoriesRepositoryImpl @Inject constructor(private val categoriesDao: Ca
 
     override suspend fun insertCategory(category: Category) = categoriesDao.insertCategory(category)
 
+    override suspend fun insertCategories(categories: List<Category>) = categoriesDao.insertCategories(categories)
+
     override suspend fun deleteCategory(category: Category) = categoriesDao.deleteCategory(category)
 }

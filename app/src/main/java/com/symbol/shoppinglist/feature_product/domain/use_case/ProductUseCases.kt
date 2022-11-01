@@ -8,5 +8,6 @@ data class ProductUseCases(
     val getProduct: GetProduct,
     val expandCategory: ExpandCategory,
     val getCategoryProducts: GetCategoryProducts,
-    val insertProducts: InsertProducts
+    val insertProducts: InsertProducts,
+    val reorderCategories: ReorderCategories
     )

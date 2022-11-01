@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.map
 class GetCategories(private val repository: CategoriesRepository, private val dispatcherProvider: DispatcherProvider) {
 
     operator fun invoke(
-        categoryOrder: CategoryOrder = CategoryOrder.Name(OrderType.Ascending)
+        categoryOrder: CategoryOrder = CategoryOrder.Custom(OrderType.Ascending)
     ): Flow<List<Category>>{
         return repository.getAllCategories().map { categories ->
             when (categoryOrder.orderType) {
-                is OrderType.Ascending -> categories.sortedBy { it.name }
-                is OrderType.Descending -> categories.sortedByDescending { it.name }
+                is OrderType.Ascending -> categories.sortedBy { it.customOrder }
+                is OrderType.Descending -> categories.sortedByDescending { it.customOrder }
             }
         }
     }

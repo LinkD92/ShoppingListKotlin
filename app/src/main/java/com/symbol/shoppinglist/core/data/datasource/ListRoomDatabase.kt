@@ -7,5 +7,5 @@ import com.symbol.shoppinglist.feature_product.data.data_source.ProductsDao
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 
-@Database(entities = [Product::class, Category::class], version = 2)
+@Database(entities = [Product::class, Category::class], version = 1)
 abstract class ListRoomDatabase : RoomDatabase(), ListDatabase
