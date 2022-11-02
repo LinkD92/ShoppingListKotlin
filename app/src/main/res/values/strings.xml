@@ -35,6 +35,7 @@
     <string name="color_select">Select category color</string>
     <string name="category_deleted">Category has been deleted</string>
     <string name="category_reorder">Reorder categories</string>
+    <string name="category_sort">Sort categories</string>
 
     <!--Settings-->
 
