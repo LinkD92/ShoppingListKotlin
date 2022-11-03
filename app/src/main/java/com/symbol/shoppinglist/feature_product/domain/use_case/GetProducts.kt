@@ -1,8 +1,6 @@
 package com.symbol.shoppinglist.feature_product.domain.use_case
 
 import com.symbol.shoppinglist.core.domain.util.OrderType
-import com.symbol.shoppinglist.feature_category.domain.model.Category
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
 import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder

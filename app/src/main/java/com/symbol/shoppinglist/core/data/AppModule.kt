@@ -1,10 +1,9 @@
 package com.symbol.shoppinglist.core.data
 
 import android.app.Application
-import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
@@ -19,19 +18,17 @@ import com.symbol.shoppinglist.feature_product.domain.repository.ProductsReposit
 import com.symbol.shoppinglist.feature_product.domain.use_case.*
 import com.symbol.shoppinglist.feature_settings.data.PreferencesRepositoryImpl
 import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
-import com.symbol.shoppinglist.feature_settings.domain.use_case.GetDisplayProductsCategoriesOrder
+import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
+import com.symbol.shoppinglist.feature_settings.domain.use_case.GetSettings
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SaveDisplayProductsCategoriesOrder
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
+import com.symbol.shoppinglist.feature_settings.domain.util.AppSettingsSerializer
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-
-val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = PreferencesDataStore.NAME
-)
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -47,7 +44,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePreferencesDataStore(app: Application): DataStore<Preferences> = app.userDataStore
+    fun provideProtoDataStore(app: Application): DataStore<AppSettings> {
+        return DataStoreFactory.create(
+            serializer = AppSettingsSerializer,
+            produceFile = {app.preferencesDataStoreFile(PreferencesDataStore.FILE_NAME)}
+        )
+    }
 
     @Provides
     fun providesProductDao(db: ListRoomDatabase) = db.productsDao()
@@ -104,7 +106,7 @@ object AppModule {
                 categoriesRepository,
                 preferencesRepository
             ),
-            getDisplayProductsCategoriesOrder = GetDisplayProductsCategoriesOrder(preferencesRepository)
+            getSettings = GetSettings(preferencesRepository)
         )
     }
 }

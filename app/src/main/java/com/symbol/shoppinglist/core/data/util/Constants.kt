@@ -7,7 +7,9 @@ object Database {
 }
 
 object PreferencesDataStore{
+    const val FILE_NAME = "app-settings.json"
     const val NAME = "user_preferences"
+
 
     object Key{
         const val DISPLAY_PRODUCT_CATEGORY_ORDER = "display_product_category_order"

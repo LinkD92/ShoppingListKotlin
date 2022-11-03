@@ -46,15 +46,6 @@ fun DisplayProducts(
     val snackScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-
-
-    // TODO: 01/11/2022
-    val reorderState = rememberReorderableLazyListState(onMove = { from, to ->
-        viewModel.reorder(state.value.categories.toMutableList().apply {
-            add(to.index, removeAt(from.index))
-        })
-    })
-
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { message ->
             snackScope.launch {
@@ -92,60 +83,46 @@ fun DisplayProducts(
         )
 
     LazyColumn(
-        state = reorderState.listState,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp)
-            .reorderable(reorderState)
-            .detectReorderAfterLongPress(reorderState)
     ) {
-        items(state.value.categories,
-            key = { it.id }) { category ->
+        items(
+            items = state.value.categories
+        ) { category ->
+            Log.d("Recomposition - DisplayProducts:", "Recomposition2")
             Spacer(modifier = Modifier.padding(4.dp))
-            ReorderableItem(reorderState, key = category.id) { isDragging ->
-                val elevation = animateDpAsState(if (isDragging) 26.dp else 10.dp)
-                val borderColor =
-                    animateColorAsState(
-                        if (isDragging)
-                            Color(category.color)
-                        else
-                            Color(category.color).copy(alpha = 0.0f)
-                    )
-                ExpandableCategoryCard(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    cardName = category.name,
-                    expandValue = category.isExpanded,
-                    backgroundColor = category.color,
-                    elevation = elevation.value,
-                    borderColor = borderColor.value,
-                    expandIconOnClick = {
-                        viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
-                    }
-                ) {
-                    Log.d("Recomposition - DisplayProducts:", "Recomposition3")
-                    val products =
-                        viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-                            initial = emptyList()
-                        ).value
-                    ProductItemsList(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Min)
-                            .padding(10.dp),
-                        backgroundColor = category.color,
-                        products = products,
-                        onItemClick = { product ->
-                            viewModel.onEvent(
-                                DisplayProductsEvent.ChangeProductSelection(product)
-                            )
-                        },
-                        onLongClick = { product ->
-                            productId = product.id
-//                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
-                            openDialog = true
-                        }
-                    )
+            ExpandableCategoryCard(
+                modifier = Modifier.fillMaxSize(),
+                cardName = category.name,
+                expandValue = category.isExpanded,
+                backgroundColor = category.color,
+                expandIconOnClick = {
+                    viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
                 }
+            ) {
+                Log.d("Recomposition - DisplayProducts:", "Recomposition3")
+                val products =
+                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+                        initial = emptyList()
+                    ).value
+                ProductItemsList(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Min)
+                        .padding(10.dp),
+                    backgroundColor = category.color,
+                    products = products,
+                    onItemClick = { product ->
+                        viewModel.onEvent(
+                            DisplayProductsEvent.ChangeProductSelection(product)
+                        )
+                    },
+                    onLongClick = { product ->
+                        productId = product.id
+//                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
+                        openDialog = true
+                    }
+                )
             }
         }
     }

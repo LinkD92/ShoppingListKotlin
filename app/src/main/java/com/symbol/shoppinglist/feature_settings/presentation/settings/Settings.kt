@@ -28,8 +28,8 @@ fun Settings(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     Column() {
-        listOfSettingsOptions.forEachIndexed {index, settingGroup ->
-            if(index != 0){
+        listOfSettingsOptions.forEachIndexed { index, settingGroup ->
+            if (index != 0) {
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -41,7 +41,10 @@ fun Settings(
             SettingsGroup(groupName = stringResource(id = settingGroup.title)) {
                 settingGroup.settingsItems.forEach { settingItem ->
                     SettingsItem(title = stringResource(id = settingItem.title), onClick = {
-                        viewModel.changeCategoryOrderType()
+                        if (index % 2 == 0)
+                            viewModel.changeCategoryOrderType()
+                        else
+                            viewModel.changeCategoryOrderType1()
                     })
                 }
             }

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
+import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +39,7 @@ class ManageCategoriesViewModel @Inject constructor(
     private var getCategoryProductsJob: Job? = null
 
     init {
-        getCategories(CategoryOrder.NAME)
+        getCategories(CategoryOrderType.NAME)
     }
 
     fun onEvent(event: ManageCategoriesEvent) {
@@ -64,14 +64,14 @@ class ManageCategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun getCategories(categoryOrder: CategoryOrder) {
+    private fun getCategories(categoryOrderType: CategoryOrderType) {
         getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(categoryOrder.stringValue)
+        getCategoriesJob = categoryUseCases.getCategories(categoryOrderType)
             .onEach { categories ->
                 _state.value =
                     state.value.copy(
                         categories = categories,
-                        categoryOrder = categoryOrder
+                        categoryOrderType = categoryOrderType
                     )
             }
             .launchIn(viewModelScope)

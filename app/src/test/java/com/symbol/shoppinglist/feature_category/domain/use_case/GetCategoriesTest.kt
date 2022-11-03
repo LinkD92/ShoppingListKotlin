@@ -8,10 +8,9 @@ import com.symbol.shoppinglist.core.domain.util.TestDispatchers
 import com.symbol.shoppinglist.feature_category.data.repository.FakeCategoryRepository
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
+import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -55,7 +54,7 @@ class GetCategoriesTest {
         `when`(repository.getAllCategories()).thenReturn(flowList)
 
         // Then
-        getCategories(CategoryOrder.Name(OrderType.Ascending)).test {
+        getCategories(CategoryOrderType.Name(OrderType.Ascending)).test {
             val list = awaitItem()
             assertThat(list[0]).isEqualTo(category1)
             assertThat(list[1]).isEqualTo(category2)
@@ -80,7 +79,7 @@ class GetCategoriesTest {
         `when`(repository.getAllCategories()).thenReturn(flowList)
 
         // Then
-        getCategories(CategoryOrder.Name(OrderType.Descending)).test{
+        getCategories(CategoryOrderType.Name(OrderType.Descending)).test{
             val list = awaitItem()
             assertThat(list[0]).isEqualTo(category3)
             assertThat(list[1]).isEqualTo(category2)

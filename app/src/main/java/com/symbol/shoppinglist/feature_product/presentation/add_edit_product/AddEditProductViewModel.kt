@@ -9,7 +9,7 @@ import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
+import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
@@ -100,7 +100,7 @@ class AddEditProductViewModel @Inject constructor(
 
     private fun getCategories() {
         getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(CategoryOrder.NAME.stringValue)
+        getCategoriesJob = categoryUseCases.getCategories(CategoryOrderType.NAME)
             .onEach { categories ->
                 _categories.value = categories
             }

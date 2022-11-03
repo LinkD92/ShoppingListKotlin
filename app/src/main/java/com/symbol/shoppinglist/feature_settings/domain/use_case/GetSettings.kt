@@ -1,11 +1,12 @@
 package com.symbol.shoppinglist.feature_settings.domain.use_case
 
 import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
+import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import kotlinx.coroutines.flow.Flow
 
-class GetDisplayProductsCategoriesOrder(private val preferencesRepository: PreferencesRepository) {
+class GetSettings(private val preferencesRepository: PreferencesRepository) {
 
-    operator fun invoke(): Flow<String> {
-        return preferencesRepository.getDisplayProductsCategoryOrder()
+    suspend operator fun invoke(): Flow<AppSettings> {
+        return preferencesRepository.getSettings()
     }
 }

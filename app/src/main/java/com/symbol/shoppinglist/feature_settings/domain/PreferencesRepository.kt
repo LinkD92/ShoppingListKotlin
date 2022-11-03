@@ -1,11 +1,12 @@
 package com.symbol.shoppinglist.feature_settings.domain
 
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
+import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
 
-    suspend fun saveDisplayProductsCategoryOrder(value: CategoryOrder)
+    suspend fun saveDisplayProductsCategoryOrder(value: CategoryOrderType)
 
-    fun getDisplayProductsCategoryOrder(): Flow<String>
+    suspend fun getSettings(): Flow<AppSettings>
 }

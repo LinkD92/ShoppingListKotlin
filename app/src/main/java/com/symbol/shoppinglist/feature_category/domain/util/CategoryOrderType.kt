@@ -1,6 +1,14 @@
 package com.symbol.shoppinglist.feature_category.domain.util
 
-enum class CategoryOrder(val stringValue: String){
-    NAME("sort_by_name"),
-    CUSTOM("sort_by_custom")
+import com.symbol.shoppinglist.feature_category.domain.model.Category
+import kotlinx.serialization.Serializable
+
+
+
+enum class CategoryOrderType(){
+    NAME,
+    CUSTOM,
 }
+
+@Serializable
+data class CategoryExpandStatus(val category: Category, val isExpanded: Boolean)
