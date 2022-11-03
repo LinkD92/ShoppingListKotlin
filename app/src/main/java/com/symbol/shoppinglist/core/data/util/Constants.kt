@@ -1,7 +1,5 @@
 package com.symbol.shoppinglist.core.data.util
 
-import androidx.datastore.preferences.core.stringPreferencesKey
-
 object Database {
     const val NAME = "products_database"
 }
@@ -84,7 +82,7 @@ object NavigationRoutes {
 
     object Settings {
         const val ROOT = "settings/"
-        const val DISPLAY_PRODUCTS = ROOT + "displayProducts/"
+        const val DISPLAY_PRODUCTS_CATEGORY_ORDER = ROOT + "displayProductsCategoryOrder/"
         const val CATEGORIES = ROOT + "categories/"
         const val PRODUCTS = ROOT + "products/"
     }

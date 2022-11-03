@@ -8,6 +8,8 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +41,10 @@ class ManageCategoriesViewModel @Inject constructor(
     private var getCategoryProductsJob: Job? = null
 
     init {
-        getCategories(CategoryOrderType.NAME)
+        getCategories(FullCategoryOrderType(
+            CategoryOrderType.NAME,
+            SortType.ASCENDING
+        ))
     }
 
     fun onEvent(event: ManageCategoriesEvent) {
@@ -64,14 +69,14 @@ class ManageCategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun getCategories(categoryOrderType: CategoryOrderType) {
+    private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
         getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(categoryOrderType)
+        getCategoriesJob = categoryUseCases.getCategories(fullCategoryOrderType)
             .onEach { categories ->
                 _state.value =
                     state.value.copy(
                         categories = categories,
-                        categoryOrderType = categoryOrderType
+                        fullCategoryOrderType = fullCategoryOrderType
                     )
             }
             .launchIn(viewModelScope)

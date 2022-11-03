@@ -1,10 +1,5 @@
 package com.symbol.shoppinglist.core.presentation.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Category
-import androidx.compose.material.icons.rounded.Checklist
-import androidx.compose.material.icons.rounded.ShoppingBasket
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.feature_settings.domain.model.SettingsGroup
 import com.symbol.shoppinglist.feature_settings.domain.model.SettingsItem
@@ -29,7 +24,7 @@ val listOfSettingsOptions = listOf(
     SettingsGroup(
         R.string.display_products,
         listOf(
-            SettingsItem(R.string.category_reorder, SettingsDirections.DisplayProducts.route)
+            SettingsItem(R.string.category_reorder, SettingsDirections.DisplayProductsCategoryOrder.route)
         )
     ),
     SettingsGroup(

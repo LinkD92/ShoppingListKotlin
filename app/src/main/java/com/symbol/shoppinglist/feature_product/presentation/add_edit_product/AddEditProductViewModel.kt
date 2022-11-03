@@ -10,6 +10,8 @@ import com.symbol.shoppinglist.core.data.util.NavigationRoutes
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
@@ -100,7 +102,12 @@ class AddEditProductViewModel @Inject constructor(
 
     private fun getCategories() {
         getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(CategoryOrderType.NAME)
+        getCategoriesJob = categoryUseCases.getCategories(
+            FullCategoryOrderType(
+            CategoryOrderType.NAME,
+            SortType.ASCENDING
+        )
+        )
             .onEach { categories ->
                 _categories.value = categories
             }

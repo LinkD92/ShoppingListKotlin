@@ -41,10 +41,7 @@ fun Settings(
             SettingsGroup(groupName = stringResource(id = settingGroup.title)) {
                 settingGroup.settingsItems.forEach { settingItem ->
                     SettingsItem(title = stringResource(id = settingItem.title), onClick = {
-                        if (index % 2 == 0)
-                            viewModel.changeCategoryOrderType()
-                        else
-                            viewModel.changeCategoryOrderType1()
+                        navHostController.navigate(settingItem.navDirection)
                     })
                 }
             }

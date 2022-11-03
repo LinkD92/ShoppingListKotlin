@@ -35,6 +35,15 @@
     <string name="category_reorder">Zmień kolejność kategorii</string>
     <string name="category_sort">Sortowanie kategorii</string>
 
+    <!--Settings-->
+    <string name="sort_type">Select sort type:</string>
+    <string name="sort_type_asc">Ascending</string>
+    <string name="sort_type_desc">Descending</string>
+    <string name="order_type">Order by: </string>
+    <string name="order_type_name">Name</string>
+    <string name="order_type_custom">Custom</string>
+
+
 
     <!--TopBarScreenName-->
     <string name="products">Produkty</string>

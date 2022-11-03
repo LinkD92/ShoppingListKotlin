@@ -2,8 +2,14 @@ package com.symbol.shoppinglist.feature_category.presentation.manage_categories
 
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.SortType
 
-data class ManageCategoriesState (
+data class ManageCategoriesState(
     val categories: List<Category> = emptyList(),
-    val categoryOrderType: CategoryOrderType = CategoryOrderType.NAME
+    val fullCategoryOrderType: FullCategoryOrderType =
+        FullCategoryOrderType(
+            CategoryOrderType.NAME,
+            SortType.ASCENDING
+        )
 )
