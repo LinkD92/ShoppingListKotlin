@@ -1,7 +1,17 @@
 package com.symbol.shoppinglist.core.data.util
 
+import androidx.datastore.preferences.core.stringPreferencesKey
+
 object Database {
     const val NAME = "products_database"
+}
+
+object PreferencesDataStore{
+    const val NAME = "user_preferences"
+
+    object Key{
+        const val DISPLAY_PRODUCT_CATEGORY_ORDER = "display_product_category_order"
+    }
 }
 
 object Action {

@@ -1,23 +1,37 @@
 package com.symbol.shoppinglist.core.data
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.symbol.shoppinglist.core.data.util.Database
 import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
 import com.symbol.shoppinglist.core.data.datasource.ListRoomDatabase
+import com.symbol.shoppinglist.core.data.util.Database
+import com.symbol.shoppinglist.core.data.util.PreferencesDataStore
 import com.symbol.shoppinglist.feature_category.data.repository.CategoriesRepositoryImpl
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
 import com.symbol.shoppinglist.feature_category.domain.use_case.*
 import com.symbol.shoppinglist.feature_product.data.repository.ProductsRepositoryImpl
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
 import com.symbol.shoppinglist.feature_product.domain.use_case.*
+import com.symbol.shoppinglist.feature_settings.data.PreferencesRepositoryImpl
+import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
+import com.symbol.shoppinglist.feature_settings.domain.use_case.GetDisplayProductsCategoriesOrder
+import com.symbol.shoppinglist.feature_settings.domain.use_case.SaveDisplayProductsCategoriesOrder
+import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
+val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = PreferencesDataStore.NAME
+)
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -30,6 +44,10 @@ object AppModule {
     ) = Room.databaseBuilder(app, ListRoomDatabase::class.java, Database.NAME)
         .fallbackToDestructiveMigration()
         .build()
+
+    @Provides
+    @Singleton
+    fun providePreferencesDataStore(app: Application): DataStore<Preferences> = app.userDataStore
 
     @Provides
     fun providesProductDao(db: ListRoomDatabase) = db.productsDao()
@@ -45,10 +63,10 @@ object AppModule {
     fun provideCategoryUseCases(
         categoriesRepository: CategoriesRepository,
         productsRepository: ProductsRepository,
-        dispatcherProvider: DispatcherProvider
+        preferencesRepository: PreferencesRepository
     ): CategoryUseCases {
         return CategoryUseCases(
-            getCategories = GetCategories(categoriesRepository, dispatcherProvider),
+            getCategories = GetCategories(categoriesRepository, preferencesRepository),
             deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
             insertCategory = InsertCategory(categoriesRepository),
             getCategory = GetCategory(categoriesRepository),
@@ -72,6 +90,23 @@ object AppModule {
             reorderCategories = ReorderCategories(categoriesRepository)
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideSettingsUseCases(
+        productsRepository: ProductsRepository,
+        categoriesRepository: CategoriesRepository,
+        preferencesRepository: PreferencesRepository
+    ): SettingsUseCases {
+        return SettingsUseCases(
+            saveDisplayProductsCategoriesOrder = SaveDisplayProductsCategoriesOrder(
+                productsRepository,
+                categoriesRepository,
+                preferencesRepository
+            ),
+            getDisplayProductsCategoriesOrder = GetDisplayProductsCategoriesOrder(preferencesRepository)
+        )
+    }
 }
 
 @Module
@@ -89,4 +124,10 @@ abstract class ModuleBinds {
     abstract fun bindProductRepository(
         productsRepositoryImpl: ProductsRepositoryImpl
     ): ProductsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindPreferencesRepository(
+        preferencesRepositoryImpl: PreferencesRepositoryImpl
+    ): PreferencesRepository
 }

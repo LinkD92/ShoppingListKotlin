@@ -6,6 +6,8 @@ import androidx.compose.material.icons.rounded.Checklist
 import androidx.compose.material.icons.rounded.ShoppingBasket
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.feature_settings.domain.model.SettingsGroup
+import com.symbol.shoppinglist.feature_settings.domain.model.SettingsItem
 
 
 val listOfRootRoutes = listOf(
@@ -22,21 +24,24 @@ val listOfRoutes = listOf(
     CategoriesDirections.ColorPicker.route
 )
 
-data class SettingsItem(val title: Int, val icon: ImageVector, val navDirection: String)
+
 val listOfSettingsOptions = listOf(
-    SettingsItem(
+    SettingsGroup(
         R.string.display_products,
-        Icons.Rounded.Checklist,
-        SettingsDirections.DisplayProducts.route
+        listOf(
+            SettingsItem(R.string.category_reorder, SettingsDirections.DisplayProducts.route)
+        )
     ),
-    SettingsItem(
+    SettingsGroup(
         R.string.categories,
-        Icons.Rounded.Category,
-        SettingsDirections.Categories.route
+        listOf(
+            SettingsItem(R.string.category_reorder, SettingsDirections.Categories.route)
+        )
     ),
-    SettingsItem(
+    SettingsGroup(
         R.string.products,
-        Icons.Rounded.ShoppingBasket,
-        SettingsDirections.Products.route
+        listOf(
+            SettingsItem(R.string.category_reorder, SettingsDirections.Products.route)
+        )
     ),
 )

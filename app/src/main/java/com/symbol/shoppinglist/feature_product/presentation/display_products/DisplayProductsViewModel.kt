@@ -5,25 +5,25 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrder
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
+import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import org.burnoutcrew.reorderable.ReorderableLazyListState
 import javax.inject.Inject
 
 @HiltViewModel
 class DisplayProductsViewModel @Inject constructor(
     private val productUseCases: ProductUseCases,
-    private val categoryUseCases: CategoryUseCases
+    private val categoryUseCases: CategoryUseCases,
+    private val settingsUseCases: SettingsUseCases
 ) :
     ViewModel() {
 
@@ -38,10 +38,25 @@ class DisplayProductsViewModel @Inject constructor(
 
     private var recentlyDeletedProduct: Product? = null
 
-    private var getCategoriesJob: Job? = null
+    private val getCategoriesJob = viewModelScope.launch {
+        categoryUseCases.getCategories(state.value.categoryOrder).collect { list ->
+            _state.value = state.value.copy(
+                categories = list
+            )
+        }
+    }
+
+
+    private val getPreferencesJob = viewModelScope.launch {
+        settingsUseCases.getDisplayProductsCategoriesOrder()
+    }
+
 
     init {
-        getCategories(CategoryOrder.Name(OrderType.Ascending))
+        viewModelScope.launch {
+            getPreferencesJob.join()
+            getCategoriesJob.join()
+        }
     }
 
     fun onEvent(event: DisplayProductsEvent) {
@@ -84,7 +99,7 @@ class DisplayProductsViewModel @Inject constructor(
     }
 
 
-    private fun getCategories(categoryOrder: CategoryOrder) {
+    private fun getCategories(categoryOrder: String) {
         viewModelScope.launch {
             categoryUseCases.getCategories(categoryOrder).collect { categories ->
                 _state.value =
@@ -96,19 +111,27 @@ class DisplayProductsViewModel @Inject constructor(
         }
     }
 
-    fun reorder(categories: List<Category>){
+    private fun getPreferences() {
+        viewModelScope.launch {
+            settingsUseCases.getDisplayProductsCategoriesOrder().collect { preferences ->
+                Log.d("QWAS - getPreferences:", "prefs: $preferences")
+                _state.value = state.value.copy(
+                    categoryOrder = preferences
+                )
+            }
+        }
+    }
+
+    fun reorder(categories: List<Category>) {
         _state.value = state.value.copy(
             categories = categories
         )
     }
 
-    fun pushReorder(categories: List<Category>){
+    fun pushReorder(categories: List<Category>) {
         viewModelScope.launch { productUseCases.reorderCategories(categories) }
 
     }
-
-    fun getCategories(): Flow<List<Category>> = categoryUseCases.getCategories()
-
 
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)

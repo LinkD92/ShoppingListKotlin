@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.model.CategoryPromptMessage
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
@@ -40,12 +39,11 @@ class ManageCategoriesViewModel @Inject constructor(
     private var getCategoryProductsJob: Job? = null
 
     init {
-        getCategories(CategoryOrder.Name(OrderType.Ascending))
+        getCategories(CategoryOrder.NAME)
     }
 
     fun onEvent(event: ManageCategoriesEvent) {
         when (event) {
-            is ManageCategoriesEvent.Order -> {}
             is ManageCategoriesEvent.DeleteCategory -> {
                 viewModelScope.launch {
                     val prompt = categoryUseCases.deleteCategory(event.category)
@@ -68,7 +66,7 @@ class ManageCategoriesViewModel @Inject constructor(
 
     private fun getCategories(categoryOrder: CategoryOrder) {
         getCategoriesJob?.cancel()
-        getCategoriesJob = categoryUseCases.getCategories(categoryOrder)
+        getCategoriesJob = categoryUseCases.getCategories(categoryOrder.stringValue)
             .onEach { categories ->
                 _state.value =
                     state.value.copy(
