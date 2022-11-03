@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.symbol.shoppinglist.core.data.util.PreferencesDataStore
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
 import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +18,9 @@ class PreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<AppSettings>
 ) : PreferencesRepository {
 
-    override suspend fun saveDisplayProductsCategoryOrder(categoryOrderType: CategoryOrderType) {
+    override suspend fun saveDisplayProductsCategoryOrder(fullCategoryOrderType: FullCategoryOrderType) {
         dataStore.updateData {
-            Log.d("QWAS - saveDisplayProductsCategoryOrder:", "${it.categoryOrderType}")
-            it.copy(categoryOrderType = categoryOrderType)
+            it.copy(fullCategoryOrderType = fullCategoryOrderType)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
@@ -87,10 +88,10 @@ class DisplayProductsViewModel @Inject constructor(
     }
 
 
-    private fun getCategories(categoryOrder: CategoryOrderType) {
+    private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
         getCategoriesJob?.cancel()
         getCategoriesJob = viewModelScope.launch {
-            categoryUseCases.getCategories(categoryOrder).collect { categories ->
+            categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
                 _state.value =
                     state.value.copy(
                         categories = categories,
@@ -104,9 +105,9 @@ class DisplayProductsViewModel @Inject constructor(
         getSettingsJob = viewModelScope.launch {
             settingsUseCases.getSettings().collect { settings ->
                 _state.value = state.value.copy(
-                    categoryOrderType = settings.categoryOrderType
+                    categoryOrderType = settings.fullCategoryOrderType
                 )
-                getCategories(settings.categoryOrderType)
+                getCategories(settings.fullCategoryOrderType)
             }
         }
     }

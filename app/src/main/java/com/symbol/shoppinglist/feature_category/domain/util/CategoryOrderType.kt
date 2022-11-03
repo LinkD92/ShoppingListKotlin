@@ -4,11 +4,21 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import kotlinx.serialization.Serializable
 
 
-
-enum class CategoryOrderType(){
+enum class CategoryOrderType() {
     NAME,
     CUSTOM,
 }
 
+enum class SortType {
+    ASCENDING,
+    DESCENDING
+}
+
 @Serializable
 data class CategoryExpandStatus(val category: Category, val isExpanded: Boolean)
+
+@Serializable
+data class FullCategoryOrderType(
+    val categoryOrderType: CategoryOrderType,
+    val sortType: SortType
+)
