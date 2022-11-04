@@ -71,6 +71,8 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha04'
+
 
     //Room database
     implementation("androidx.room:room-runtime:$room_version")

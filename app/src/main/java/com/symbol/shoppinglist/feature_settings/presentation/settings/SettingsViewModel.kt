@@ -1,5 +1,7 @@
 package com.symbol.shoppinglist.feature_settings.presentation.settings
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
@@ -8,7 +10,10 @@ import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderTyp
 import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
+import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductEvent
+import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,9 +24,47 @@ class SettingsViewModel @Inject constructor(
     private val settingsUseCases: SettingsUseCases
 ) : ViewModel() {
 
+    private val _state = mutableStateOf(SettingsDisplayProductsState())
+    val state: State<SettingsDisplayProductsState> = _state
+
+    private var getCategoriesJob: Job? = null
+    private var getSettingsJob: Job? = null
+
+    init {
+        getSettings()
+    }
+
+    fun onEvent(event: SettingsDisplayProductEvent) {
+        when (event) {
+            is SettingsDisplayProductEvent.ChangeSortType -> {
+                viewModelScope.launch {
+                    val categoryOrderType = state.value.categoryOrderType
+                    val fullCategoryOrderType =
+                        FullCategoryOrderType(categoryOrderType, event.sortType)
+                    settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
+                }
+            }
+            is SettingsDisplayProductEvent.ChangeOrderType -> {
+                viewModelScope.launch {
+                    val sortType = state.value.sortType
+                    val fullCategoryOrderType =
+                        FullCategoryOrderType(event.categoryOrderType, sortType)
+                    settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
+                }
+            }
+            is SettingsDisplayProductEvent.SaveCustomOrderSettings -> {
+                viewModelScope.launch {
+                    categoryUseCases.reorderCategories(event.categories)
+                }
+            }
+        }
+
+    }
+
     fun changeCategoryOrderType() {
         viewModelScope.launch {
-            val fullCategoryOrderType = FullCategoryOrderType(CategoryOrderType.NAME, SortType.ASCENDING)
+            val fullCategoryOrderType =
+                FullCategoryOrderType(CategoryOrderType.NAME, SortType.ASCENDING)
             settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
         }
     }
@@ -29,8 +72,34 @@ class SettingsViewModel @Inject constructor(
 
     fun changeCategoryOrderType1() {
         viewModelScope.launch {
-            val fullCategoryOrderType = FullCategoryOrderType(CategoryOrderType.NAME, SortType.DESCENDING)
+            val fullCategoryOrderType =
+                FullCategoryOrderType(CategoryOrderType.NAME, SortType.DESCENDING)
             settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
+        }
+    }
+
+    private fun getSettings() {
+        getSettingsJob?.cancel()
+        getSettingsJob = viewModelScope.launch {
+            settingsUseCases.getSettings().collect { settings ->
+                _state.value = state.value.copy(
+                    sortType = settings.fullCategoryOrderType.sortType,
+                    categoryOrderType = settings.fullCategoryOrderType.categoryOrderType
+                )
+                getCategories(settings.fullCategoryOrderType)
+            }
+        }
+    }
+
+    private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
+        getCategoriesJob?.cancel()
+        getCategoriesJob = viewModelScope.launch {
+            categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
+                _state.value =
+                    state.value.copy(
+                        categories = categories,
+                    )
+            }
         }
     }
 }

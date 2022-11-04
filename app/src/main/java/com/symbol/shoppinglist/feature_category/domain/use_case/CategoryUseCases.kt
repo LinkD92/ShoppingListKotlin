@@ -8,5 +8,6 @@ data class CategoryUseCases(
     val deleteCategory: DeleteCategory,
     val insertCategory: InsertCategory,
     val getCategory: GetCategory,
+    val reorderCategories: ReorderCategories
 ) {
 }

@@ -103,8 +103,8 @@ fun CategoriesDropDown(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CategoryItem(
-                modifier = Modifier,
                 category = selectedCategory,
+                modifier = Modifier,
                 onClick = { expanded = !expanded })
             {
                 Icon(Icons.Rounded.ArrowDropDownCircle, IconName.DROPDOWN)
@@ -124,7 +124,7 @@ fun CategoriesDropDown(
                             chooseCategory(category)
                         }
                     ) {
-                        CategoryItem(Modifier, category)
+                        CategoryItem(category, Modifier)
                     }
                 }
             }

@@ -66,8 +66,8 @@ fun ManageCategories(
 
 @Composable
 fun CategoryItem(
-    modifier: Modifier = Modifier,
     category: Category,
+    modifier: Modifier = Modifier,
     onClick: ((Int?) -> Unit)? = null,
     deleteIconClick: ((Category) -> Unit)? = null,
     content: @Composable (() -> Unit)? = null
@@ -122,8 +122,8 @@ fun ListOfCategories(
         ) {
             items(categories, key = { it.id }) { item ->
                 CategoryItem(
-                    modifier = modifier,
                     category = item,
+                    modifier = modifier,
                     onClick = onClick,
                     deleteIconClick = deleteIconClick,
                 )

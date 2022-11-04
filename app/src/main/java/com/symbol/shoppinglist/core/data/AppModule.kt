@@ -72,6 +72,7 @@ object AppModule {
             deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
             insertCategory = InsertCategory(categoriesRepository),
             getCategory = GetCategory(categoriesRepository),
+            reorderCategories = ReorderCategories(categoriesRepository)
         )
     }
 
@@ -88,8 +89,7 @@ object AppModule {
             getProduct = GetProduct(productsRepository),
             expandCategory = ExpandCategory(categoriesRepository),
             getCategoryProducts = GetCategoryProducts(productsRepository),
-            insertProducts = InsertProducts(productsRepository),
-            reorderCategories = ReorderCategories(categoriesRepository)
+            insertProducts = InsertProducts(productsRepository)
         )
     }
 
