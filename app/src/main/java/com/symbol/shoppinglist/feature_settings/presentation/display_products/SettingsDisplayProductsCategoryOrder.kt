@@ -53,16 +53,16 @@ fun SettingsDisplayProductsCategoryOrder(
         horizontalAlignment = Alignment.Start
     ) {
         Text(text = stringResource(id = R.string.sort_type))
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
         ) {
             RadioButtonWithDescription(
                 isSelected = (state.value.sortType == SortType.ASCENDING),
                 onClick = { viewModel.onEvent(SettingsDisplayProductEvent.ChangeSortType(SortType.ASCENDING)) },
                 description = stringResource(id = R.string.sort_type_asc)
             )
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.height(5.dp))
             RadioButtonWithDescription(
                 isSelected = (state.value.sortType == SortType.DESCENDING),
                 onClick = {
@@ -72,6 +72,23 @@ fun SettingsDisplayProductsCategoryOrder(
                 },
                 description = stringResource(id = R.string.sort_type_desc)
             )
+            Row() {
+                RadioButtonWithDescription(
+                    isSelected = (state.value.sortType == SortType.CUSTOM),
+                    onClick = {
+                        viewModel.onEvent(
+                            SettingsDisplayProductEvent.ChangeSortType(SortType.CUSTOM)
+                        )
+                    },
+                    description = stringResource(id = R.string.sort_type_custom)
+                )
+                Button(
+                    onClick = { showCustomOrderView = !showCustomOrderView },
+                    enabled = (state.value.sortType == SortType.CUSTOM)
+                ) {
+                    Text(text = stringResource(id = R.string.sort_type_custom_change))
+                }
+            }
         }
         Spacer(
             modifier = Modifier
@@ -83,6 +100,7 @@ fun SettingsDisplayProductsCategoryOrder(
         Text(text = stringResource(id = R.string.order_type))
         RadioButtonWithDescription(
             isSelected = (state.value.categoryOrderType == CategoryOrderType.NAME),
+            enabled = (state.value.sortType != SortType.CUSTOM),
             onClick = {
                 viewModel.onEvent(
                     SettingsDisplayProductEvent.ChangeOrderType(CategoryOrderType.NAME)
@@ -90,24 +108,6 @@ fun SettingsDisplayProductsCategoryOrder(
             },
             description = stringResource(id = R.string.order_type_name)
         )
-        Row() {
-            RadioButtonWithDescription(
-                isSelected = (state.value.categoryOrderType == CategoryOrderType.CUSTOM),
-                onClick = {
-                    viewModel.onEvent(
-                        SettingsDisplayProductEvent.ChangeOrderType(CategoryOrderType.CUSTOM)
-                    )
-                },
-                description = stringResource(id = R.string.order_type_custom)
-            )
-            Button(
-                onClick = { showCustomOrderView = !showCustomOrderView },
-                enabled = (state.value.categoryOrderType == CategoryOrderType.CUSTOM)
-            ) {
-                Text(text = stringResource(id = R.string.order_type_custom_change))
-            }
-        }
-
     }
     if (showCustomOrderView) {
         CustomOrderView(
@@ -127,6 +127,7 @@ fun RadioButtonWithDescription(
     isSelected: Boolean,
     onClick: () -> Unit,
     description: String,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -134,7 +135,7 @@ fun RadioButtonWithDescription(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        RadioButton(selected = isSelected, onClick = onClick)
+        RadioButton(selected = isSelected, onClick = onClick, enabled = enabled)
         Text(text = description, Modifier.padding(horizontal = 10.dp))
     }
 }

@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 
 enum class CategoryOrderType() {
     NAME,
-    CUSTOM,
 }
 
 enum class SortType {
     ASCENDING,
-    DESCENDING
+    DESCENDING,
+    CUSTOM
 }
 
 @Serializable

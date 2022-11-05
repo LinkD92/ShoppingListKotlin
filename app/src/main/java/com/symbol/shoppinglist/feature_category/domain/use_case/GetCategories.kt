@@ -19,14 +19,15 @@ class GetCategories(
                 SortType.ASCENDING -> {
                     when (fullCategoryOrderType.categoryOrderType) {
                         CategoryOrderType.NAME -> categories.sortedBy { it.name }
-                        CategoryOrderType.CUSTOM -> categories.sortedBy { it.customOrder }
                     }
                 }
                 SortType.DESCENDING -> {
                     when (fullCategoryOrderType.categoryOrderType) {
                         CategoryOrderType.NAME -> categories.sortedByDescending { it.name }
-                        CategoryOrderType.CUSTOM -> categories.sortedByDescending { it.customOrder }
                     }
+                }
+                SortType.CUSTOM -> {
+                    categories.sortedBy { it.customOrder }
                 }
             }
         }
