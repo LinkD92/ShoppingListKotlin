@@ -1,18 +1,17 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products.components
 
 import android.util.Log
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,15 +24,9 @@ import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsViewModel
-import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.detectReorderAfterLongPress
-import org.burnoutcrew.reorderable.rememberReorderableLazyListState
-import org.burnoutcrew.reorderable.reorderable
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DisplayProducts(
     navHostController: NavHostController = rememberNavController(),
@@ -102,10 +95,7 @@ fun DisplayProducts(
                 }
             ) {
                 Log.d("Recomposition - DisplayProducts:", "Recomposition3")
-                val products =
-                    viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-                        initial = emptyList()
-                    ).value
+                val products = viewModel.productsOfCategoryState.value[category] ?: emptyList()
                 ProductItemsList(
                     modifier = Modifier
                         .width(IntrinsicSize.Min)
@@ -119,7 +109,6 @@ fun DisplayProducts(
                     },
                     onLongClick = { product ->
                         productId = product.id
-//                        viewModel.onEvent(DisplayProductsEvent.OnProductLongClick(product))
                         openDialog = true
                     }
                 )

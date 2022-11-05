@@ -1,9 +1,11 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
@@ -29,6 +31,9 @@ class DisplayProductsViewModel @Inject constructor(
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
 
+    private val _productsOfCategoryState = mutableStateOf(mapOf<Category, List<Product>>())
+    val productsOfCategoryState: State<Map<Category, List<Product>>> = _productsOfCategoryState
+
     private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -51,7 +56,6 @@ class DisplayProductsViewModel @Inject constructor(
                 }
             }
             is DisplayProductsEvent.OnProductLongClick -> {
-                _state.value.longPressProduct = event.product
             }
             is DisplayProductsEvent.RestoreProduct -> {
                 viewModelScope.launch {
@@ -87,6 +91,7 @@ class DisplayProductsViewModel @Inject constructor(
                     state.value.copy(
                         categories = categories,
                     )
+                getCategoriesProduct(categories)
             }
         }
     }
@@ -99,6 +104,19 @@ class DisplayProductsViewModel @Inject constructor(
                     categoryOrderType = settings.fullCategoryOrderType
                 )
                 getCategories(settings.fullCategoryOrderType)
+            }
+        }
+    }
+
+    private fun getCategoriesProduct(categories: List<Category>) {
+        categories.forEach { category ->
+            viewModelScope.launch {
+                productUseCases.getCategoryProducts(category.id).collect { products ->
+                    var map = productsOfCategoryState.value.toMutableMap().apply {
+                        this[category] = products
+                    }
+                    _productsOfCategoryState.value = map
+                }
             }
         }
     }
