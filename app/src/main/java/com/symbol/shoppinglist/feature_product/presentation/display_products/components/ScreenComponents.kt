@@ -113,7 +113,6 @@ fun ExpandableCategoryCard(
     Card(
         modifier = modifier.fillMaxSize(),
         elevation = elevation,
-        border = BorderStroke(2.dp, borderColor)
     ) {
         var expand by rememberSaveable { mutableStateOf(expandValue) }
         val rotateAngle = if (expand) 180f else 0f
@@ -156,15 +155,6 @@ fun ExpandableCategoryCard(
         }
     }
 }
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun BottomSheet(){
-
-}
-
-
-
 
 
 

@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDownCircle
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.data.util.IconName
-import com.symbol.shoppinglist.core.presentation.components.ConfirmButton
+import com.symbol.shoppinglist.core.presentation.components.CustomButton
 import com.symbol.shoppinglist.core.presentation.components.LabelAndPlaceHolder
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.components.CategoryItem
@@ -75,11 +76,12 @@ fun AddEditProduct(
         ) { category ->
             viewModel.onEvent(AddEditProductEvent.ChooseCategory(category))
         }
-        ConfirmButton(
+        CustomButton(
+            onClick = { viewModel.onEvent(AddEditProductEvent.SaveProduct) },
             Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
                 .align(Alignment.End),
-            onClick = { viewModel.onEvent(AddEditProductEvent.SaveProduct) }
+            icon = Icons.Rounded.Check
         )
     }
 }

@@ -6,8 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Reorder
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,6 +29,9 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.presentation.components.CustomButton
+import com.symbol.shoppinglist.core.presentation.components.CustomViewHeader
+import com.symbol.shoppinglist.core.presentation.components.RadioButtonWithDescription
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.core.presentation.ui.theme.Shapes
 import com.symbol.shoppinglist.feature_category.domain.model.Category
@@ -114,29 +122,10 @@ fun SettingsDisplayProductsCategoryOrder(
             categories = state.value.categories,
             onCancelClick = { showCustomOrderView = !showCustomOrderView },
             onSaveClick = { categories ->
-                viewModel.onEvent(
-                    SettingsDisplayProductEvent.SaveCustomOrderSettings(categories)
-                )
+                viewModel.onEvent(SettingsDisplayProductEvent.SaveCustomOrderSettings(categories))
+                showCustomOrderView = !showCustomOrderView
             }
         )
-    }
-}
-
-@Composable
-fun RadioButtonWithDescription(
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    description: String,
-    enabled: Boolean = true,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        RadioButton(selected = isSelected, onClick = onClick, enabled = enabled)
-        Text(text = description, Modifier.padding(horizontal = 10.dp))
     }
 }
 
@@ -162,10 +151,19 @@ fun CustomOrderView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val constraints = ConstraintSet {
-            val categoriesLazyColumn = createRefFor("categoriesLazyColumn")
-            val buttonsRow = createRefFor("buttonsRow")
-            constrain(categoriesLazyColumn) {
+            val categoriesLazyColumn = createRefFor(ViewId.LIST_ID)
+            val buttonsRow = createRefFor(ViewId.BUTTONS_ID)
+            val header = createRefFor(ViewId.HEADER_ID)
+            constrain(header) {
                 top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(categoriesLazyColumn.top)
+                height = Dimension.wrapContent
+                width = Dimension.matchParent
+            }
+            constrain(categoriesLazyColumn) {
+                top.linkTo(header.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(buttonsRow.top)
@@ -188,6 +186,12 @@ fun CustomOrderView(
                 .padding(10.dp)
                 .background(color = MyColor.Background, shape = Shapes.medium)
         ) {
+            CustomViewHeader(
+                headerTitle = stringResource(id = R.string.category_reorder),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .layoutId(ViewId.HEADER_ID)
+            )
             LazyColumn(
                 state = reorderState.listState,
                 modifier = Modifier
@@ -195,7 +199,7 @@ fun CustomOrderView(
                     .reorderable(reorderState)
                     .detectReorderAfterLongPress(reorderState)
                     .fillMaxHeight()
-                    .layoutId("categoriesLazyColumn")
+                    .layoutId(ViewId.LIST_ID)
             ) {
                 items(categoryState, key = { it.id }) { category ->
                     Spacer(modifier = Modifier.padding(4.dp))
@@ -221,45 +225,33 @@ fun CustomOrderView(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.layoutId("buttonsRow")
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .layoutId(ViewId.BUTTONS_ID)
+                    .padding(horizontal = 10.dp, vertical = 5.dp)
             ) {
-                Button(onClick = {
-                    onSaveClick(categoryState.apply {
-                        forEachIndexed { index, category ->
-                            category.customOrder = index
-                        }
-                    })
-                }) {
-                    Text(text = "Save")
-                }
-                Button(onClick = { onCancelClick() }) {
-                    Text(text = "Cancel")
-                }
+                CustomButton(
+                    onClick = {
+                        onSaveClick(categoryState.apply {
+                            forEachIndexed { index, category ->
+                                category.customOrder = index
+                            }
+                        })
+                    },
+                    icon = Icons.Rounded.Check
+                )
+                CustomButton(onClick = { onCancelClick() },
+                    icon = Icons.Rounded.Close
+                )
             }
         }
     }
 }
 
 
+private object ViewId {
+    const val HEADER_ID = "headerId"
+    const val BUTTONS_ID = "buttonsID"
+    const val LIST_ID = "listId"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

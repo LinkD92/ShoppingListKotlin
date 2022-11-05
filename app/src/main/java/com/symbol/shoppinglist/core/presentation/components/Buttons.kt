@@ -1,14 +1,16 @@
 package com.symbol.shoppinglist.core.presentation.components
 
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
-import androidx.compose.material.Icon
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -41,11 +43,51 @@ fun AppFab(navController: NavHostController) {
 }
 
 @Composable
-fun ConfirmButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun CustomButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String? = null,
+    icon: ImageVector? = null,
+    enabled: Boolean = true
+) {
     Button(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled
     ) {
-        Icon(Icons.Rounded.Check, Action.CHECK)
+        Row(Modifier.padding(horizontal = 5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center) {
+            if(icon != null){
+                Icon(icon, text)
+            }
+            if(text != null){
+                Text(text = text)
+            }
+        }
+    }
+}
+
+@Composable
+fun RadioButtonWithDescription(
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    description: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    val fontAlpha = if (enabled) Component.Alpha.ENABLED else Component.Alpha.DISABLED
+    val defaultFontColor =
+        TextFieldDefaults.textFieldColors().textColor(enabled = true).value.copy(fontAlpha)
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        RadioButton(selected = isSelected, onClick = onClick, enabled = enabled)
+        Text(
+            text = description, Modifier.padding(horizontal = 10.dp),
+            color = defaultFontColor
+        )
     }
 }

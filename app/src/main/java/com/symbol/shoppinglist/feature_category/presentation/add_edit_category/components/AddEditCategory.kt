@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.data.util.IconName
-import com.symbol.shoppinglist.core.presentation.components.ConfirmButton
+import com.symbol.shoppinglist.core.presentation.components.CustomButton
 import com.symbol.shoppinglist.core.presentation.components.LabelAndPlaceHolder
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.feature_category.presentation.add_edit_category.AddEditCategoryEvent
@@ -65,7 +65,7 @@ fun AddEditCategory(
                 .fillMaxWidth(),
             buttonColor = currentColor,
             onClick = { navHostController.navigate(CategoriesDirections.ColorPicker.route) })
-        ConfirmButton(
+        CustomButton(
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
                 .align(Alignment.End),
