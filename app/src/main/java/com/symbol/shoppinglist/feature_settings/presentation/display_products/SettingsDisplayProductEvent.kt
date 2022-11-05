@@ -8,7 +8,6 @@ sealed class SettingsDisplayProductEvent {
     data class ChangeSortType(val sortType: SortType) : SettingsDisplayProductEvent()
     data class ChangeOrderType(val categoryOrderType: CategoryOrderType) :
         SettingsDisplayProductEvent()
-
     data class SaveCustomOrderSettings(val categories: List<Category>) :
         SettingsDisplayProductEvent()
 }

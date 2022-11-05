@@ -233,9 +233,7 @@ fun CustomOrderView(
                 CustomButton(
                     onClick = {
                         onSaveClick(categoryState.apply {
-                            forEachIndexed { index, category ->
-                                category.customOrder = index
-                            }
+
                         })
                     },
                     icon = Icons.Rounded.Check

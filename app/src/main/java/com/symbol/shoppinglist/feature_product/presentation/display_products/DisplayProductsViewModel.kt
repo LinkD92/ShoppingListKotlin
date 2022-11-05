@@ -1,17 +1,14 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
-import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
-import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -32,16 +29,11 @@ class DisplayProductsViewModel @Inject constructor(
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
 
-    private val _appSettings = mutableStateOf(AppSettings())
-    val appSettings: State<AppSettings> = _appSettings
-
     private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var recentlyDeletedProduct: Product? = null
-
     private var getCategoriesJob: Job? = null
-
     private var getSettingsJob: Job? = null
 
     init {
@@ -71,7 +63,7 @@ class DisplayProductsViewModel @Inject constructor(
             }
             is DisplayProductsEvent.ExpandCategory -> {
                 viewModelScope.launch {
-                    productUseCases.expandCategory(event.category.apply {
+                    categoryUseCases.expandCategory(event.category.apply {
                         isExpanded = !isExpanded
                     })
                 }
@@ -86,7 +78,6 @@ class DisplayProductsViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
         getCategoriesJob?.cancel()
@@ -114,5 +105,4 @@ class DisplayProductsViewModel @Inject constructor(
 
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
         productUseCases.getCategoryProducts(categoryId)
-
 }

@@ -72,22 +72,21 @@ object AppModule {
             deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
             insertCategory = InsertCategory(categoriesRepository),
             getCategory = GetCategory(categoriesRepository),
-            reorderCategories = ReorderCategories(categoriesRepository)
-        )
+            reorderCategories = ReorderCategories(categoriesRepository),
+            expandCategory = ExpandCategory(categoriesRepository),
+            )
     }
 
     @Provides
     @Singleton
     fun provideProductUseCases(
         productsRepository: ProductsRepository,
-        categoriesRepository: CategoriesRepository,
     ): ProductUseCases {
         return ProductUseCases(
             getProducts = GetProducts(productsRepository),
             deleteProduct = DeleteProduct(productsRepository),
             insertProduct = InsertProduct(productsRepository),
             getProduct = GetProduct(productsRepository),
-            expandCategory = ExpandCategory(categoriesRepository),
             getCategoryProducts = GetCategoryProducts(productsRepository),
             insertProducts = InsertProducts(productsRepository)
         )
