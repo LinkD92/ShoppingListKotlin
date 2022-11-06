@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -86,9 +87,7 @@ fun DisplayProducts(
             Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
                 modifier = Modifier.fillMaxSize(),
-                cardName = category.name,
-                expandValue = category.isExpanded,
-                backgroundColor = category.color,
+                category = category,
                 expandIconOnClick = {
                     viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
                 }

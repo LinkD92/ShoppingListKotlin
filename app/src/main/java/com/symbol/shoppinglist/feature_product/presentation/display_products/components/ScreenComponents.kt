@@ -1,11 +1,17 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products.components
 
 import android.util.Log
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.SnackbarDefaults.backgroundColor
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandCircleDown
 import androidx.compose.runtime.*
@@ -24,6 +30,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
 import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
+import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -101,20 +108,17 @@ fun ProductItemsList(
 @Composable
 fun ExpandableCategoryCard(
     modifier: Modifier = Modifier,
-    cardName: String,
-    expandValue: Boolean,
-    backgroundColor: Long,
+    category: Category,
     expandIconOnClick: (Boolean) -> Unit,
     elevation: Dp = 10.dp,
-    borderColor: Color = Color(backgroundColor),
     content: @Composable () -> Unit
 ) {
     Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition1")
+    var expand by remember { mutableStateOf(category.isExpanded) }
     Card(
         modifier = modifier.fillMaxSize(),
         elevation = elevation,
     ) {
-        var expand by rememberSaveable { mutableStateOf(expandValue) }
         val rotateAngle = if (expand) 180f else 0f
         Column {
             Row(
@@ -124,7 +128,7 @@ fun ExpandableCategoryCard(
             ) {
                 Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition2")
                 Icon(Icons.Rounded.ExpandCircleDown, IconName.DROPDOWN,
-                    tint = Color(backgroundColor),
+                    tint = Color(category.color),
                     modifier = Modifier
                         .clickable {
                             expand = !expand
@@ -137,7 +141,7 @@ fun ExpandableCategoryCard(
                 Spacer(modifier = Modifier.padding(2.dp))
                 Text(
                     modifier = Modifier.padding(2.dp),
-                    text = cardName,
+                    text = category.name,
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                 )

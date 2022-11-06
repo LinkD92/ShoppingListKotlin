@@ -6,13 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Reorder
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -233,7 +233,8 @@ fun RadioButtonsSection(
                 CustomButton(
                     enabled = (currentSortType == SortType.CUSTOM),
                     onClick = showCustomOrderView,
-                    text = stringResource(id = R.string.sort_type_custom_change),
+                    text = stringResource(id = R.string.action_edit),
+                    icon = Icons.Rounded.Edit
                 )
             }
         }

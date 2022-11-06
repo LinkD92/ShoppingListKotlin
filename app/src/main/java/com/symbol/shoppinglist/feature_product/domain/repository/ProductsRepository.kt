@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.feature_product.domain.repository
 
-import android.util.Log
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 

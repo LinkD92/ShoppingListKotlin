@@ -1,8 +1,6 @@
 package com.symbol.shoppinglist.core.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -55,13 +53,13 @@ fun CustomButton(
         enabled = enabled
     ) {
         Row(
-            Modifier.padding(horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             if (icon != null) {
                 Icon(icon, text)
             }
+            Spacer(modifier = Modifier.width(5.dp))
             if (text != null) {
                 Text(text = text)
             }

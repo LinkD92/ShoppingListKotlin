@@ -5,8 +5,6 @@ import com.symbol.shoppinglist.feature_product.domain.repository.ProductsReposit
 import com.symbol.shoppinglist.test_helper.RandomString
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito

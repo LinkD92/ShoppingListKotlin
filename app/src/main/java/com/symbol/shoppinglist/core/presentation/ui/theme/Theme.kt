@@ -13,8 +13,8 @@ import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.OnSurface
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Primary
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Purple700
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Secondary
-import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Teal200
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Surface
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor.Teal200
 
 private val DarkColorPalette = darkColors(
     primary = Primary,

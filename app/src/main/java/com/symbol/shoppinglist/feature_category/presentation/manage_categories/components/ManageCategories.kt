@@ -20,15 +20,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.R
+import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.navigation.CategoriesDirections
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesEvent
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun ManageCategories(

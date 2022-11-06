@@ -107,7 +107,7 @@ fun CategoriesDropDown(
             CategoryItem(
                 category = selectedCategory,
                 modifier = Modifier,
-                onClick = { expanded = !expanded })
+            )
             {
                 Icon(Icons.Rounded.ArrowDropDownCircle, IconName.DROPDOWN)
             }
