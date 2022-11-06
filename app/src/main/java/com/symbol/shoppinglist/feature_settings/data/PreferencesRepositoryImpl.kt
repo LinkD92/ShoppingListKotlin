@@ -2,8 +2,8 @@ package com.symbol.shoppinglist.feature_settings.data
 
 import androidx.datastore.core.DataStore
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
-import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
 import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
+import com.symbol.shoppinglist.feature_settings.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

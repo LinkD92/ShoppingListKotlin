@@ -53,8 +53,7 @@ fun SettingsDisplayProductsCategoryOrder(
     var showCustomOrderView by rememberSaveable {
         mutableStateOf(false)
     }
-    RadioButtonsSection(
-        currentSortType = state.value.sortType,
+    RadioButtonsSection(currentSortType = state.value.sortType,
         changeSortType = { sortType ->
             viewModel.onEvent(SettingsDisplayProductEvent.ChangeSortType(sortType))
         },
@@ -62,32 +61,30 @@ fun SettingsDisplayProductsCategoryOrder(
         currentOrderType = state.value.categoryOrderType,
         changeOrderType = { categoryOrderType ->
             viewModel.onEvent(SettingsDisplayProductEvent.ChangeOrderType(categoryOrderType))
-        }
-    )
+        })
     if (showCustomOrderView) {
-        CustomSortView(
-            categories = state.value.categories,
+        CustomSortView(categories = state.value.categories,
             onCancelClick = { showCustomOrderView = !showCustomOrderView },
             onSaveClick = { categories ->
                 viewModel.onEvent(SettingsDisplayProductEvent.SaveCustomOrderSettings(categories))
                 showCustomOrderView = !showCustomOrderView
-            }
-        )
+            })
     }
 }
 
 @Composable
 fun CustomSortView(
-    categories: List<Category>,
-    onCancelClick: () -> Unit,
-    onSaveClick: (List<Category>) -> Unit
+    categories: List<Category>, onCancelClick: () -> Unit, onSaveClick: (List<Category>) -> Unit
 ) {
     var categoriesState by remember {
         mutableStateOf(categories)
     }
     val reorderState = rememberReorderableLazyListState(onMove = { from, to ->
         categoriesState = categoriesState.toMutableList().apply {
-            add(to.index, removeAt(from.index))
+            add(
+                to.index,
+                removeAt(from.index)
+            )
         }
     })
     Column(
@@ -132,7 +129,10 @@ fun CustomSortView(
             modifier = Modifier
                 .fillMaxSize(0.8f)
                 .padding(10.dp)
-                .background(color = MyColor.Background, shape = Shapes.medium)
+                .background(
+                    color = MyColor.Background,
+                    shape = Shapes.medium
+                )
         ) {
             CustomViewHeader(
                 headerTitle = stringResource(id = R.string.category_reorder),
@@ -149,9 +149,13 @@ fun CustomSortView(
                     .fillMaxHeight()
                     .layoutId(ViewId.LIST_ID)
             ) {
-                items(categoriesState, key = { it.id }) { category ->
+                items(categoriesState,
+                    key = { it.id }) { category ->
                     Spacer(modifier = Modifier.padding(4.dp))
-                    ReorderableItem(reorderState, key = category.id) { isDragging ->
+                    ReorderableItem(
+                        reorderState,
+                        key = category.id
+                    ) { isDragging ->
                         val elevation = animateDpAsState(if (isDragging) 26.dp else 0.dp)
                         val borderColor = if (isDragging) MyColor.Primary else Color(category.color)
                         Row(
@@ -159,16 +163,18 @@ fun CustomSortView(
                             horizontalArrangement = Arrangement.Start
                         ) {
                             CategoryItem(
-                                modifier = Modifier
-                                    .background(
-                                        shape = Shapes.medium,
-                                        color = Color(category.color)
-                                    ),
+                                modifier = Modifier.background(
+                                    shape = Shapes.medium,
+                                    color = Color(category.color)
+                                ),
                                 elevation = elevation.value,
                                 borderColor = borderColor,
                                 category = category
                             ) {
-                                Icon(Icons.Rounded.Reorder, null)
+                                Icon(
+                                    Icons.Rounded.Reorder,
+                                    null
+                                )
                             }
                         }
                     }
@@ -179,7 +185,10 @@ fun CustomSortView(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .layoutId(ViewId.BUTTONS_ID)
-                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 5.dp
+                    )
             ) {
                 CustomButton(
                     onClick = { onSaveClick(categoriesState) },
@@ -205,7 +214,10 @@ fun RadioButtonsSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 5.dp),
+            .padding(
+                horizontal = 20.dp,
+                vertical = 5.dp
+            ),
         horizontalAlignment = Alignment.Start
     ) {
         Text(text = stringResource(id = R.string.sort_type))
@@ -224,7 +236,11 @@ fun RadioButtonsSection(
                 onClick = { changeSortType(SortType.DESCENDING) },
                 description = stringResource(id = R.string.sort_type_desc)
             )
-            Row() {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 RadioButtonWithDescription(
                     isSelected = (currentSortType == SortType.CUSTOM),
                     onClick = { changeSortType(SortType.CUSTOM) },
@@ -257,10 +273,8 @@ fun RadioButtonsSection(
     }
 }
 
-
 private object ViewId {
     const val HEADER_ID = "headerId"
     const val BUTTONS_ID = "buttonsID"
     const val LIST_ID = "listId"
-
 }

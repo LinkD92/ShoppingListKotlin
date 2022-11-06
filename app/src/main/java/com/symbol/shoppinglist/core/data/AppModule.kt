@@ -17,7 +17,7 @@ import com.symbol.shoppinglist.feature_product.data.repository.ProductsRepositor
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
 import com.symbol.shoppinglist.feature_product.domain.use_case.*
 import com.symbol.shoppinglist.feature_settings.data.PreferencesRepositoryImpl
-import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
+import com.symbol.shoppinglist.feature_settings.domain.repository.PreferencesRepository
 import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import com.symbol.shoppinglist.feature_settings.domain.use_case.GetSettings
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SaveDisplayProductsCategoriesOrder

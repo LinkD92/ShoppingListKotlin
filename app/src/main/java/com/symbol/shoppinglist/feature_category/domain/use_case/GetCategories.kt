@@ -5,7 +5,7 @@ import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepo
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.SortType
-import com.symbol.shoppinglist.feature_settings.domain.PreferencesRepository
+import com.symbol.shoppinglist.feature_settings.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

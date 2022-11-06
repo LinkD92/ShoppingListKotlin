@@ -39,4 +39,10 @@ class FakeCategoryRepository : CategoriesRepository {
     override suspend fun deleteCategory(category: Category) {
         categories.remove(category)
     }
+
+    override suspend fun insertCategories(categories: List<Category>) {
+        categories.forEach { category ->
+            this.categories.add(category)
+        }
+    }
 }

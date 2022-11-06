@@ -31,20 +31,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddEditProduct(
-    snackbarHostState: SnackbarHostState,
-    viewModel: AddEditProductViewModel = hiltViewModel()
+    snackbarHostState: SnackbarHostState, viewModel: AddEditProductViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val snackScope = rememberCoroutineScope()
-    val categories = viewModel.categories.value
-    val productName = viewModel.productName.value
-    val productQuantity = viewModel.productQuantity.value
-    val productCategory = viewModel.productCategory.value
-    val labelName = stringResource(id = R.string.product_label_name)
-    val labelAmount = stringResource(id = R.string.product_label_quantity)
-    val labelAndPlaceholderModifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 10.dp, vertical = 5.dp)
+    val categories = viewModel.categoriesState.value
+    val productName = viewModel.productNameState.value
+    val productQuantity = viewModel.productQuantityState.value
+    val productCategory = viewModel.productCategoryState.value
+    val labelAndPlaceholderModifier =
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
 
     LaunchedEffect(true) {
         snackScope.launch {
@@ -55,30 +53,25 @@ fun AddEditProduct(
     }
     Column(modifier = Modifier.fillMaxWidth()) {
         LabelAndPlaceHolder(
-            labelAndPlaceholderModifier,
-            productName,
-            labelName
+            labelAndPlaceholderModifier, productName,
+            stringResource(id = R.string.product_label_name)
         ) {
             viewModel.onEvent(AddEditProductEvent.EnteredName(it))
         }
         LabelAndPlaceHolder(
-            labelAndPlaceholderModifier,
-            productQuantity,
-            labelAmount,
+            labelAndPlaceholderModifier, productQuantity,
+            stringResource(id = R.string.product_label_quantity),
             KeyboardOptions(keyboardType = KeyboardType.Number)
         ) {
             viewModel.onEvent(AddEditProductEvent.EnteredQuantity(it))
         }
         CategoriesDropDown(
-            labelAndPlaceholderModifier,
-            categories,
-            productCategory
+            labelAndPlaceholderModifier, categories, productCategory
         ) { category ->
             viewModel.onEvent(AddEditProductEvent.ChooseCategory(category))
         }
         CustomButton(
-            onClick = { viewModel.onEvent(AddEditProductEvent.SaveProduct) },
-            Modifier
+            onClick = { viewModel.onEvent(AddEditProductEvent.SaveProduct) }, Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
                 .align(Alignment.End),
             icon = Icons.Rounded.Check
@@ -88,44 +81,33 @@ fun AddEditProduct(
 
 @Composable
 fun CategoriesDropDown(
-    modifier: Modifier = Modifier,
-    categories: List<Category>,
-    selectedCategory: Category,
+    modifier: Modifier = Modifier, categories: List<Category>, selectedCategory: Category,
     chooseCategory: (Category) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
+        modifier = modifier, contentAlignment = Alignment.Center
     ) {
         Row(
-            modifier = Modifier
-                .clickable { expanded = !expanded },
+            modifier = Modifier.clickable { expanded = !expanded },
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CategoryItem(
-                category = selectedCategory,
-                modifier = Modifier,
-            )
-            {
+            CategoryItem(category = selectedCategory) {
                 Icon(Icons.Rounded.ArrowDropDownCircle, IconName.DROPDOWN)
             }
             DropdownMenu(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .padding(horizontal = 10.dp, vertical = 5.dp),
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
+                expanded = expanded, onDismissRequest = { expanded = false }) {
                 categories.forEach { category ->
                     DropdownMenuItem(
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 5.dp),
                         onClick = {
                             expanded = false
                             chooseCategory(category)
-                        }
-                    ) {
+                        }) {
                         CategoryItem(category, Modifier)
                     }
                 }

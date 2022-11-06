@@ -9,6 +9,7 @@ import com.symbol.shoppinglist.feature_category.data.repository.FakeCategoryRepo
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.repository.CategoriesRepository
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
+import com.symbol.shoppinglist.feature_settings.domain.repository.PreferencesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
@@ -27,13 +28,16 @@ class GetCategoriesTest {
     @Mock
     private val repository = mock(CategoriesRepository::class.java)
 
+    @Mock
+    private val preferencesRepository = mock(PreferencesRepository::class.java)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         dispatcherProvider = TestDispatchers()
         fakeCategoryRepository = FakeCategoryRepository()
 
-        getCategories = GetCategories(repository, dispatcherProvider)
+        getCategories = GetCategories(repository, preferencesRepository)
 
 
     }

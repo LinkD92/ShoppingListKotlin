@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.feature_settings.domain
+package com.symbol.shoppinglist.feature_settings.domain.repository
 
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
