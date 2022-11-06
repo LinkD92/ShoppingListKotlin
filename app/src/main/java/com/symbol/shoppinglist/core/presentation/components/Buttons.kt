@@ -54,12 +54,14 @@ fun CustomButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (icon != null) {
                 Icon(icon, text)
             }
-            Spacer(modifier = Modifier.width(5.dp))
+            if (icon != null && text != null) {
+                Spacer(modifier = Modifier.width(5.dp))
+            }
             if (text != null) {
                 Text(text = text)
             }

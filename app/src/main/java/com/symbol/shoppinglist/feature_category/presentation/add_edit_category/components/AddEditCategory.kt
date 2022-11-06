@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,7 +70,8 @@ fun AddEditCategory(
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
                 .align(Alignment.End),
-            onClick = { viewModel.onEvent(AddEditCategoryEvent.SaveCategory) }
+            onClick = { viewModel.onEvent(AddEditCategoryEvent.SaveCategory) },
+            icon = Icons.Rounded.Check
         )
     }
 }

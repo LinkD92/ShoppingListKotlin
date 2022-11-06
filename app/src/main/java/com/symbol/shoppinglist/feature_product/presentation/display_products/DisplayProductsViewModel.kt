@@ -13,6 +13,7 @@ import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -117,4 +118,7 @@ class DisplayProductsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
+        productUseCases.getCategoryProducts(categoryId)
 }

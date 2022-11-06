@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -24,6 +23,7 @@ import com.symbol.shoppinglist.core.presentation.navigation.ProductsDirections
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsEvent
 import com.symbol.shoppinglist.feature_product.presentation.display_products.DisplayProductsViewModel
+import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -42,13 +42,11 @@ fun DisplayProducts(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { message ->
             snackScope.launch {
-                val result = snackbarHostState.showSnackbar(
-                    message = context.getString(message.resourceString),
-                    actionLabel =
-                    if (message is ProductPromptMessage.ProductDeleted)
-                        context.getString(R.string.action_undo)
-                    else null
-                )
+                val result =
+                    snackbarHostState.showSnackbar(message = context.getString(message.resourceString),
+                        actionLabel = if (message is ProductPromptMessage.ProductDeleted) context.getString(
+                            R.string.action_undo)
+                        else null)
                 if (result == SnackbarResult.ActionPerformed) {
                     viewModel.onEvent(DisplayProductsEvent.RestoreProduct)
                 }
@@ -56,60 +54,48 @@ fun DisplayProducts(
         }
     }
 
-    if (openDialog)
-        OptionsDialog(
-            modifier = Modifier,
-            shouldOpenDialog = { openDialog = false },
-            title = stringResource(id = R.string.choose_action),
-            btn1Name = stringResource(id = R.string.action_edit),
-            btn1Icon = Icons.Rounded.Edit,
-            btn1OnClick = {
-                openDialog = false
-                navHostController.navigate(ProductsDirections.AddProduct.passArgument(productId))
-            },
-            btn2Name = stringResource(id = R.string.action_delete),
-            btn2Icon = Icons.Rounded.Delete,
-            btn2OnClick = {
-                openDialog = false
-                viewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
-            }
-        )
+    if (openDialog) OptionsDialog(modifier = Modifier,
+        shouldOpenDialog = { openDialog = false },
+        title = stringResource(id = R.string.choose_action),
+        btn1Name = stringResource(id = R.string.action_edit),
+        btn1Icon = Icons.Rounded.Edit,
+        btn1OnClick = {
+            openDialog = false
+            navHostController.navigate(ProductsDirections.AddProduct.passArgument(productId))
+        },
+        btn2Name = stringResource(id = R.string.action_delete),
+        btn2Icon = Icons.Rounded.Delete,
+        btn2OnClick = {
+            openDialog = false
+            viewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
+        })
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 10.dp)
-    ) {
-        items(
-            items = state.value.categories
-        ) { category ->
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 10.dp)) {
+        items(items = state.value.categories) { category ->
             Log.d("Recomposition - DisplayProducts:", "Recomposition2")
             Spacer(modifier = Modifier.padding(4.dp))
-            ExpandableCategoryCard(
-                modifier = Modifier.fillMaxSize(),
+            ExpandableCategoryCard(modifier = Modifier.fillMaxSize(),
                 category = category,
                 expandIconOnClick = {
                     viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
-                }
-            ) {
+                }) {
                 Log.d("Recomposition - DisplayProducts:", "Recomposition3")
-                val products = viewModel.productsOfCategoryState.value[category] ?: emptyList()
-                ProductItemsList(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Min)
-                        .padding(10.dp),
+                val products = viewModel.getCategoriesProduct(category.id)
+                    .collectAsStateLifecycleAware(initial = emptyList()).value
+                ProductItemsList(modifier = Modifier
+                    .width(IntrinsicSize.Min)
+                    .padding(10.dp),
                     backgroundColor = category.color,
                     products = products,
                     onItemClick = { product ->
-                        viewModel.onEvent(
-                            DisplayProductsEvent.ChangeProductSelection(product)
-                        )
+                        viewModel.onEvent(DisplayProductsEvent.ChangeProductSelection(product))
                     },
                     onLongClick = { product ->
                         productId = product.id
                         openDialog = true
-                    }
-                )
+                    })
             }
         }
     }
