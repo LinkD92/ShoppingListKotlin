@@ -5,7 +5,6 @@ import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder
 
 sealed class DisplayProductsEvent {
-    data class Order(val productOrder: ProductOrder): DisplayProductsEvent()
     data class DeleteProduct(val productId: Int): DisplayProductsEvent()
     data class OnProductLongClick(val product: Product): DisplayProductsEvent()
     object RestoreProduct: DisplayProductsEvent()

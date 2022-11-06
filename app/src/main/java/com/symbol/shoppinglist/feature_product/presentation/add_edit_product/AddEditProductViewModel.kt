@@ -29,7 +29,6 @@ class AddEditProductViewModel @Inject constructor(
     private val productUseCases: ProductUseCases,
     private val categoryUseCases: CategoryUseCases,
     private val savedStateHandle: SavedStateHandle,
-    private val dispatcher: DispatcherProvider
 ) :
     ViewModel() {
 

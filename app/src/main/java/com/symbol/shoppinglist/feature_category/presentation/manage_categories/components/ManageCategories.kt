@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.feature_category.presentation.manage_categories.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -26,6 +28,7 @@ import com.symbol.shoppinglist.feature_category.presentation.manage_categories.M
 import com.symbol.shoppinglist.feature_category.presentation.manage_categories.ManageCategoriesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun ManageCategories(
@@ -68,6 +71,8 @@ fun ManageCategories(
 fun CategoryItem(
     category: Category,
     modifier: Modifier = Modifier,
+    elevation: Dp = 5.dp,
+    borderColor: Color = Color(category.color),
     onClick: ((Int?) -> Unit)? = null,
     deleteIconClick: ((Category) -> Unit)? = null,
     content: @Composable (() -> Unit)? = null
@@ -76,8 +81,9 @@ fun CategoryItem(
         if (onClick != null) modifier.clickable { onClick(category.id) } else modifier
     Card(
         modifier = chooseModifier,
-        elevation = 5.dp,
-        backgroundColor = Color(category.color)
+        elevation = elevation,
+        backgroundColor = Color(category.color),
+        border =  BorderStroke(1.dp, borderColor)
     ) {
         Row(
             modifier = Modifier

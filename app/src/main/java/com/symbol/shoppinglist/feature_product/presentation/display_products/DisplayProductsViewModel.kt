@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,6 @@ import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -47,7 +45,6 @@ class DisplayProductsViewModel @Inject constructor(
 
     fun onEvent(event: DisplayProductsEvent) {
         when (event) {
-            is DisplayProductsEvent.Order -> {}
             is DisplayProductsEvent.DeleteProduct -> {
                 viewModelScope.launch {
                     recentlyDeletedProduct = productUseCases.getProduct(event.productId)
@@ -112,7 +109,7 @@ class DisplayProductsViewModel @Inject constructor(
         categories.forEach { category ->
             viewModelScope.launch {
                 productUseCases.getCategoryProducts(category.id).collect { products ->
-                    var map = productsOfCategoryState.value.toMutableMap().apply {
+                    val map = productsOfCategoryState.value.toMutableMap().apply {
                         this[category] = products
                     }
                     _productsOfCategoryState.value = map
@@ -120,7 +117,4 @@ class DisplayProductsViewModel @Inject constructor(
             }
         }
     }
-
-    fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
-        productUseCases.getCategoryProducts(categoryId)
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.runtime.Composable
@@ -38,74 +37,38 @@ fun Settings(
                         .background(color = Color.Black.copy(alpha = 0.6f))
                 )
             }
-            SettingsGroup(groupName = stringResource(id = settingGroup.title)) {
+            SettingsGroup(
+                groupName = stringResource(id = settingGroup.title),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 5.dp),
+            ) {
                 settingGroup.settingsItems.forEach { settingItem ->
-                    SettingsItem(title = stringResource(id = settingItem.title), onClick = {
-                        navHostController.navigate(settingItem.navDirection)
-                    })
+                    SettingsItem(
+                        title = stringResource(id = settingItem.title),
+                        onClick = { navHostController.navigate(settingItem.navDirection) }
+                    )
                 }
             }
         }
     }
-
-//    val shouldShowBox = remember { mutableStateOf(true) }
-//    var text by remember { mutableStateOf(0) }
-//    Column(verticalArrangement = Arrangement.SpaceBetween) {
-//        listOfSettingsOptions.forEach { item ->
-//            SettingsItem(
-//                title = stringResource(id = item.title),
-//                icon = item.icon,
-//                onClick = { navHostController.navigate(item.navDirection) })
-//        }
-//        val alpha = if (shouldShowBox.value) 1f else 0.2f
-//
-//        Button(onClick = {
-//            shouldShowBox.value = !shouldShowBox.value
-//            text++
-//        }) {
-//            Text(text = "Click Me")
-//        }
-//        Box(
-//            Modifier
-//                .fillMaxSize()
-//
-//        ) {
-//
-//            Column(Modifier.clickable {
-//                text++
-//            }) {
-//                Text(text = "test1$text")
-//                Text(text = "test1$text")
-//                Text(text = "test1$text")
-//                Text(text = "test1$text")
-//            }
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .background(Color.Yellow.copy(alpha))
-//                    .clickable { text-- }
-//            ) {
-//
-//            }
-//        }
-//    }
 }
 
 
 @Composable
 fun SettingsGroup(
     groupName: String,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 5.dp),
+        modifier,
         horizontalAlignment = Alignment.Start
     ) {
-
-        val textFieldColor = TextFieldDefaults.textFieldColors().textColor(enabled = true).value
-        Text(text = groupName, color = MyColor.OnPrimary)
+        Text(
+            text = groupName,
+            color = MyColor.OnPrimary
+        )
         content()
     }
 }
@@ -142,4 +105,3 @@ fun SettingsItem(
     }
     Spacer(modifier = Modifier.height(3.dp))
 }
-
