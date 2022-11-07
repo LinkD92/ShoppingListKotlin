@@ -19,6 +19,6 @@ data class CategoryExpandStatus(val category: Category, val isExpanded: Boolean)
 
 @Serializable
 data class FullCategoryOrderType(
-    val categoryOrderType: CategoryOrderType,
+    val categoryOrderType: CategoryOrderType = CategoryOrderType.NAME,
     val sortType: SortType
 )

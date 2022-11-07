@@ -22,8 +22,8 @@ class SettingsViewModel @Inject constructor(
     private val settingsUseCases: SettingsUseCases
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(SettingsDisplayProductsState())
-    val state: State<SettingsDisplayProductsState> = _state
+    private val _stateSettingsDisplayProducts = mutableStateOf(SettingsDisplayProductsState())
+    val stateSettingsDisplayProduct: State<SettingsDisplayProductsState> = _stateSettingsDisplayProducts
 
     private var getCategoriesJob: Job? = null
     private var getSettingsJob: Job? = null
@@ -36,17 +36,17 @@ class SettingsViewModel @Inject constructor(
         when (event) {
             is SettingsDisplayProductEvent.ChangeSortType -> {
                 viewModelScope.launch {
-                    val categoryOrderType = state.value.categoryOrderType
+                    val categoryOrderType = stateSettingsDisplayProduct.value.categoryOrderType
                     val fullCategoryOrderType =
-                        FullCategoryOrderType(categoryOrderType, event.sortType)
+                            FullCategoryOrderType(categoryOrderType, event.sortType)
                     settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
                 }
             }
             is SettingsDisplayProductEvent.ChangeOrderType -> {
                 viewModelScope.launch {
-                    val sortType = state.value.sortType
+                    val sortType = stateSettingsDisplayProduct.value.sortType
                     val fullCategoryOrderType =
-                        FullCategoryOrderType(event.categoryOrderType, sortType)
+                            FullCategoryOrderType(event.categoryOrderType, sortType)
                     settingsUseCases.saveDisplayProductsCategoriesOrder(fullCategoryOrderType)
                 }
             }
@@ -66,7 +66,7 @@ class SettingsViewModel @Inject constructor(
         getSettingsJob?.cancel()
         getSettingsJob = viewModelScope.launch {
             settingsUseCases.getSettings().collect { settings ->
-                _state.value = state.value.copy(
+                _stateSettingsDisplayProducts.value = stateSettingsDisplayProduct.value.copy(
                     sortType = settings.fullCategoryOrderType.sortType,
                     categoryOrderType = settings.fullCategoryOrderType.categoryOrderType
                 )
@@ -79,10 +79,10 @@ class SettingsViewModel @Inject constructor(
         getCategoriesJob?.cancel()
         getCategoriesJob = viewModelScope.launch {
             categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
-                _state.value =
-                    state.value.copy(
-                        categories = categories,
-                    )
+                _stateSettingsDisplayProducts.value =
+                        stateSettingsDisplayProduct.value.copy(
+                            categories = categories,
+                        )
             }
         }
     }

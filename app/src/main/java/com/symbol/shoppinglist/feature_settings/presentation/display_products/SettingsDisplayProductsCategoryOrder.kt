@@ -49,7 +49,7 @@ fun SettingsDisplayProductsCategoryOrder(
     snackbarHostState: SnackbarHostState,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state
+    val state = viewModel.stateSettingsDisplayProduct
     var showCustomOrderView by rememberSaveable {
         mutableStateOf(false)
     }
