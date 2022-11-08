@@ -97,7 +97,7 @@ class SettingsViewModel @Inject constructor(
         val orderType = stateSettingsDisplayProduct.value.categoryOrderType
         return if(sortType != SortType.CUSTOM)
             "${sortType.name.capitalized()} ${orderType.name.capitalized()}"
-        else "${sortType.name.capitalized()}"
+        else sortType.name.capitalized()
 
     }
 

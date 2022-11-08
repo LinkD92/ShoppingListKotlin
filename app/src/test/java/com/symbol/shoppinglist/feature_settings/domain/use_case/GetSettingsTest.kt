@@ -1,13 +1,13 @@
 package com.symbol.shoppinglist.feature_settings.domain.use_case
 
 import app.cash.turbine.test
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_settings.domain.model.AppSettings
 import com.symbol.shoppinglist.feature_settings.domain.repository.PreferencesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -15,6 +15,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+@OptIn(ExperimentalCoroutinesApi::class)
 
 class GetSettingsTest {
 
@@ -44,10 +45,10 @@ class GetSettingsTest {
 
         // Then
         getSettings().test {
-            val appSettings = awaitItem()
-            assertThat(appSettings.fullCategoryOrderType.categoryOrderType)
+            val result = awaitItem()
+            assertThat(result.fullCategoryOrderType.categoryOrderType)
                 .isEqualTo(categoryOrderType)
-            assertThat(appSettings.fullCategoryOrderType.sortType).isEqualTo(sortType)
+            assertThat(result.fullCategoryOrderType.sortType).isEqualTo(sortType)
             cancelAndIgnoreRemainingEvents()
         }
     }
