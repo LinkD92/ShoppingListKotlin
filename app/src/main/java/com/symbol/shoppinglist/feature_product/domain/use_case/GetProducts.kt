@@ -3,7 +3,7 @@ package com.symbol.shoppinglist.feature_product.domain.use_case
 import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
-import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder
+import com.symbol.shoppinglist.feature_product.domain.model.ProductOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

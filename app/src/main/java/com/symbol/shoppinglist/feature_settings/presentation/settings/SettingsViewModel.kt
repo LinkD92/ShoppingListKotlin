@@ -90,6 +90,8 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+
+    // TODO: 08/11/2022 needs better way to implement this
     fun secondaryTextBuilder(): String{
         val sortType = stateSettingsDisplayProduct.value.sortType
         val orderType = stateSettingsDisplayProduct.value.categoryOrderType
@@ -99,6 +101,7 @@ class SettingsViewModel @Inject constructor(
 
     }
 
+    // TODO: 08/11/2022 needs better way to implement this
     private fun String.capitalized(): String {
         return this.lowercase().replaceFirstChar {
             if (it.isLowerCase())

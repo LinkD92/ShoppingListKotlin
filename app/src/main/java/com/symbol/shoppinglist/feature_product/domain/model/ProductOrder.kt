@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.feature_product.domain.util
+package com.symbol.shoppinglist.feature_product.domain.model
 
 import com.symbol.shoppinglist.core.domain.util.OrderType
 

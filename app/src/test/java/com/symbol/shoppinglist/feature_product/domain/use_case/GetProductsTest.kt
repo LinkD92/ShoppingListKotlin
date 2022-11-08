@@ -1,13 +1,12 @@
 package com.symbol.shoppinglist.feature_product.domain.use_case
 
 import app.cash.turbine.test
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_product.data.repository.FakeProductRepository
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.repository.ProductsRepository
-import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder
+import com.symbol.shoppinglist.feature_product.domain.model.ProductOrder
 import com.symbol.shoppinglist.test_helper.RandomString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow

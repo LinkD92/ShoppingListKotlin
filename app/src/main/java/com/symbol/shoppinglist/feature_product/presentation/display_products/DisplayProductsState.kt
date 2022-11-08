@@ -5,7 +5,7 @@ import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.SortType
-import com.symbol.shoppinglist.feature_product.domain.util.ProductOrder
+import com.symbol.shoppinglist.feature_product.domain.model.ProductOrder
 
 data class DisplayProductsState(
     val categories: List<Category> = emptyList(),
