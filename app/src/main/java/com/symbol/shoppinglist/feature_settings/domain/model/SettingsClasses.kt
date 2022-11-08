@@ -13,7 +13,6 @@ data class SettingsItem(val title: Int, val navDirection: String)
 
 @Serializable
 data class AppSettings(
-    val categoryOrderType: CategoryOrderType = CategoryOrderType.NAME,
     val categoryExpandStatus: PersistentList<CategoryExpandStatus> = persistentListOf(),
     val fullCategoryOrderType: FullCategoryOrderType = FullCategoryOrderType(
         CategoryOrderType.NAME, SortType.ASCENDING

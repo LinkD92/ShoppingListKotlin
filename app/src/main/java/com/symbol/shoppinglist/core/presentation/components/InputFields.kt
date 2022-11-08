@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
-import com.symbol.shoppinglist.core.presentation.ui.theme.Typography
+import com.symbol.shoppinglist.core.presentation.ui.theme.MyTypography
 
 
 @Composable
@@ -48,7 +48,7 @@ fun CustomViewHeader(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = headerTitle, color = MyColor.OnPrimary, style = Typography.h2)
+            Text(text = headerTitle, color = MyColor.OnPrimary, style = MyTypography.h2)
         }
     }
 }

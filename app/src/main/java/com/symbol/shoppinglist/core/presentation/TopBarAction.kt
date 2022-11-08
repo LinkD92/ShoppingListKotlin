@@ -6,5 +6,5 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.symbol.shoppinglist.R
 
 sealed class TopBarAction(val label: Int, val icon: ImageVector) {
-    object ReorderCategory : TopBarAction(R.string.category_reorder, Icons.Rounded.MoreVert)
+    object ReorderCategory : TopBarAction(R.string.category_order, Icons.Rounded.MoreVert)
 }

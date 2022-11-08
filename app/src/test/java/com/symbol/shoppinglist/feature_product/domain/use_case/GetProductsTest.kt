@@ -2,6 +2,7 @@ package com.symbol.shoppinglist.feature_product.domain.use_case
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import com.symbol.shoppinglist.core.domain.util.OrderType
 import com.symbol.shoppinglist.feature_product.data.repository.FakeProductRepository
 import com.symbol.shoppinglist.feature_product.domain.model.Product
@@ -18,7 +19,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
 
-class GetProductsTest{
+class GetProductsTest {
     private lateinit var getProducts: GetProducts
 
     private lateinit var fakeProductRepository: FakeProductRepository
@@ -43,7 +44,7 @@ class GetProductsTest{
         val product2 = Product("bbb", 1, false, 10, 2)
         val product3 = Product("ccc", 1, false, 10, 3)
         val productsList = listOf(product1, product2, product3)
-        val flowList = flow{ emit(productsList)}
+        val flowList = flow { emit(productsList) }
 
         // When
         `when`(productsRepository.getAllProducts()).thenReturn(flowList)
@@ -51,9 +52,9 @@ class GetProductsTest{
         // Then
         getProducts(ProductOrder.Name(OrderType.Ascending)).test {
             val list = awaitItem()
-            Truth.assertThat(list[0]).isEqualTo(product1)
-            Truth.assertThat(list[1]).isEqualTo(product2)
-            Truth.assertThat(list[2]).isEqualTo(product3)
+            assertThat(list[0]).isEqualTo(product1)
+            assertThat(list[1]).isEqualTo(product2)
+            assertThat(list[2]).isEqualTo(product3)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -66,7 +67,7 @@ class GetProductsTest{
         val product2 = Product("bbb", 1, false, 10, 2)
         val product3 = Product("ccc", 1, false, 10, 3)
         val productsList = listOf(product1, product2, product3)
-        val flowList = flow{ emit(productsList)}
+        val flowList = flow { emit(productsList) }
 
         // When
         `when`(productsRepository.getAllProducts()).thenReturn(flowList)
@@ -74,9 +75,9 @@ class GetProductsTest{
         // Then
         getProducts(ProductOrder.Name(OrderType.Descending)).test {
             val list = awaitItem()
-            Truth.assertThat(list[0]).isEqualTo(product3)
-            Truth.assertThat(list[1]).isEqualTo(product2)
-            Truth.assertThat(list[2]).isEqualTo(product1)
+            assertThat(list[0]).isEqualTo(product3)
+            assertThat(list[1]).isEqualTo(product2)
+            assertThat(list[2]).isEqualTo(product1)
             cancelAndIgnoreRemainingEvents()
         }
     }

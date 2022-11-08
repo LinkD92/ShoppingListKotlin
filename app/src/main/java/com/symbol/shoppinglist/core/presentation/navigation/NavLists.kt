@@ -24,19 +24,19 @@ val listOfSettingsOptions = listOf(
     SettingsGroup(
         R.string.display_products,
         listOf(
-            SettingsItem(R.string.category_reorder, SettingsDirections.DisplayProductsCategoryOrder.route)
+            SettingsItem(R.string.category_order, SettingsDirections.DisplayProductsCategoryOrder.route)
         )
     ),
     SettingsGroup(
         R.string.categories,
         listOf(
-            SettingsItem(R.string.category_reorder, SettingsDirections.Categories.route)
+            SettingsItem(R.string.category_order, SettingsDirections.Categories.route)
         )
     ),
     SettingsGroup(
         R.string.products,
         listOf(
-            SettingsItem(R.string.category_reorder, SettingsDirections.Products.route)
+            SettingsItem(R.string.category_order, SettingsDirections.Products.route)
         )
     ),
 )

@@ -44,7 +44,7 @@ fun ShoppingListTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Comp
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = MyTypography,
         shapes = Shapes,
         content = content
     )

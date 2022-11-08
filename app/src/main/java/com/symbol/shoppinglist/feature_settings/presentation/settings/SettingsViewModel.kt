@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
+import com.symbol.shoppinglist.feature_category.domain.util.CategoryOrderType
 import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderType
+import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductEvent
@@ -13,6 +15,7 @@ import com.symbol.shoppinglist.feature_settings.presentation.display_products.Se
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -86,4 +89,22 @@ class SettingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun secondaryTextBuilder(): String{
+        val sortType = stateSettingsDisplayProduct.value.sortType
+        val orderType = stateSettingsDisplayProduct.value.categoryOrderType
+        return if(sortType != SortType.CUSTOM)
+            "${sortType.name.capitalized()} ${orderType.name.capitalized()}"
+        else "${sortType.name.capitalized()}"
+
+    }
+
+    private fun String.capitalized(): String {
+        return this.lowercase().replaceFirstChar {
+            if (it.isLowerCase())
+                it.titlecase(Locale.getDefault())
+            else it.toString()
+        }
+    }
 }
+

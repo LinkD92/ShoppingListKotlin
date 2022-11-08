@@ -43,15 +43,6 @@ object AppModule {
         .build()
 
     @Provides
-    @Singleton
-    fun provideProtoDataStore(app: Application): DataStore<AppSettings> {
-        return DataStoreFactory.create(
-            serializer = AppSettingsSerializer,
-            produceFile = {app.preferencesDataStoreFile(PreferencesDataStore.FILE_NAME)}
-        )
-    }
-
-    @Provides
     fun providesProductDao(db: ListRoomDatabase) = db.productsDao()
 
     @Provides
@@ -60,54 +51,6 @@ object AppModule {
     @Provides
     fun providesDispatchers(): DispatcherProvider = DefaultDispatchers()
 
-    @Provides
-    @Singleton
-    fun provideCategoryUseCases(
-        categoriesRepository: CategoriesRepository,
-        productsRepository: ProductsRepository,
-        preferencesRepository: PreferencesRepository
-    ): CategoryUseCases {
-        return CategoryUseCases(
-            getCategories = GetCategories(categoriesRepository, preferencesRepository),
-            deleteCategory = DeleteCategory(categoriesRepository, productsRepository),
-            insertCategory = InsertCategory(categoriesRepository),
-            getCategory = GetCategory(categoriesRepository),
-            reorderCategories = ReorderCategories(categoriesRepository),
-            expandCategory = ExpandCategory(categoriesRepository),
-            )
-    }
-
-    @Provides
-    @Singleton
-    fun provideProductUseCases(
-        productsRepository: ProductsRepository,
-    ): ProductUseCases {
-        return ProductUseCases(
-            getProducts = GetProducts(productsRepository),
-            deleteProduct = DeleteProduct(productsRepository),
-            insertProduct = InsertProduct(productsRepository),
-            getProduct = GetProduct(productsRepository),
-            getCategoryProducts = GetCategoryProducts(productsRepository),
-            insertProducts = InsertProducts(productsRepository)
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideSettingsUseCases(
-        productsRepository: ProductsRepository,
-        categoriesRepository: CategoriesRepository,
-        preferencesRepository: PreferencesRepository
-    ): SettingsUseCases {
-        return SettingsUseCases(
-            saveDisplayProductsCategoriesOrder = SaveDisplayProductsCategoriesOrder(
-                productsRepository,
-                categoriesRepository,
-                preferencesRepository
-            ),
-            getSettings = GetSettings(preferencesRepository)
-        )
-    }
 }
 
 @Module

@@ -135,7 +135,7 @@ fun CustomSortView(
                 )
         ) {
             CustomViewHeader(
-                headerTitle = stringResource(id = R.string.category_reorder),
+                headerTitle = stringResource(id = R.string.category_order),
                 modifier = Modifier
                     .fillMaxWidth()
                     .layoutId(ViewId.HEADER_ID)
