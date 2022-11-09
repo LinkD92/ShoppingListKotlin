@@ -27,6 +27,7 @@ Project uses MVVM software design pattern & clean architecure solutions.
   - Categories: 
     - Add/Edit (Name, Color)
     - Delete
+    - Sort options
    
 ## Planned functionality:
   - Remote database
