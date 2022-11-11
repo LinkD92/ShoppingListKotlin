@@ -1,10 +1,7 @@
 package com.symbol.shoppinglist.core.presentation.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,8 +48,8 @@ fun OptionsDialog(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = btn1Name)
                             Spacer(modifier = Modifier.width(5.dp))
-                            if(btn1Icon != null)
-                            Icon(btn1Icon, btn1Name)
+                            if (btn1Icon != null)
+                                Icon(btn1Icon, btn1Name)
                         }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
@@ -63,8 +60,8 @@ fun OptionsDialog(
                         ) {
                             Text(text = btn2Name, textAlign = TextAlign.Center)
                             Spacer(modifier = Modifier.width(5.dp))
-                            if(btn2Icon != null)
-                            Icon(btn2Icon, btn2Name)
+                            if (btn2Icon != null)
+                                Icon(btn2Icon, btn2Name)
                         }
                     }
                 }

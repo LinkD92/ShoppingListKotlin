@@ -7,15 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandCircleDown
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.flowlayout.SizeMode
+import com.symbol.shoppinglist.core.data.util.Action
 import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.feature_category.domain.model.Category
@@ -111,19 +108,23 @@ fun ExpandableCategoryCard(
     category: Category,
     expandIconOnClick: (Boolean) -> Unit,
     elevation: Dp = 10.dp,
+    categoryCardMenu: @Composable () -> Unit,
     content: @Composable () -> Unit
 ) {
     Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition1")
     var expand by remember { mutableStateOf(category.isExpanded) }
+    var menuExpand by remember { mutableStateOf(false) }
     Card(
         modifier = modifier.fillMaxSize(),
         elevation = elevation,
     ) {
         val rotateAngle = if (expand) 180f else 0f
-        Column {
+        Column() {
             Row(
-                modifier = Modifier.padding(5.dp),
-                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Log.d("Recomposition - ExpandableCategoryCard:", "Recomposition2")
@@ -138,13 +139,24 @@ fun ExpandableCategoryCard(
                         .padding(5.dp)
                         .align(Alignment.CenterVertically)
                 )
-                Spacer(modifier = Modifier.padding(2.dp))
                 Text(
                     modifier = Modifier.padding(2.dp),
                     text = category.name,
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp,
                 )
+                Column() {
+                    Icon(Icons.Rounded.MoreVert, Action.ADD, modifier = Modifier.clickable {
+                        menuExpand = !menuExpand
+                    })
+                    DropdownMenu(
+                        modifier = Modifier,
+                        expanded = menuExpand,
+                        onDismissRequest = { menuExpand = !menuExpand }
+                    ){
+                        categoryCardMenu()
+                    }
+                }
             }
             if (expand) {
                 Spacer(
@@ -159,14 +171,3 @@ fun ExpandableCategoryCard(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-

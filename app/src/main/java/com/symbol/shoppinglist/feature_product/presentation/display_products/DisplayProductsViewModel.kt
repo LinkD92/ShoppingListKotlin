@@ -11,6 +11,7 @@ import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderTyp
 import com.symbol.shoppinglist.feature_product.domain.model.Product
 import com.symbol.shoppinglist.feature_product.domain.model.ProductPromptMessage
 import com.symbol.shoppinglist.feature_product.domain.use_case.ProductUseCases
+import com.symbol.shoppinglist.feature_product.presentation.display_products.components.CategoryCardMenuEvent
 import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -27,7 +28,7 @@ class DisplayProductsViewModel @Inject constructor(
     private val categoryUseCases: CategoryUseCases,
     private val settingsUseCases: SettingsUseCases
 ) :
-        ViewModel() {
+    ViewModel() {
 
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
@@ -83,49 +84,65 @@ class DisplayProductsViewModel @Inject constructor(
                     delay(1000)
                     productUseCases.insertProducts(listOfChangedProducts)
                     listOfChangedProducts.clear()
-            }
-        }
-    }
-}
-
-private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
-    getCategoriesJob?.cancel()
-    getCategoriesJob = viewModelScope.launch {
-        categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
-            _state.value =
-                    state.value.copy(
-                        categories = categories,
-                    )
-            getCategoriesProduct(categories)
-        }
-    }
-}
-
-private fun getSettings() {
-    getSettingsJob?.cancel()
-    getSettingsJob = viewModelScope.launch {
-        settingsUseCases.getSettings().collect { settings ->
-            _state.value = state.value.copy(
-                categoryOrderType = settings.fullCategoryOrderType
-            )
-            getCategories(settings.fullCategoryOrderType)
-        }
-    }
-}
-
-private fun getCategoriesProduct(categories: List<Category>) {
-    categories.forEach { category ->
-        viewModelScope.launch {
-            productUseCases.getCategoryProducts(category.id).collect { products ->
-                val map = productsOfCategoryState.value.toMutableMap().apply {
-                    this[category] = products
                 }
-                _productsOfCategoryState.value = map
             }
         }
     }
-}
 
-fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
-        productUseCases.getCategoryProducts(categoryId)
+    fun onMenuEvent(event: CategoryCardMenuEvent){
+        when(event){
+            is CategoryCardMenuEvent.CheckUncheckAll -> {
+                val isFirstProductChecked = event.products[0].isChecked
+                val isLastProductChecked = event.products.last().isChecked
+                val shouldCheckAllProducts = (isFirstProductChecked && isLastProductChecked)
+                val changedProducts = event.products.onEach { product ->
+                    product.apply { isChecked = shouldCheckAllProducts }
+                }
+                viewModelScope.launch {
+                    productUseCases.insertProducts(changedProducts)
+                }
+            }
+        }
+    }
+
+    private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
+        getCategoriesJob?.cancel()
+        getCategoriesJob = viewModelScope.launch {
+            categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
+                _state.value =
+                        state.value.copy(
+                            categories = categories,
+                        )
+                getCategoriesProduct(categories)
+            }
+        }
+    }
+
+    private fun getSettings() {
+        getSettingsJob?.cancel()
+        getSettingsJob = viewModelScope.launch {
+            settingsUseCases.getSettings().collect { settings ->
+                _state.value = state.value.copy(
+                    categoryOrderType = settings.fullCategoryOrderType
+                )
+                getCategories(settings.fullCategoryOrderType)
+            }
+        }
+    }
+
+    private fun getCategoriesProduct(categories: List<Category>) {
+        categories.forEach { category ->
+            viewModelScope.launch {
+                productUseCases.getCategoryProducts(category.id).collect { products ->
+                    val map = productsOfCategoryState.value.toMutableMap().apply {
+                        this[category] = products
+                    }
+                    _productsOfCategoryState.value = map
+                }
+            }
+        }
+    }
+
+    fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
+            productUseCases.getCategoryProducts(categoryId)
 }

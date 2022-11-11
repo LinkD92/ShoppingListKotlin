@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
@@ -62,7 +64,8 @@ fun DisplayProducts(
         btn1OnClick = {
             openDialog = false
             navHostController.navigate(ProductsDirections.AddProduct.passArgument(productId))
-        }, btn2Name = stringResource(id = R.string.action_delete), btn2Icon = Icons.Rounded.Delete,
+        },
+        btn2Name = stringResource(id = R.string.action_delete), btn2Icon = Icons.Rounded.Delete,
         btn2OnClick = {
             openDialog = false
             viewModel.onEvent(DisplayProductsEvent.DeleteProduct(productId))
@@ -74,26 +77,40 @@ fun DisplayProducts(
             .padding(horizontal = 10.dp)
     ) {
         items(items = state.value.categories) { category ->
-            Log.d(
-                "Recomposition - DisplayProducts:", "Recomposition2"
-            )
+            Log.d("Recomposition - DisplayProducts:", "Recomposition2")
+            var products = viewModel.getCategoriesProduct(category.id)
+                .collectAsStateLifecycleAware(initial = emptyList()).value
             Spacer(modifier = Modifier.padding(4.dp))
             ExpandableCategoryCard(
-                modifier = Modifier.fillMaxSize(), category = category, expandIconOnClick = {
+                modifier = Modifier.fillMaxSize(),
+                category = category,
+                expandIconOnClick = {
                     viewModel.onEvent(DisplayProductsEvent.ExpandCategory(category))
-                }) {
-                Log.d(
-                    "Recomposition - DisplayProducts:", "Recomposition3"
-                )
-                val products = viewModel.getCategoriesProduct(category.id)
-                    .collectAsStateLifecycleAware(initial = emptyList()).value
+                },
+                categoryCardMenu = {
+                    DropdownMenuItem(
+                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 5.dp),
+                        onClick = {
+                            products = products.onEach { product ->
+                                product.apply { isChecked = !isChecked }
+                            }
+                            viewModel.onMenuEvent(CategoryCardMenuEvent.CheckUncheckAll(products))
+                        }
+                    ) {
+                        Text(text = "Check/Uncheck all")
+                    }
+                })
+            {
+                Log.d("Recomposition - DisplayProducts:", "Recomposition3")
                 ProductItemsList(modifier = Modifier
                     .width(IntrinsicSize.Min)
                     .padding(10.dp),
-                    backgroundColor = category.color, products = products,
+                    backgroundColor = category.color,
+                    products = products,
                     onItemClick = { product ->
                         viewModel.onEvent(DisplayProductsEvent.ChangeProductSelection(product))
-                    }, onLongClick = { product ->
+                    },
+                    onLongClick = { product ->
                         productId = product.id
                         openDialog = true
                     })

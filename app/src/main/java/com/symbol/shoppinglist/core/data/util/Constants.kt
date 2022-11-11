@@ -20,6 +20,7 @@ object Action {
     const val ADD = "Add"
     const val HOME = "Home"
     const val NEXT = "Next"
+    const val MORE = "More"
 }
 
 object IconName {
