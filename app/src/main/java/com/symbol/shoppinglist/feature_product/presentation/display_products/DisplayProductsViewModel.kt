@@ -16,9 +16,7 @@ import com.symbol.shoppinglist.feature_settings.domain.use_case.SettingsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +31,13 @@ class DisplayProductsViewModel @Inject constructor(
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
 
-    private val _productsOfCategoryState = mutableStateOf(mapOf<Category, List<Product>>())
-    val productsOfCategoryState: State<Map<Category, List<Product>>> = _productsOfCategoryState
+    private val _testState =
+            MutableStateFlow<Map<Category, Map<Product, StateFlow<Boolean>>>>(emptyMap())
+    val testState = _testState.asStateFlow()
+
+    private val _productsOfCategoryState =
+            MutableStateFlow<Map<Category, List<StateFlow<Product>>>>(emptyMap())
+    val productsOfCategoryState = _productsOfCategoryState.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -89,17 +92,22 @@ class DisplayProductsViewModel @Inject constructor(
         }
     }
 
-    fun onMenuEvent(event: CategoryCardMenuEvent){
-        when(event){
+    fun onMenuEvent(event: CategoryCardMenuEvent) {
+        when (event) {
             is CategoryCardMenuEvent.CheckUncheckAll -> {
-                val isFirstProductChecked = event.products[0].isChecked
-                val isLastProductChecked = event.products.last().isChecked
-                val shouldCheckAllProducts = (isFirstProductChecked && isLastProductChecked)
-                val changedProducts = event.products.onEach { product ->
-                    product.apply { isChecked = shouldCheckAllProducts }
+//                val list = event.products.toList().toMutableList()
+//                val isFirstProductChecked = list[0].second.value
+//                val isLastProductChecked = list.last().second.value
+                val isFirstProductChecked = event.products.first().value.isChecked
+                val isLastProductChecked = event.products.last().value.isChecked
+                val shouldCheckAllProducts = !(isFirstProductChecked && isLastProductChecked)
+                val changedList = mutableListOf<Product>()
+                event.products.forEach { product ->
+                    changedList.add(product.value.apply { isChecked = shouldCheckAllProducts })
                 }
+                Log.d("QWAS - onMenuEvent:", "$changedList")
                 viewModelScope.launch {
-                    productUseCases.insertProducts(changedProducts)
+                    productUseCases.insertProducts(changedList)
                 }
             }
         }
@@ -134,10 +142,20 @@ class DisplayProductsViewModel @Inject constructor(
         categories.forEach { category ->
             viewModelScope.launch {
                 productUseCases.getCategoryProducts(category.id).collect { products ->
-                    val map = productsOfCategoryState.value.toMutableMap().apply {
-                        this[category] = products
+                    _testState.value = _testState.value.toMutableMap().apply {
+                        val productsMap = mutableMapOf<Product, StateFlow<Boolean>>()
+                        products.onEach { product ->
+                            productsMap[product] = MutableStateFlow(product.isChecked)
+                        }
+                        this[category] = productsMap
                     }
-                    _productsOfCategoryState.value = map
+                    val productsState  = mutableListOf<StateFlow<Product>>()
+                    products.forEach { product ->
+                        productsState.add(MutableStateFlow(product))
+                    }
+                    _productsOfCategoryState.value = productsOfCategoryState.value.toMutableMap().apply {
+                        this[category] = productsState
+                    }
                 }
             }
         }
@@ -145,4 +163,8 @@ class DisplayProductsViewModel @Inject constructor(
 
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
             productUseCases.getCategoryProducts(categoryId)
+
+    fun getProduct(productId: Int) = viewModelScope.launch {
+        productUseCases.getProduct(productId)
+    }
 }

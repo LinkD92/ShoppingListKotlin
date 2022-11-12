@@ -1,10 +1,7 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products.components
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -29,6 +26,10 @@ import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
+import com.symbol.shoppinglist.ui.collectAsStateLifecycleAware
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.forEach
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -44,6 +45,7 @@ fun ProductItem(
         elevation = 10.dp,
         shape = RoundedCornerShape(35)
     ) {
+        Log.d("Recomposition - ProductItem:", "Recomposition 1 ${product.name}")
         Box(
             modifier = Modifier
                 .combinedClickable(
@@ -53,6 +55,7 @@ fun ProductItem(
                 .background(color = backgroundColor)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
+            Log.d("Recomposition - ProductItem:", "2")
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.Center,
@@ -72,9 +75,9 @@ fun ProductItem(
 fun ProductItemsList(
     modifier: Modifier = Modifier,
     backgroundColor: Long,
-    products: List<Product>,
+    products: List<StateFlow<Product>>,
     onItemClick: (Product) -> Unit,
-    onLongClick: (Product) -> Unit
+    onLongClick: (Product) -> Unit,
 ) {
     FlowRow(
         modifier = modifier,
@@ -86,17 +89,20 @@ fun ProductItemsList(
     ) {
         // TODO: 26/10/2022 make it as content and take outside
         products.forEach { product ->
-            var isCheckedState by remember(product.id) { mutableStateOf(product.isChecked) }
-            val alphaValue = if (isCheckedState) 1f else 0.3f
+            Log.d("Recomposition - ProductItemsList:", "1")
+            var isCheckedState by remember(product.value.id) {
+                mutableStateOf(product.value.isChecked)
+            }
+            val alphaValue = if (product.value.isChecked) 1f else 0.3f
             val itemBackgroundColor = Color(backgroundColor).copy(alphaValue)
             ProductItem(
-                product = product,
+                product = product.value,
                 backgroundColor = itemBackgroundColor,
                 onClick = {
-                    isCheckedState = !isCheckedState
-                    onItemClick(product)
+                    product.value.isChecked
+                    onItemClick(product.value)
                 },
-                onLongClick = { onLongClick(product) }
+                onLongClick = { onLongClick(product.value) }
             )
         }
     }
