@@ -1,6 +1,5 @@
 package com.symbol.shoppinglist.feature_product.presentation.display_products
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -31,13 +30,8 @@ class DisplayProductsViewModel @Inject constructor(
     private val _state = mutableStateOf(DisplayProductsState())
     val state: State<DisplayProductsState> = _state
 
-    private val _testState =
-            MutableStateFlow<Map<Category, Map<Product, StateFlow<Boolean>>>>(emptyMap())
-    val testState = _testState.asStateFlow()
-
-    private val _productsOfCategoryState =
-            MutableStateFlow<Map<Category, List<StateFlow<Product>>>>(emptyMap())
-    val productsOfCategoryState = _productsOfCategoryState.asStateFlow()
+    private val _categoriesState = MutableStateFlow<List<Category>>(emptyList())
+    val categoriesState = _categoriesState.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<ProductPromptMessage>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -68,7 +62,7 @@ class DisplayProductsViewModel @Inject constructor(
             is DisplayProductsEvent.RestoreProduct -> {
                 viewModelScope.launch {
                     val prompt =
-                            productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
+                        productUseCases.insertProduct(recentlyDeletedProduct ?: return@launch)
                     _eventFlow.emit(prompt)
                     recentlyDeletedProduct = null
                 }
@@ -83,11 +77,12 @@ class DisplayProductsViewModel @Inject constructor(
             is DisplayProductsEvent.ChangeProductSelection -> {
                 listOfChangedProducts.add(event.product.apply { isChecked = !isChecked })
                 changeProductsSelection?.cancel()
-                changeProductsSelection = viewModelScope.launch {
-                    delay(1000)
-                    productUseCases.insertProducts(listOfChangedProducts)
-                    listOfChangedProducts.clear()
-                }
+                changeProductsSelection =
+                    viewModelScope.launch {
+                        delay(1000)
+                        productUseCases.insertProducts(listOfChangedProducts)
+                        listOfChangedProducts.clear()
+                    }
             }
         }
     }
@@ -95,17 +90,13 @@ class DisplayProductsViewModel @Inject constructor(
     fun onMenuEvent(event: CategoryCardMenuEvent) {
         when (event) {
             is CategoryCardMenuEvent.CheckUncheckAll -> {
-//                val list = event.products.toList().toMutableList()
-//                val isFirstProductChecked = list[0].second.value
-//                val isLastProductChecked = list.last().second.value
-                val isFirstProductChecked = event.products.first().value.isChecked
-                val isLastProductChecked = event.products.last().value.isChecked
+                val isFirstProductChecked = event.products.first().isChecked
+                val isLastProductChecked = event.products.last().isChecked
                 val shouldCheckAllProducts = !(isFirstProductChecked && isLastProductChecked)
                 val changedList = mutableListOf<Product>()
                 event.products.forEach { product ->
-                    changedList.add(product.value.apply { isChecked = shouldCheckAllProducts })
+                    changedList.add(product.apply { isChecked = shouldCheckAllProducts })
                 }
-                Log.d("QWAS - onMenuEvent:", "$changedList")
                 viewModelScope.launch {
                     productUseCases.insertProducts(changedList)
                 }
@@ -117,11 +108,7 @@ class DisplayProductsViewModel @Inject constructor(
         getCategoriesJob?.cancel()
         getCategoriesJob = viewModelScope.launch {
             categoryUseCases.getCategories(fullCategoryOrderType).collect { categories ->
-                _state.value =
-                        state.value.copy(
-                            categories = categories,
-                        )
-                getCategoriesProduct(categories)
+                _categoriesState.value = categories
             }
         }
     }
@@ -138,31 +125,8 @@ class DisplayProductsViewModel @Inject constructor(
         }
     }
 
-    private fun getCategoriesProduct(categories: List<Category>) {
-        categories.forEach { category ->
-            viewModelScope.launch {
-                productUseCases.getCategoryProducts(category.id).collect { products ->
-                    _testState.value = _testState.value.toMutableMap().apply {
-                        val productsMap = mutableMapOf<Product, StateFlow<Boolean>>()
-                        products.onEach { product ->
-                            productsMap[product] = MutableStateFlow(product.isChecked)
-                        }
-                        this[category] = productsMap
-                    }
-                    val productsState  = mutableListOf<StateFlow<Product>>()
-                    products.forEach { product ->
-                        productsState.add(MutableStateFlow(product))
-                    }
-                    _productsOfCategoryState.value = productsOfCategoryState.value.toMutableMap().apply {
-                        this[category] = productsState
-                    }
-                }
-            }
-        }
-    }
-
     fun getCategoriesProduct(categoryId: Int): Flow<List<Product>> =
-            productUseCases.getCategoryProducts(categoryId)
+        productUseCases.getCategoryProducts(categoryId)
 
     fun getProduct(productId: Int) = viewModelScope.launch {
         productUseCases.getProduct(productId)

@@ -7,7 +7,8 @@ import com.symbol.shoppinglist.feature_category.domain.util.FullCategoryOrderTyp
 import com.symbol.shoppinglist.feature_category.domain.util.SortType
 import com.symbol.shoppinglist.feature_product.domain.model.ProductOrder
 
-data class DisplayProductsState(
+// TODO: 18/11/2022 to verify the approach of state
+data class DisplayProductsState (
     val categories: List<Category> = emptyList(),
     val categoryOrderType: FullCategoryOrderType = FullCategoryOrderType(
         CategoryOrderType.NAME,

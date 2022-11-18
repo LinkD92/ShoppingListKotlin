@@ -29,7 +29,6 @@ import com.symbol.shoppinglist.core.data.util.IconName
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.feature_category.domain.model.Category
 import com.symbol.shoppinglist.feature_product.domain.model.Product
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,13 +48,15 @@ fun ProductItem(
         Box(
             modifier = Modifier
                 .combinedClickable(
-                    onClick = onClick,
+                    onClick = {
+                        onClick()
+                    },
                     onLongClick = onLongClick
                 )
                 .background(color = backgroundColor)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
-            Log.d("Recomposition - ProductItem:", "2")
+            Log.d("Recomposition - ProductItem:", "Recomp 2")
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.Center,
@@ -75,7 +76,7 @@ fun ProductItem(
 fun ProductItemsList(
     modifier: Modifier = Modifier,
     backgroundColor: Long,
-    products: List<StateFlow<Product>>,
+    products: List<Product>,
     onItemClick: (Product) -> Unit,
     onLongClick: (Product) -> Unit,
 ) {
@@ -87,22 +88,19 @@ fun ProductItemsList(
         crossAxisSpacing = 10.dp,
         lastLineMainAxisAlignment = MainAxisAlignment.Start
     ) {
-        // TODO: 26/10/2022 make it as content and take outside
         products.forEach { product ->
-            Log.d("Recomposition - ProductItemsList:", "1")
-            var clickedState by remember(product.value.id) {
-                mutableStateOf(product.value.isChecked)
-            }
-            val alphaValue = if (clickedState) 1f else 0.3f
-            val itemBackgroundColor = Color(backgroundColor).copy(alphaValue)
+            val isProductChecked = mutableStateOf(product.isChecked)
+            val alpha = if (isProductChecked.value) 1f else 0.3f
+            val productBackgroundColor = Color(backgroundColor).copy(alpha)
             ProductItem(
-                product = product.value,
-                backgroundColor = itemBackgroundColor,
+                product = product,
+                backgroundColor = productBackgroundColor,
                 onClick = {
-                    clickedState = !clickedState
-                    onItemClick(product.value)
+                    Log.d("QWAS:", "99:ProductItemsList -> onClick")
+                    isProductChecked.value = !isProductChecked.value
+                    onItemClick(product)
                 },
-                onLongClick = { onLongClick(product.value) }
+                onLongClick = { onLongClick(product) }
             )
         }
     }

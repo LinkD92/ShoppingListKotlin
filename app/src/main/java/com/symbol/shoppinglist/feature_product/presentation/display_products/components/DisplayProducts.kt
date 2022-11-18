@@ -36,12 +36,11 @@ fun DisplayProducts(
     snackbarHostState: SnackbarHostState,
     viewModel: DisplayProductsViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state
+    val state = viewModel.categoriesState.collectAsStateLifecycleAware(initial = emptyList())
     var openDialog by remember { mutableStateOf(false) }
     var productId by remember { mutableStateOf(0) }
     val snackScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val products = viewModel.productsOfCategoryState.collectAsStateLifecycleAware(initial = emptyMap())
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { message ->
@@ -79,16 +78,18 @@ fun DisplayProducts(
             .padding(horizontal = 10.dp)
     ) {
         items(
-            items = state.value.categories,
-            key = {category: Category -> category.id}
+            items = state.value,
+            key = { category: Category -> category.id }
         ) { category ->
-            Log.d("Recomposition - DisplayProducts:", "Recomposition2")
-//            val products = viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
-//                initial = emptyList()
-//            ).value
-//            val products = viewModel.testState.collectAsStateLifecycleAware(initial = emptyMap()).value[category] ?: emptyMap()
-
+            Log.d(
+                "Recomposition - DisplayProducts:",
+                "Recomposition2 - name> ${category.name} < name"
+            )
             Spacer(modifier = Modifier.padding(4.dp))
+            val categoryProducts =
+                viewModel.getCategoriesProduct(category.id).collectAsStateLifecycleAware(
+                    initial = emptyList()
+                ).value
             ExpandableCategoryCard(
                 modifier = Modifier.fillMaxSize(),
                 category = category,
@@ -99,7 +100,9 @@ fun DisplayProducts(
                     DropdownMenuItem(
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 5.dp),
                         onClick = {
-                            viewModel.onMenuEvent(CategoryCardMenuEvent.CheckUncheckAll(products.value[category] ?: emptyList()))
+                            viewModel.onMenuEvent(
+                                CategoryCardMenuEvent.CheckUncheckAll(categoryProducts)
+                            )
                         }
                     ) {
                         Text(text = "Check/Uncheck all")
@@ -111,7 +114,7 @@ fun DisplayProducts(
                     .width(IntrinsicSize.Min)
                     .padding(10.dp),
                     backgroundColor = category.color,
-                    products = products.value[category] ?: emptyList(),
+                    products = categoryProducts,
                     onItemClick = { product ->
                         viewModel.onEvent(DisplayProductsEvent.ChangeProductSelection(product))
                     },
