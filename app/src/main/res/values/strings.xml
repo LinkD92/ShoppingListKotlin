@@ -45,6 +45,10 @@
     <string name="order_type_name">Name</string>
     <string name="sort_type_custom">Custom</string>
     <string name="sort_type_custom_change">Change custom order </string>
+    <string name="import_export">Import/Export</string>
+    <string name="val_import">Import from file</string>
+    <string name="val_export">Export to file</string>
+
 
 
 

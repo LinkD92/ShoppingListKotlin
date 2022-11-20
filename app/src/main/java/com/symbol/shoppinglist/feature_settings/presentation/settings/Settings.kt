@@ -1,5 +1,6 @@
 package com.symbol.shoppinglist.feature_settings.presentation.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -19,6 +20,7 @@ import com.symbol.shoppinglist.core.data.util.Action
 import com.symbol.shoppinglist.core.presentation.navigation.SettingsDirections
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyTypography
+import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductEvent
 
 @Composable
 fun Settings(
@@ -26,26 +28,40 @@ fun Settings(
     snackbarHostState: SnackbarHostState,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    Column(Modifier.padding(20.dp),
-        horizontalAlignment = Alignment.Start) {
-        SettingsGroup(groupName = stringResource(id = R.string.display_products)) {
-            SettingsItem(title = stringResource(id = R.string.category_order),
+    Column(
+        horizontalAlignment = Alignment.Start
+    ) {
+        SettingsGroup(
+            groupName = stringResource(id = R.string.display_products)
+        ) {
+            SettingsItem(
+                title = stringResource(id = R.string.category_order),
                 onClick = {
                     navHostController.navigate(
-                        SettingsDirections.DisplayProductsCategoryOrder.route)
+                        SettingsDirections.DisplayProductsCategoryOrder.route
+                    )
                 },
                 secondaryText = viewModel.secondaryTextBuilder()
             )
         }
-        Spacer(modifier = Modifier.height(5.dp))
-        SettingsGroup(groupName = stringResource(id = R.string.categories)) {
+        SettingsSpacer()
+        SettingsGroup(
+            groupName = stringResource(id = R.string.categories)
+        ) {
             SettingsItem(title = stringResource(id = R.string.category_order),
                 onClick = { navHostController.navigate(SettingsDirections.Categories.route) })
         }
-        Spacer(modifier = Modifier.height(5.dp))
+        SettingsSpacer()
         SettingsGroup(groupName = stringResource(id = R.string.products)) {
             SettingsItem(title = stringResource(id = R.string.category_order),
                 onClick = { navHostController.navigate(SettingsDirections.Products.route) })
+        }
+        SettingsSpacer()
+        SettingsGroup(groupName = stringResource(id = R.string.import_export)) {
+            SettingsItem(title = stringResource(id = R.string.val_import), onClick = { /*TODO*/ })
+            SettingsItem(
+                title = stringResource(id = R.string.val_export),
+                onClick = { viewModel.onEvent(SettingsDisplayProductEvent.ExportToFile) })
         }
     }
 }
@@ -57,7 +73,10 @@ fun SettingsGroup(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(modifier, horizontalAlignment = Alignment.Start) {
+    Column(
+        modifier = modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
         Text(text = groupName, color = MyColor.OnPrimary)
         content()
     }
@@ -97,5 +116,17 @@ fun SettingsItem(
         Icon(Icons.Rounded.NavigateNext, Action.NEXT)
     }
     Spacer(modifier = Modifier.height(3.dp))
+}
+
+@Composable
+fun SettingsSpacer(
+    modifier: Modifier = Modifier
+) {
+    Spacer(
+        modifier = modifier
+            .height(1.dp)
+            .fillMaxWidth()
+            .background(MyColor.OnSurface.copy(alpha = 0.3f))
+    )
 }
 
