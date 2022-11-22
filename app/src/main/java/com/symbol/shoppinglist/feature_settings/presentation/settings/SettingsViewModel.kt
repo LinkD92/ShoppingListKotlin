@@ -1,13 +1,9 @@
 package com.symbol.shoppinglist.feature_settings.presentation.settings
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Environment
-import android.provider.DocumentsContract
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.symbol.shoppinglist.feature_category.domain.use_case.CategoryUseCases
@@ -36,8 +32,12 @@ class SettingsViewModel @Inject constructor(
     val stateSettingsDisplayProduct: State<SettingsDisplayProductsState> =
         _stateSettingsDisplayProducts
 
+    private val _productsState = mutableStateOf(emptyList<Product>())
+    val productsState: State<List<Product>> = _productsState
+
     private var getCategoriesJob: Job? = null
     private var getSettingsJob: Job? = null
+    private var getProductsJob: Job? = null
 
     init {
         getSettings()
@@ -93,6 +93,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private fun getProducts() {
+        getProductsJob?.cancel()
+        getProductsJob = viewModelScope.launch {
+            productUseCases.getProducts().collect { products ->
+                _productsState.value = products
+            }
+        }
+    }
+
     private fun getCategories(fullCategoryOrderType: FullCategoryOrderType) {
         getCategoriesJob?.cancel()
         getCategoriesJob = viewModelScope.launch {
@@ -134,23 +143,7 @@ class SettingsViewModel @Inject constructor(
             else it.toString()
         }
     }
-
-    private fun createFile(pickerInitialUri: Uri) {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/pdf"
-            putExtra(Intent.EXTRA_TITLE, "invoice.pdf")
-
-            putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
-        }
-        startActivityForResult(intent, intent, 1)
-    }
 }
-
-
-
-
-
 
 
 

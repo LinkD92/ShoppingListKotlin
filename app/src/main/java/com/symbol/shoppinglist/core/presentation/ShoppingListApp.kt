@@ -1,4 +1,4 @@
-package com.symbol.shoppinglist.core.presentation.components
+package com.symbol.shoppinglist.core.presentation
 
 import android.content.pm.PackageManager
 import android.util.Log
@@ -12,13 +12,16 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.symbol.shoppinglist.core.domain.MainActivityActionEvent
+import com.symbol.shoppinglist.core.presentation.components.AppFab
+import com.symbol.shoppinglist.core.presentation.components.AppTopBar
 import com.symbol.shoppinglist.core.presentation.navigation.AppBottomNavigation
 import com.symbol.shoppinglist.core.presentation.navigation.AppNavGraph
 import com.symbol.shoppinglist.core.presentation.ui.theme.ShoppingListTheme
 
 
 @Composable
-fun ShoppingListApp() {
+fun ShoppingListApp(createFile: (MainActivityActionEvent) -> Unit) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val launcher = rememberLauncherForActivityResult(
@@ -50,7 +53,8 @@ fun ShoppingListApp() {
             ) {
                 AppNavGraph(
                     navController = navController,
-                    snackbarHostState = scaffoldState.snackbarHostState
+                    snackbarHostState = scaffoldState.snackbarHostState,
+                    createFile = {event -> createFile(event)}
                 )
             }
         }

@@ -1,5 +1,9 @@
 package com.symbol.shoppinglist.feature_settings.presentation.settings
 
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,25 +13,36 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.gson.Gson
 import com.symbol.shoppinglist.R
 import com.symbol.shoppinglist.core.data.util.Action
+import com.symbol.shoppinglist.core.domain.MainActivityActionEvent
 import com.symbol.shoppinglist.core.presentation.navigation.SettingsDirections
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyColor
 import com.symbol.shoppinglist.core.presentation.ui.theme.MyTypography
-import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductEvent
 
 @Composable
 fun Settings(
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
+    createFile: (MainActivityActionEvent) -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        type = "application/json"
+        putExtra(Intent.EXTRA_TITLE, "list_export.json")
+    }
     Column(
         horizontalAlignment = Alignment.Start
     ) {
@@ -61,11 +76,13 @@ fun Settings(
             SettingsItem(title = stringResource(id = R.string.val_import), onClick = { /*TODO*/ })
             SettingsItem(
                 title = stringResource(id = R.string.val_export),
-                onClick = { viewModel.onEvent(SettingsDisplayProductEvent.ExportToFile) })
+                onClick = {
+                    createFile(MainActivityActionEvent.CreateFileAction)
+                }
+            )
         }
     }
 }
-
 
 @Composable
 fun SettingsGroup(

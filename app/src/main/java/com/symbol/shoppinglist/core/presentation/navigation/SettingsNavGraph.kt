@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.symbol.shoppinglist.core.data.util.NavigationRoutes
+import com.symbol.shoppinglist.core.domain.MainActivityActionEvent
 import com.symbol.shoppinglist.feature_settings.presentation.categories.SettingsCategories
 import com.symbol.shoppinglist.feature_settings.presentation.display_products.SettingsDisplayProductsCategoryOrder
 import com.symbol.shoppinglist.feature_settings.presentation.products.SettingsProducts
@@ -23,6 +24,7 @@ sealed class SettingsDirections(val route: String) {
 fun NavGraphBuilder.settingsNavGraph(
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
+    createFile: (MainActivityActionEvent) -> Unit
 ) {
     navigation(
         startDestination = SettingsDirections.Root.route,
@@ -31,7 +33,8 @@ fun NavGraphBuilder.settingsNavGraph(
         composable(SettingsDirections.Root.route) {
             Settings(
                 navHostController = navHostController,
-                snackbarHostState = snackbarHostState
+                snackbarHostState = snackbarHostState,
+                createFile = { event -> createFile(event) }
             )
         }
         composable(SettingsDirections.DisplayProductsCategoryOrder.route) {

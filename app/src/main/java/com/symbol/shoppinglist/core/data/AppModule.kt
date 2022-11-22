@@ -1,12 +1,16 @@
 package com.symbol.shoppinglist.core.data
 
+import android.app.Activity
 import android.app.Application
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ComponentActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.symbol.shoppinglist.DefaultDispatchers
 import com.symbol.shoppinglist.DispatcherProvider
+import com.symbol.shoppinglist.core.MainActivity
 import com.symbol.shoppinglist.core.data.datasource.ListRoomDatabase
 import com.symbol.shoppinglist.core.data.util.Database
 import com.symbol.shoppinglist.core.data.util.PreferencesDataStore
@@ -50,7 +54,6 @@ object AppModule {
 
     @Provides
     fun providesDispatchers(): DispatcherProvider = DefaultDispatchers()
-
 }
 
 @Module

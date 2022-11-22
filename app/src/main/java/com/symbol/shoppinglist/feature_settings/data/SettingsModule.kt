@@ -1,6 +1,9 @@
 package com.symbol.shoppinglist.feature_settings.data
 
 import android.app.Application
+import android.content.Intent
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ComponentActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
@@ -28,6 +31,7 @@ object SettingsModule {
         return DataStoreFactory.create(
             serializer = AppSettingsSerializer,
             produceFile = {app.preferencesDataStoreFile(PreferencesDataStore.FILE_NAME)}
+
         )
     }
 

@@ -105,6 +105,9 @@ dependencies {
     //Drag and drop
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.4")
 
+    //Gson
+    implementation "com.google.code.gson:gson:2.10"
+
     //Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
